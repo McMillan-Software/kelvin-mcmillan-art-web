@@ -14,17 +14,15 @@
 }
 
 .painting-image {
-    width: 1000px;  /* Set the desired width */
+    width: 1000px; 
     height: auto;  /* Keep the aspect ratio */
     max-width: 100%; /* Ensures responsiveness */
 }
 
 .editable-fields {
-    padding: 10px; /* add space inside the container */
-    margin-top: 0px; /* add space outside the container */
+    padding: 10px; 
+    margin-top: 0px; 
     margin-bottom: 10px;
-    /*background-color: #c4c1c1cf; /* already white..? */
-   
 }
 
 .editable-fields div {
