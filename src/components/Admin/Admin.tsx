@@ -18,8 +18,7 @@ const Admin: React.FC = () => {
         console.error(`Error fetching data: ${error}`);
       });
 
-    }, [] ); // note empty array - I think this is thing to also update? Or it is a trigger...
-
+    }, [] );
 
     const handleInputChange = (id: number, field: string, value: any ) => {
 
