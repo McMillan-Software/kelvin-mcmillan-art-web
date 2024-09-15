@@ -1,16 +1,14 @@
-export interface original {
+export interface painting {
     id : number,
     title : string,
     type : string,
-    aspectRatio: number,
     height: number,
     width: number,
+    aspectRatio: number,
     giclee : boolean,
-    sold: boolean, 
-    price : number,
+    price : string,
+    sold : boolean,
     info : string,
     galleryLink : string,
     galleryName: string
 }
-
-

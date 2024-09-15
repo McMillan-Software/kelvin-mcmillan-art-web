@@ -28,7 +28,7 @@ const Original: React.FC = () => {
           <h2>{original.title}</h2>
           <p>{original.info}</p>
 
-          <p>{original.type} - ${original.price} - {original.dimensions}</p>
+          <p>{original.type} - ${original.price} - {original.width}x{original.height} </p>
           {original.galleryLink ? (
             <p>Available at <Link to={`http://${original.galleryLink}`} target="_blank" rel="noopener noreferrer">{original.galleryName}</Link></p>
           ) : (
