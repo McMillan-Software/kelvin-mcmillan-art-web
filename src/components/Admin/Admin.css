@@ -1,0 +1,42 @@
+.admin-painting-list {
+    list-style-type: none;
+    display : flex;
+    flex-wrap: wrap;
+    padding: 0;
+}
+
+.admin-painting-list-item {
+    background-color: #f0ecec;
+   /* border: 1px solid #101010;*/
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+
+.painting-image {
+    width: 1000px; 
+    height: auto;  /* Keep the aspect ratio */
+    max-width: 100%; /* Ensures responsiveness */
+}
+
+.editable-fields {
+    padding: 10px; 
+    margin-top: 0px; 
+    margin-bottom: 10px;
+}
+
+.editable-fields div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px; 
+}
+
+.editable-fields label {
+    width: 100px;
+}
+
+.editable-fields input[type="text"] {
+    flex-grow: 1;
+}
+
+
