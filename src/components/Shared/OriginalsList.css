@@ -1,0 +1,26 @@
+.orginals-list {
+    list-style-type: none;
+    display : flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0;
+}
+
+.originals-list-item {
+    display : flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0% 5% 0% 5%;
+}
+
+.originals-image-link {
+    display: flex;
+    justify-content: center;
+}
+
+.orginals-image {
+    max-height: 800px;
+    width : 100%; 
+    height: 100%
+}
