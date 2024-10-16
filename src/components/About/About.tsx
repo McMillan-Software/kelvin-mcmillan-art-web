@@ -62,21 +62,21 @@ const About: React.FC = () => {
       <div className="about-photo-main-div">
         <div className="about-photo-div-row">
           <div className="about-photo-div">
-            <img className="about-photo" src="./src/assets/about1.jpg" alt="Angus and Sam"/>
+            <img className="about-photo" src="/images/about1.jpg" alt="Angus and Sam"/>
             <p>Angus and Sam fishing in Collingwood 2005</p>
           </div>
           <div className="about-photo-div">
-            <img className="about-photo" src="./src/assets/about2.jpg" alt="St Andrews" />
+            <img className="about-photo" src="/images/about2.jpg" alt="St Andrews" />
             <p>St Andrews College</p>
           </div>
         </div>
         <div className="about-photo-div-row">
           <div className="about-photo-div">
-            <img className="about-photo" src="./src/assets/about3.jpg" alt="Angus" />
+            <img className="about-photo" src="/images/about3.jpg" alt="Angus" />
             <p>Angus</p>
           </div>
           <div className="about-photo-div">
-            <img className="about-photo" src="./src/assets/about4.jpg" alt="Sam" />
+            <img className="about-photo" src="/images/about4.jpg" alt="Sam" />
             <p>Sam</p>
           </div>
         </div>  

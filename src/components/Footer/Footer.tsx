@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
-      <img className="footer-image" src={"/src/assets/footer3.jpg"} alt="footer image" />
+      <img className="footer-image" src={"/images/footer3.jpg"} alt="footer image" />
         <div className="footer-main">
           <div className="footer-title-div">
             <h1 className="footer-title">Kelvin McMillan Art</h1>

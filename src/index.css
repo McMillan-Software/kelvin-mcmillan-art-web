@@ -14,7 +14,7 @@
 
 @font-face {
   font-family: 'Europa';
-  src: url('./fonts/CabinetGrotesk-Regular.woff2') format('woff2'), /* Change the path accordingly */
+  src: url('/fonts/CabinetGrotesk-Regular.woff2') format('woff2'), 
 }
 
 body {

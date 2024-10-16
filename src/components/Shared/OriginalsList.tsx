@@ -1,4 +1,5 @@
 import React from "react";
+import { getImageUrl } from '../../utils/getImageUrl';
 import { original } from "../../types/original";
 import { NavLink } from "react-router-dom";
 import "./OriginalsList.css";
@@ -14,7 +15,7 @@ const OriginalsList: React.FC<OriginalsListProps> = ({ originals }) => {
         <li key={original.id}>
           <div className="originals-list-item">
             <NavLink className="originals-image-link" to={`/Originals/${original.id}`}>
-              <img className="orginals-image" src={"./src/mocks/images/" + original.title + ".jpg"} alt={original.title} />
+              <img className="orginals-image" src={getImageUrl(original.title)} />
             </NavLink>
             <div><p>{original.title}</p></div>
           </div>
