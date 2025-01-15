@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import './Admin.css';
 import { painting } from "../../types/painting";
 import axios from "axios";
+import { useAuth }  from "../../AuthContext";
 
 const Admin: React.FC = () => {
-
+    const { isAuthenticated } = useAuth();
     const [paintings, setPaintings] = React.useState<painting[]>([]);
 
     useEffect( () => {
@@ -44,79 +45,83 @@ const Admin: React.FC = () => {
 
   };
 
-  return (
-    <div className='admin-div'>
-        <h3>Admin</h3>
-        <ul className="admin-painting-list">
-          {paintings.map((item: painting) => ( // collection.map((name: interface/type) => () )
-            <li key={item.id}>
-              <div className="admin-painting-list-item">
-                <img className="painting-image" src="./src/mocks/images/3.jpg" alt={item.title} />
-                <div className='editable-fields'>
-                  <div>
-                    <label>Title: </label>
-                    <input 
-                    type = "text"
-                    value = {item.title}
-                    onChange={(e) => handleInputChange(item.id, 'title', e.target.value)}
-                    />
+  if (!isAuthenticated) {
+    return <div>Please log in to access admin tools.</div>;
+  } else {
+    return (
+      <div className='admin-div'>
+          <h3>Admin</h3>
+          <ul className="admin-painting-list">
+            {paintings.map((item: painting) => ( // collection.map((name: interface/type) => () )
+              <li key={item.id}>
+                <div className="admin-painting-list-item">
+                  <img className="painting-image" src="./src/mocks/images/3.jpg" alt={item.title} />
+                  <div className='editable-fields'>
+                    <div>
+                      <label>Title: </label>
+                      <input 
+                      type = "text"
+                      value = {item.title}
+                      onChange={(e) => handleInputChange(item.id, 'title', e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label>Height: </label>
+                      <input 
+                      type = "number"
+                      value = {item.height}
+                      readOnly
+                      />
+                    </div>
+                    <div>
+                      <label>Width: </label>
+                      <input 
+                      type = "number"
+                      value = {item.width}
+                      readOnly
+                      />
+                    </div>
+                    <div>
+                      <label>Aspect Ratio: </label>
+                      <input 
+                      type = "number"
+                      value = {item.aspectRatio}
+                      readOnly
+                      />
+                    </div>
+                    <div>
+                      <label>Price: </label>
+                      <input 
+                      type = "number"
+                      value = {item.price}
+                      readOnly
+                      />
+                    </div>
+                    <div>
+                      <label>Sold: </label>
+                      <input 
+                      type = "checkbox"
+                      checked = {item.sold}
+                      readOnly
+                      />
+                    </div>
+                    <div>
+                      <label>Giclee: </label>
+                      <input 
+                      type = "checkbox"
+                      checked = {item.giclee}
+                      readOnly
+                      />
+                    </div>
+                    <button onClick={() => handleSave(item)}>Save</button>
                   </div>
-                  <div>
-                    <label>Height: </label>
-                    <input 
-                    type = "number"
-                    value = {item.height}
-                    readOnly
-                    />
-                  </div>
-                  <div>
-                    <label>Width: </label>
-                    <input 
-                    type = "number"
-                    value = {item.width}
-                    readOnly
-                    />
-                  </div>
-                  <div>
-                    <label>Aspect Ratio: </label>
-                    <input 
-                    type = "number"
-                    value = {item.aspectRatio}
-                    readOnly
-                    />
-                  </div>
-                  <div>
-                    <label>Price: </label>
-                    <input 
-                    type = "number"
-                    value = {item.price}
-                    readOnly
-                    />
-                  </div>
-                  <div>
-                    <label>Sold: </label>
-                    <input 
-                    type = "checkbox"
-                    checked = {item.sold}
-                    readOnly
-                    />
-                  </div>
-                  <div>
-                    <label>Giclee: </label>
-                    <input 
-                    type = "checkbox"
-                    checked = {item.giclee}
-                    readOnly
-                    />
-                  </div>
-                  <button onClick={() => handleSave(item)}>Save</button>
                 </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-    </div>
-  );
+              </li>
+            ))}
+          </ul>
+      </div>
+    );
+  };
 };
 
 export default Admin;

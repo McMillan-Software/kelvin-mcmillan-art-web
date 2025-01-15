@@ -9,27 +9,32 @@ import Original from './components/Original/Original';
 import Portfolio from './components/Portfolio/Portfolio';
 import Contact from './components/Contact/Contact';
 import Admin from './components/Admin/Admin';
+import Login from './components/Login/Login';
+import { AuthProvider } from './AuthContext';
 
 function App() {
   return (
     <div>
       <Router>
-      <header>
-        <Header />
-      </header>
-        <div className="page-content">
-          <div className="content">
-            <Routes>
-                <Route path="/Home" element={<Home/>}/>
-                <Route path="/Originals" element={<Originals/>}/>
-                <Route path="/Originals/:id" element={<Original/>}/>
-                <Route path="/Portfolio" element={<Portfolio/>}/>
-                <Route path="/About" element={<About/>}/>
-                <Route path="/Contact" element={<Contact/>}/>
-                <Route path="/Admin" element={<Admin/>}/>   
-            </Routes>
+        <AuthProvider>
+        <header>
+          <Header />
+        </header>
+          <div className="page-content">
+            <div className="content">
+              <Routes>
+                  <Route path="/Home" element={<Home/>}/>
+                  <Route path="/Originals" element={<Originals/>}/>
+                  <Route path="/Originals/:id" element={<Original/>}/>
+                  <Route path="/Portfolio" element={<Portfolio/>}/>
+                  <Route path="/About" element={<About/>}/>
+                  <Route path="/Contact" element={<Contact/>}/>
+                  <Route path="/Admin" element={<Admin/>}/>   
+                  <Route path="/Login" element={<Login/>}/>
+              </Routes>
+            </div>
           </div>
-        </div>
+        </AuthProvider>
       </Router>
       <footer>
         <Footer />
