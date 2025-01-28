@@ -23,7 +23,7 @@ const Home: React.FC = () => {
       <div className="home-div">
 
         <div className="expression-div">
-          <img className="quote-image" src={"/src/assets/quote.jpg"} alt='quote' />
+          <img className="quote-image" src={"/images/quote.jpg"} alt='quote' />
           <div className="quote-div">
             <h3 className="quote-text">"The most important element in a painting is light, especially the light from either end of the day, 
             which can bring a painting to life. The interplay of colors, shadows, and contrasts illuminated by this type of light can transform even the most mundane subject into something truly captivating."</h3>
