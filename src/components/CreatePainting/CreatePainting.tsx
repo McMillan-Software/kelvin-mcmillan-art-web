@@ -2,6 +2,7 @@ import React, { useState  } from "react";
 import axios from "axios";
 import './CreatePainting.css';
 import { useAuth }  from "../../AuthContext";
+import { NavLink } from 'react-router-dom';
 
 const paintingTypes = ["Watercolour", "Acrylic"];
 const pageOptions = ["Marine", "Rural", "Landscape"];
@@ -26,19 +27,25 @@ const CreatePainting: React.FC = () => {
     const handlePaintingCreation = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:8000/admin/create-painting", {
-                title,
-                type,
-                width: width || 0, 
-                height: height || 0, 
-                sold,
-                price: price || 0.0, 
-                info,
-                aspectRatio,
-                galleryLink,
-                galleryName,
-                pages,
-            });
+            const response = await axios.post(
+                'http://localhost:8000/admin/create-painting', 
+                {
+                  title,
+                  type,
+                  width: width || 0, 
+                  height: height || 0, 
+                  sold,
+                  price: price || 0.0, 
+                  info,
+                  aspectRatio,
+                  galleryLink,
+                  galleryName,
+                  pages,
+                },
+                {
+                  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                }
+              );
             alert("Painting created successfully");
         } catch (err: any) {
             setError(err.response?.data?.message || "Error creating painting");
@@ -73,10 +80,11 @@ const CreatePainting: React.FC = () => {
 
     return (
         <div className="painting-creation-div">
+            <NavLink to="/Admin" className="back-link">Back to Admin</NavLink>
             <h2>Create Painting</h2>
             <div className="painting-creation-input-div">
                 <div className="painting-form-div">
-                <h3>Painting Details</h3>    
+                <h2>Painting Details</h2>    
                 <form className="painting-form" onSubmit={handlePaintingCreation}>
                     <div>
                         <label>Title:</label>
@@ -176,7 +184,7 @@ const CreatePainting: React.FC = () => {
                 </form>
                 </div>
                 <div className="painting-creation-image-div">
-                    <h3>Painting Image</h3>
+                    <h2>Painting Image</h2>
                     <img src={imagePreview || "/images/placeholder.jpg"} alt="Placeholder"   
                     style={{    width: "100%",
                                 height: "300px",

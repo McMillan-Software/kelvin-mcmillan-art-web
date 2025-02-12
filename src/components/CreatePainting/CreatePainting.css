@@ -2,9 +2,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100vh;
 }
 
 .painting-creation-input-div {
     display: flex;
     flex-direction: row;
+    height: 600px;
+}
+
+.painting-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 400px;
 }

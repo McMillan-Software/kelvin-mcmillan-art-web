@@ -3,6 +3,7 @@ import './Admin.css';
 import { painting } from "../../types/painting";
 import axios from "axios";
 import { useAuth }  from "../../AuthContext";
+import { NavLink } from 'react-router-dom';
 
 const Admin: React.FC = () => {
     const { isAuthenticated } = useAuth();
@@ -51,6 +52,11 @@ const Admin: React.FC = () => {
     return (
       <div className='admin-div'>
           <h3>Admin</h3>
+          <button>
+            <NavLink to="/CreatePainting">
+                Create Painting
+            </NavLink>
+          </button>
           <ul className="admin-painting-list">
             {paintings.map((item: painting) => ( // collection.map((name: interface/type) => () )
               <li key={item.id}>
