@@ -1,21 +1,10 @@
 import React, { useEffect, useState } from "react";
 import './Prints.css';
 import { giclee, option } from "../../types/giclee";
-// use {} on imports (Named export) allows for multiple imports/exports of interfaces, classes, variables or functions from the same file
-// not strictly neccesary here as only a single items is able to be imported from giclee
 import axios from "axios";
 
 const Prints: React.FC = () => {
-
-    // giclees - state variable, hold the current value of giclees
-    // setGiclees - setter function to update the state variable ^
-    //
-    // useState funtion - React hook
-    //  ([]): takes initial value '[]' an empty array
-    //  <giclee[]>: TypeScript generics syntax - specifies that the state variable ('giclees') is expected to hold an array of 'giclee' objects 
-    //  giclee is TypeScript type or interface (in this case interface whichis defined withing types folder)
     const [giclees, setGiclees] = useState<giclee[]>([])
-
 
     useEffect(() => {
         console.log("Getting Giclees")
