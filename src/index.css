@@ -3,7 +3,7 @@
   font-family: Europa;
   font-weight: 400;
 
-  color-scheme: light dark;
+  /* color-scheme: light dark; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -14,7 +14,7 @@
 
 @font-face {
   font-family: 'Europa';
-  src: url('./fonts/CabinetGrotesk-Regular.woff2') format('woff2'), /* Change the path accordingly */
+  src: url('/fonts/CabinetGrotesk-Regular.woff2') format('woff2'), 
 }
 
 body {

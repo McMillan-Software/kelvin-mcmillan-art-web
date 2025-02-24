@@ -10,28 +10,36 @@ import Portfolio from './components/Portfolio/Portfolio';
 import Contact from './components/Contact/Contact';
 import Admin from './components/Admin/Admin';
 import Prints from './components/Prints/Prints';
+import Login from './components/Login/Login';
+import CreatePainting from './components/CreatePainting/CreatePainting';
+import { AuthProvider } from './AuthContext';
+
 
 function App() {
   return (
     <div>
       <Router>
-      <header>
-        <Header />
-      </header>
-        <div className="page-content">
-          <div className="content">
-            <Routes>
-                <Route path="/Home" element={<Home/>}/>
-                <Route path="/Originals" element={<Originals/>}/>
-                <Route path="/Originals/:id" element={<Original/>}/>
-                <Route path="/Portfolio" element={<Portfolio/>}/>
-                <Route path="/About" element={<About/>}/>
-                <Route path="/Contact" element={<Contact/>}/>
-                <Route path="/Admin" element={<Admin/>}/> 
-                <Route path="/Prints" element={<Prints/>}/>   
-            </Routes>
+        <AuthProvider>
+        <header>
+          <Header />
+        </header>
+          <div className="page-content">
+            <div className="content">
+              <Routes>
+                  <Route path="/Home" element={<Home/>}/>
+                  <Route path="/Originals" element={<Originals/>}/>
+                  <Route path="/Originals/:id" element={<Original/>}/>
+                  <Route path="/Portfolio" element={<Portfolio/>}/>
+                  <Route path="/About" element={<About/>}/>
+                  <Route path="/Contact" element={<Contact/>}/>
+                  <Route path="/Admin" element={<Admin/>}/>
+                   <Route path="/Prints" element={<Prints/>}/> 
+                  <Route path="/Login" element={<Login/>}/>
+                  <Route path="/CreatePainting" element={<CreatePainting/>}/>
+              </Routes>
+            </div>
           </div>
-        </div>
+        </AuthProvider>
       </Router>
       <footer>
         <Footer />
