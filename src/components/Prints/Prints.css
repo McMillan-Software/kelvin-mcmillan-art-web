@@ -42,12 +42,11 @@
 
 .options-grid {
     display: grid;
-    /*grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
     grid-template-columns: repeat(4, auto);
     gap: 1px; /* Space between grid items */
-    text-align: center; /* Center text */
-    margin: 0 auto; /* Center the grid horizontally - does nothing, I believe css higher up has already done this...*/
-    max-width: 200px; /* Set a max width for the grid - does hardcoding like this cause issue for smaller screen sizes?*/
+    text-align: center;
+    margin: 0 auto; /* Don't believe this is doing anything*/
+    max-width: 200px; /* Should this be set here. What about small screen size */
    
 }
 
