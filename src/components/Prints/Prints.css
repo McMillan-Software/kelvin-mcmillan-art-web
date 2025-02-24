@@ -1,0 +1,52 @@
+.prints-page {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.prints-list {
+    list-style-type: none;
+    display : flex;
+    flex-wrap: wrap;
+    padding: 0;
+}
+
+.painting-image {
+    width: 1000px; 
+    height: auto;  /* Keep the aspect ratio */
+    max-width: 100%; /* Ensures responsiveness */
+}
+
+.giclee-list-item {
+    display: flex;
+    flex-direction: column; /* otherwise contents of each list item will be arrange by default as one line*/
+    margin-bottom: 40px;
+}
+
+.giclee-list-item-text {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.giclee-title {
+    font-weight: 700 !important;
+    font-family: Arial, sans-serif; /* Test with a standard font */
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.options-list {
+    list-style-type: none;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    gap: 1px; /* Space between grid items */
+    text-align: center;
+    margin: 0 auto; /* Don't believe this is doing anything*/
+    max-width: 200px; /* Should this be set here. What about small screen size */
+   
+}
+
