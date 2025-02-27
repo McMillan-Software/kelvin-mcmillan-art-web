@@ -28,7 +28,7 @@ const CreatePainting: React.FC = () => {
         e.preventDefault();
         try {
             const response = await axios.post(
-                'http://localhost:8000/admin/create-painting', 
+                'http://localhost:8000/admin/painting', 
                 {
                   title,
                   type,
@@ -47,6 +47,21 @@ const CreatePainting: React.FC = () => {
                 }
               );
             alert("Painting created successfully");
+            if (image) {
+                const formData = new FormData();
+                formData.append("file", image);
+                await axios.post(
+                    `http://localhost:8000/admin/painting/${response.data.id}/image`,
+                    formData,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                            "Content-Type": "multipart/form-data",
+                        },
+                    }
+                );
+                alert("Image uploaded successfully");
+            }
         } catch (err: any) {
             setError(err.response?.data?.message || "Error creating painting");
         }
@@ -62,7 +77,7 @@ const CreatePainting: React.FC = () => {
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
+        if (file && (file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg")) {
             setImage(file);
             const reader = new FileReader();
             reader.onloadend = () => {
