@@ -10,7 +10,7 @@ const Originals: React.FC = () => {
 
     useEffect(() => {
         console.log("Getting oringals for page: " + category);
-        axios.get('http://localhost:8000/paintings/portfolio/' + category)
+        axios.get(`${import.meta.env.VITE_API_URL}/portfolio/${category}`)
         .then((response) => {
 
         setOrginals(response.data);

@@ -8,7 +8,7 @@ const Prints: React.FC = () => {
 
     useEffect(() => {
         console.log("Getting Giclees")
-        axios.get("http://localhost:8000/paintings/giclees/v2")
+        axios.get(`${import.meta.env.VITE_API_URL}paintings/giclees/v2`)
             .then(
                 (response) => {
                     setGiclees(response.data);

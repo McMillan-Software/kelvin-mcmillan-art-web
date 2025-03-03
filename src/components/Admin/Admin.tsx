@@ -10,8 +10,7 @@ const Admin: React.FC = () => {
     const [paintings, setPaintings] = React.useState<painting[]>([]);
 
     useEffect( () => {
-      console.log("Getting paintings")
-      axios.get("http://localhost:8000/paintings")
+      axios.get(`${import.meta.env.VITE_API_URL}paintings`)
       .then(
         (response) => {
           setPaintings(response.data);
@@ -36,7 +35,7 @@ const Admin: React.FC = () => {
 
     console.log("Updating painting");
 
-    axios.put(`http://localhost:8000/painting/${painting.id}`, painting)
+    axios.put(`${import.meta.env.VITE_API_URL}painting/${painting.id}`, painting)
     .then((response) => {
         console.log('Painting updated successfully:', response.data);
     })

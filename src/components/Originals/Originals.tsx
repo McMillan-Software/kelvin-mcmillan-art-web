@@ -8,7 +8,7 @@ const Originals: React.FC = () => {
     const [originals, setOriginals] = React.useState<original[]>([]);
 
     useEffect(() => {
-      axios.get('http://localhost:8000/paintings/originals').then((response) => {
+      axios.get(`${import.meta.env.VITE_API_URL}paintings/originals`).then((response) => {
         setOriginals(response.data);
       })
       .catch((error) => {

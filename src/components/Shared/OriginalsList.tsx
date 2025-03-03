@@ -1,5 +1,4 @@
 import React from "react";
-import { getImageUrl } from '../../utils/getImageUrl';
 import { original } from "../../types/original";
 import { NavLink } from "react-router-dom";
 import "./OriginalsList.css";
@@ -15,7 +14,7 @@ const OriginalsList: React.FC<OriginalsListProps> = ({ originals }) => {
         <li key={original.id}>
           <div className="originals-list-item">
             <NavLink className="originals-image-link" to={`/Originals/${original.id}`}>
-              <img className="orginals-image" src={getImageUrl(original.title)} />
+              <img className="orginals-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${original.image_path}`} />
             </NavLink>
             <div><p>{original.title}</p></div>
           </div>

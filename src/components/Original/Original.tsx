@@ -10,7 +10,7 @@ const Original: React.FC = () => {
   const [original, setOrginal] = React.useState<original>({} as original);
 
     useEffect(() => {
-      axios.get('http://localhost:8000/paintings/originals/' + id).then((response) => {
+      axios.get(`${import.meta.env.VITE_API_URL}paintings/originals/${id}`).then((response) => {
         setOrginal(response.data);
         console.log(response.data)
       })
@@ -23,7 +23,7 @@ const Original: React.FC = () => {
       <div className="orignal-content">   
         <div className="original-container">
           <div className="original-image-container">
-            <img className="orginal-image" src={"/src/mocks/images/" + original.title + ".jpg"} alt={original.title} />
+            <img className="orginal-image" src={original.image_Path} alt={original.title} />
           </div>
           <h2>{original.title}</h2>
           <p>{original.info}</p>

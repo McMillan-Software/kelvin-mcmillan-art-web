@@ -10,7 +10,8 @@ export interface original {
     price : number,
     info : string,
     galleryLink : string,
-    galleryName: string
+    galleryName: string,
+    image_path: string
 }
 
 

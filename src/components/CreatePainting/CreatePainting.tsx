@@ -2,7 +2,7 @@ import React, { useState  } from "react";
 import axios from "axios";
 import './CreatePainting.css';
 import { useAuth }  from "../../AuthContext";
-import { NavLink } from 'react-router-dom';
+import { NavLink, Navigate } from 'react-router-dom';
 
 const paintingTypes = ["Watercolour", "Acrylic"];
 const pageOptions = ["Marine", "Rural", "Landscape"];
@@ -51,7 +51,7 @@ const CreatePainting: React.FC = () => {
                 const formData = new FormData();
                 formData.append("file", image);
                 await axios.post(
-                    `http://localhost:8000/admin/painting/${response.data.id}/image`,
+                    `${import.meta.env.VITE_API_URL}painting/${response.data.id}/image`,
                     formData,
                     {
                         headers: {
@@ -62,6 +62,7 @@ const CreatePainting: React.FC = () => {
                 );
                 alert("Image uploaded successfully");
             }
+            return <Navigate to="/admin" />;
         } catch (err: any) {
             setError(err.response?.data?.message || "Error creating painting");
         }

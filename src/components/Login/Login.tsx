@@ -3,7 +3,6 @@ import axios from "axios";
 import "./Login.css";
 import { useAuth }  from "../../AuthContext";
 
-
 const Login: React.FC = () => {
     const { isAuthenticated, login} = useAuth();
     const [username, setUsername] = useState("");
@@ -14,7 +13,7 @@ const Login: React.FC = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post("http://localhost:8000/admin/login", {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}authentication/login`, {
                 username,
                 password,
             });
