@@ -1,10 +1,10 @@
-import { painting } from "./painting";
+import { original } from "./original"
 
 // export allows this to be used elsewhere other than just this file
 export interface giclee {
     painting_id: number,
     page_order: number,
-    painting: painting,
+    painting: original,
     options: option[]  
 }
 

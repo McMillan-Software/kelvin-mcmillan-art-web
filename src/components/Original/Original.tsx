@@ -23,7 +23,7 @@ const Original: React.FC = () => {
       <div className="orignal-content">   
         <div className="original-container">
           <div className="original-image-container">
-            <img className="orginal-image" src={original.image_Path} alt={original.title} />
+            <img className="orginal-image" src={original.image_path} alt={original.title} />
           </div>
           <h2>{original.title}</h2>
           <p>{original.info}</p>

@@ -25,3 +25,13 @@ To run this application locally, you'll need to have Node.js installed on your s
 3. **Run the application**
     ```sh
     pnpm vite dev    
+
+### Running production clone
+
+1. **Build the application**
+    ```sh
+    pnpm run build
+
+2. **Run the build**
+    ```sh
+    pnpm run preview
