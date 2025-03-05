@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
-import { originals } from "../../types/originals";
+import { original } from "../../types/original";
 import './Portfolio.css';
-import { NavLink } from "react-router-dom";
+import OriginalsList from "../Shared/OriginalsList"
 import axios from "axios";
 
 const Originals: React.FC = () => {
-    const [orginals, setOrginals] = React.useState<originals[]>([]);
+    const [originals, setOriginals] = React.useState<original[]>([]);
     const [category, setCategory] = React.useState<String>("");
 
     useEffect(() => {
         console.log("Getting oringals for page: " + category);
-        axios.get(`${import.meta.env.VITE_API_URL}/portfolio/${category}`)
+        axios.get(`${import.meta.env.VITE_API_URL}paintings/portfolio/${category}`)
         .then((response) => {
 
-        setOrginals(response.data);
+        setOriginals(response.data);
         })
         .catch((error) => {
             console.error(`Error fetching data: ${error}`);
@@ -38,16 +38,7 @@ const Originals: React.FC = () => {
                     <option value="sport">Sport</option>
                 </select>
             </div>
-            <ul className="portfolio-list">
-                {orginals.map((orginal: originals) => (
-                    <li key={orginal.id}>
-                        <div className="portfolio-list-item">
-                            <img className="portfolio-image" src={"./src/mocks/images/" + orginal.title + ".jpg"} alt={orginal.title} />
-                            <div><p>{orginal.title}</p></div>
-                        </div>
-                    </li> 
-                ))}
-            </ul>    
+            <OriginalsList originals={originals} />    
         </div>
     );
 }

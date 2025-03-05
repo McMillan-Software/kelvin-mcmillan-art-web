@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import './Admin.css';
-import { painting } from "../../types/painting";
+import { original } from "../../types/original";
 import axios from "axios";
 import { useAuth }  from "../../AuthContext";
 import { NavLink } from 'react-router-dom';
 
 const Admin: React.FC = () => {
     const { isAuthenticated } = useAuth();
-    const [paintings, setPaintings] = React.useState<painting[]>([]);
+    const [paintings, setPaintings] = React.useState<original[]>([]);
 
     useEffect( () => {
       axios.get(`${import.meta.env.VITE_API_URL}paintings`)
@@ -31,7 +31,7 @@ const Admin: React.FC = () => {
     };
 
 
-  const handleSave = (painting: painting) => {
+  const handleSave = (painting: original) => {
 
     console.log("Updating painting");
 
@@ -57,7 +57,7 @@ const Admin: React.FC = () => {
             </NavLink>
           </button>
           <ul className="admin-painting-list">
-            {paintings.map((item: painting) => ( // collection.map((name: interface/type) => () )
+            {paintings.map((item: original) => ( // collection.map((name: interface/type) => () )
               <li key={item.id}>
                 <div className="admin-painting-list-item">
                   <img className="painting-image" src="./src/mocks/images/3.jpg" alt={item.title} />
