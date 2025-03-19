@@ -1,0 +1,6 @@
+interface GicleeOption {
+    width: number,
+    height: number,
+    aspect_ratio: String,
+    price: number
+}
