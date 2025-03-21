@@ -2,41 +2,27 @@
     list-style-type: none;
     display : flex;
     flex-wrap: wrap;
+    justify-content: center;
     padding: 0;
 }
 
 .admin-painting-list-item {
-    background-color: #f0ecec;
-   /* border: 1px solid #101010;*/
-    margin-top: 10px;
-    margin-bottom: 10px;
-
+    display : flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0% 5% 0% 5%;
 }
 
-.painting-image {
-    width: 1000px; 
-    height: auto;  /* Keep the aspect ratio */
-    max-width: 100%; /* Ensures responsiveness */
+.admin-painting-image {
+    max-height: 800px;
+    width : 100%; 
+    height: 100%;
 }
 
-.editable-fields {
-    padding: 10px; 
-    margin-top: 0px; 
-    margin-bottom: 10px;
-}
-
-.editable-fields div {
+.admin-div {
     display: flex;
     align-items: center;
-    margin-bottom: 8px; 
+    flex-direction: column;
+
 }
-
-.editable-fields label {
-    width: 100px;
-}
-
-.editable-fields input[type="text"] {
-    flex-grow: 1;
-}
-
-

@@ -11,7 +11,7 @@ const CreatePainting: React.FC = () => {
     const { isAuthenticated, login} = useAuth();
     const[error, setError] = useState("");
     const [title, setTitle] = useState("");
-    const [type, setType] = useState("");
+    const [type, setType] = useState("Watercolour");
     const [width, setWidth] = useState<number | "">("");
     const [height, setHeight] = useState<number | "">("");
     const [sold, setSold] = useState(false);
@@ -28,7 +28,7 @@ const CreatePainting: React.FC = () => {
         e.preventDefault();
         try {
             const response = await axios.post(
-                'http://localhost:8000/admin/painting', 
+                `${import.meta.env.VITE_API_URL}admin/painting`, 
                 {
                   title,
                   type,
@@ -51,7 +51,7 @@ const CreatePainting: React.FC = () => {
                 const formData = new FormData();
                 formData.append("file", image);
                 await axios.post(
-                    `${import.meta.env.VITE_API_URL}painting/${response.data.id}/image`,
+                    `${import.meta.env.VITE_API_URL}admin/painting/${response.data.id}/image`,
                     formData,
                     {
                         headers: {
@@ -122,7 +122,7 @@ const CreatePainting: React.FC = () => {
                         </select>
                     </div>
                     <div>
-                        <label>Width (cm):</label>
+                        <label>Width (mm):</label>
                         <input
                             type="number"
                             value={width}
@@ -131,7 +131,7 @@ const CreatePainting: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <label>Height (cm):</label>
+                        <label>Height (mm):</label>
                         <input
                             type="number"
                             value={height}
@@ -145,6 +145,7 @@ const CreatePainting: React.FC = () => {
                             type="checkbox"
                             checked={sold}
                             onChange={(e) => setSold(e.target.checked)}
+                            required
                         />
                     </div>
                     <div>
@@ -154,7 +155,6 @@ const CreatePainting: React.FC = () => {
                             step="0.01"
                             value={price}
                             onChange={(e) => setPrice(e.target.value ? parseFloat(e.target.value) : "")}
-                            required
                         />
                     </div>
                     <div>
