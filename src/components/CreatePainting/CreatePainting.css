@@ -25,3 +25,14 @@
 .set-aspect-ratio {
     display:block;
 }
+
+.options-grid {
+    display: block; /* Ensures items stack naturally */
+    padding: 0;
+    list-style: none; /* Optional: Removes bullet points */
+  }
+
+  .option-item {
+    display: block; /*  Each list item takes full width */
+    padding: 5px 0;
+  }

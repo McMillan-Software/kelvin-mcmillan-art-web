@@ -3,6 +3,7 @@ import axios from "axios";
 import './CreatePainting.css';
 import { useAuth }  from "../../AuthContext";
 import { NavLink, Navigate } from 'react-router-dom';
+import { giclee, option_attributes } from "../../types/giclee";
 
 const paintingTypes = ["Watercolour", "Acrylic"];
 const pageOptions = ["Marine", "Rural", "Landscape"];
@@ -28,7 +29,7 @@ const CreatePainting: React.FC = () => {
     const [createdPainting, setCreatedPainting] = useState<any>(null)
 
     const [availableAspectRatios, setAvailableAspectRatios] = useState([]);
-    const [filteredOptions, setFilteredOptions] = useState([]);
+    const [filteredOptions, setFilteredOptions] = useState<option_attributes[]>([]);
 
     const handlePaintingCreation = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -273,7 +274,7 @@ const CreatePainting: React.FC = () => {
                     <input type="file" accept="image/jpeg, image/png" onChange={handleImageUpload} />
                 </div>
 
-                {/* ✅ SHOW CREATED PAINTING DETAILS HERE */}
+               
                 {createdPainting && (
                     <div className="created-painting-info">
                         <h3>Painting Created</h3>
@@ -281,8 +282,13 @@ const CreatePainting: React.FC = () => {
                         <p><strong>Type:</strong> {createdPainting.type}</p>
                         <p><strong>Size:</strong> {createdPainting.width} cm x {createdPainting.height} cm</p>
                         <p><strong>Price:</strong> ${createdPainting.price}</p>
-                        <p><strong>Sold:</strong> ${createdPainting.sold}</p>
-                        <p><strong>Image Path:</strong> ${createdPainting.imagePath}</p>
+                        <p><strong>Sold:</strong> {createdPainting.sold}</p>
+                        <p><strong>framed:</strong> {createdPainting.framed}</p>
+                        <p><strong>Giclee:</strong> {createdPainting.giclee}</p>
+                        <p><strong>Image Path:</strong> {createdPainting.image_path}</p>
+                        <p><strong>Info:</strong> {createdPainting.info}</p>
+                        <p><strong>Gallery Link:</strong> {createdPainting.galleryName}</p>
+                        <p><strong>Gallery Name:</strong> {createdPainting.galleryLink}</p>
                     </div>
                 )}
 
@@ -308,20 +314,20 @@ const CreatePainting: React.FC = () => {
                     ))}
                 </select>
                 <div className="options-box">
-                <h3>Options for Aspect Ratio: {aspectRatio || "None selected"}</h3>
+                    <h3>Options for Aspect Ratio: {aspectRatio || "None selected"}</h3>
 
-                {filteredOptions.length === 0 ? (
-                <p>No options available.</p>
-                ) : (
-                <ul className="options-grid">
-                    {filteredOptions.map((option, index) => (
-                <li key={index} className="option-item">
-                    {option.name} - {option.price} 
-                </li>
-            ))}
-        </ul>
-    )}
-</div>
+                    {filteredOptions.length === 0 ? (
+                    <p>No options available.</p>
+                    ) : (
+                    <ul className="options-grid">
+                        {filteredOptions.map((option, index) => (
+                        <li key={index} className="option-item">
+                            {option.width}x{option.height}mm,  ${option.price} 
+                        </li>
+                        ))}
+                    </ul>
+                    )}
+                </div>
 
 
             </div>
