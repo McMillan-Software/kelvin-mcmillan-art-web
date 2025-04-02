@@ -9,9 +9,9 @@ import { NavLink } from 'react-router-dom';
 const Admin: React.FC = () => {
     const { isAuthenticated } = useAuth();
     const [paintings, setPaintings] = useState<original[]>([]);
+    const paintingTypes = ["", "Watercolour", "Acrylic"];
     const [searchParams, setSearchParams] = useState<PaintingSearchParams>({
-      title: "",
-      location: "",
+      q: "",
       type: "",
       minWidth: undefined,
       maxWidth: undefined,
@@ -22,25 +22,53 @@ const Admin: React.FC = () => {
       giclee: undefined,
       minPrice: undefined,
       maxPrice: undefined,
-      aspect_ratio: "",
-      galleryName: "",
       page: 1, // Default first page
-      limit: 10, // Default page size
+      limit: 1000, // Default page size
     });
 
+    const resetSearchParam = () => {
+      setSearchParams({
+        q: "",
+        type: "",
+        minWidth: undefined,
+        maxWidth: undefined,
+        minHeight: undefined,
+        maxHeight: undefined,
+        sold: undefined,
+        framed: undefined,
+        giclee: undefined,
+        minPrice: undefined,
+        maxPrice: undefined,
+        page: 1, // Reset to first page
+        limit: 1000, // Reset page size
+      });
+    };
+
+    // Function to update state dynamically
     const updateSearchParam = (key: keyof PaintingSearchParams, value: any) => {
       setSearchParams((prev) => ({
         ...prev,
         [key]: value,
       }));
     };
+
+    // Function to update boolean fields dyanmically
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, checked } = event.target;
+      setSearchParams((prev) => ({
+        ...prev,
+        [name]: checked, // Dynamically update the field
+      }));
+    };
   
+    // Function to remove undefined/empty values before sending request
     const getFilteredParams = (params: PaintingSearchParams) => {
       return Object.fromEntries(
-        Object.entries(params).filter(([_, v]) => v !== undefined && v !== "")
+        Object.entries(params).filter(([_, v]) => v !== undefined && v !== "" && v !== 0) 
       );
     };
   
+      // Function to fetch paintings (debounced)
     const fetchPaintings = async () => {
       const filteredParams = getFilteredParams(searchParams);
       try {
@@ -52,6 +80,7 @@ const Admin: React.FC = () => {
       }
     };
   
+    // Automatically fetch when search params change (debounced)
     useEffect(() => {
       const delayDebounce = setTimeout(() => {
         fetchPaintings();
@@ -81,10 +110,17 @@ const Admin: React.FC = () => {
               <div className="painting-search-parameter-row">
                 <input
                   type="text"
-                  placeholder="Title"
-                  value={searchParams.title}
-                  onChange={(e) => updateSearchParam("title", e.target.value)}
+                  placeholder=""
+                  value={searchParams.q}
+                  onChange={(e) => updateSearchParam("q", e.target.value)}
                 />
+                  <select value={searchParams.type} onChange={(e) => updateSearchParam("type", e.target.value)}>
+                            {paintingTypes.map((option) => (
+                                <option key={option} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                  </select>
               </div>
               <div className="painting-search-parameter-row">
                 <input
@@ -96,26 +132,71 @@ const Admin: React.FC = () => {
                 <input
                   type="number"
                   placeholder="Max Width (mm)"
-                  value={searchParams.minWidth || ""}
+                  value={searchParams.maxWidth || ""}
                   onChange={(e) => updateSearchParam("maxWidth", Number(e.target.value))}
                 />
               </div>
               <div className="painting-search-parameter-row">
-              <input
-                    type="number"
-                    placeholder="Min Height (mm)"
-                    value={searchParams.minWidth || ""}
-                    onChange={(e) => updateSearchParam("minHeight", Number(e.target.value))}
-                  />
+                <input
+                  type="number"
+                  placeholder="Min Height (mm)"
+                  value={searchParams.minHeight || ""}
+                  onChange={(e) => updateSearchParam("minHeight", Number(e.target.value))}
+                />
                 <input
                   type="number"
                   placeholder="Max Height (mm)"
-                  value={searchParams.minWidth || ""}
+                  value={searchParams.maxHeight || ""}
                   onChange={(e) => updateSearchParam("maxHeight", Number(e.target.value))}
                 />
-               
+              </div>
+              <div className="painting-search-parameter-row">
+                <input
+                      type="number"
+                      placeholder="Min price"
+                      value={searchParams.minPrice || ""}
+                      onChange={(e) => updateSearchParam("minPrice", Number(e.target.value))}
+                    />
+                  <input
+                    type="number"
+                    placeholder="Max price"
+                    value={searchParams.maxPrice || ""}
+                    onChange={(e) => updateSearchParam("maxPrice", Number(e.target.value))}
+                  />
+              </div>
+              <div className="painting-search-parameter-row">
+                <label>
+                <input
+                  type="checkbox"
+                  name="sold"
+                  checked={searchParams.sold}
+                  onChange={handleCheckboxChange}
+                />
+                Sold
+              </label>
+
+              <label>
+                <input
+                  type="checkbox"
+                  name="framed"
+                  checked={searchParams.framed}
+                  onChange={handleCheckboxChange}
+                />
+                Framed
+              </label>
+
+              <label>
+                <input
+                  type="checkbox"
+                  name="giclee"
+                  checked={searchParams.giclee}
+                  onChange={handleCheckboxChange}
+                />
+                Giclee
+              </label>
               </div>
             </div>
+            <button onClick={resetSearchParam}>Reset</button>
           </div>
           
           <ul className="admin-painting-list">
@@ -130,6 +211,7 @@ const Admin: React.FC = () => {
                     alt={painting.title}
                   />  
                   <p>{painting.title}</p>
+                  <p>Information: {painting.info}</p>
                   <p>Height: {painting.height}mm</p>
                   <p>Width: {painting.width}mm </p>
                   <p>Price: ${painting.price} </p>
@@ -139,7 +221,7 @@ const Admin: React.FC = () => {
                       Edit
                     </NavLink>
                   </button>
-                  <button>
+                  <button>y
                     Delete
                   </button>
                 </div>

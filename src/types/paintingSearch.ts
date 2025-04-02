@@ -1,6 +1,5 @@
 export type PaintingSearchParams = {
-    title?: string;         // Partial match (LIKE)
-    location?: string;      // Partial match (LIKE)
+    q?: string;             // Partial match (LIKE)
     type?: string;          // Exact match
     minWidth?: number;      // Lower bound
     maxWidth?: number;      // Upper bound
@@ -11,8 +10,6 @@ export type PaintingSearchParams = {
     giclee?: boolean;       // Filter by giclee status
     minPrice?: number;      // Lower bound
     maxPrice?: number;      // Upper bound
-    aspect_ratio?: string;  // Exact match
-    galleryName?: string;   // Partial match (LIKE)
     
     // Pagination
     page?: number;          // Page number
