@@ -19,7 +19,10 @@
 }
 
 .giclee-create {
-    overflow: visible;
+    overflow: visible; /* What does this do? */
+    display: block;  /* Ensures it takes up full width */
+    clear: both;  /* Prevents floating elements from affecting it */
+    margin-top: 50px;  /* Space between above section */
 }
 
 .set-aspect-ratio {
@@ -27,12 +30,47 @@
 }
 
 .options-grid {
-    display: block; /* Ensures items stack naturally */
+    display: flex;
+    flex-direction: column; /* Ensures items stack properly */
+    align-items: flex-start; /* Aligns all text to the left */
+    width: 100%; /* Makes sure there is enough room */
     padding: 0;
     list-style: none; /* Optional: Removes bullet points */
+}
+
+
+.option-item {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Align items vertically */
+    gap: 20px; /* Adjust spacing between fields */
+    padding: 8px;
+    border-bottom: 1px solid #ddd; /* Add a separator between rows */
+}
+
+
+
+.option-cell {
+    flex: 1; /* Make fields take equal space */
+    text-align: left; /* Align text */
+}
+.option-dimensions {
+    white-space: nowrap; /* Prevents line breaks */
+    min-width: 150px; /* Ensures enough space */
+    text-align: left; /* Keeps alignment consistent */
   }
 
-  .option-item {
-    display: block; /*  Each list item takes full width */
-    padding: 5px 0;
-  }
+
+
+.add-option-button {
+    padding: 5px 10px;
+    font-size: 16px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+  
+.add-option-button:hover {
+    background-color: #0056b3;
+}

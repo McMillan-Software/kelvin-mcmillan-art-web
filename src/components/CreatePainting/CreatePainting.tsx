@@ -156,7 +156,33 @@ const CreatePainting: React.FC = () => {
         fetchOptions();
     }, [aspectRatio]);  // ✅ Runs whenever aspectRatio changes
 
+const handleAddOption = async (paintingId: number, optionAttributesId: number) => {
 
+    console.log("paintingId: ", paintingId)
+
+    try {
+        const token = localStorage.getItem("token");
+        const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}admin/giclee`, 
+        {
+            painting_id: paintingId,
+            page_order: 0, 
+            goa_ids: [optionAttributesId],
+            create_all_for_aspect_ratio: false
+        },
+        {
+            headers: { Authorization: `Bearer ${token}` },
+        }
+    );
+
+        console.log("Option added successfully:", response.data);
+
+        } catch (error) {
+            console.error("Error adding Option: ", error)
+    }
+
+}; 
+    
 
 
     return (
@@ -278,6 +304,7 @@ const CreatePainting: React.FC = () => {
                 {createdPainting && (
                     <div className="created-painting-info">
                         <h3>Painting Created</h3>
+                        <p><strong>Id:</strong> {createdPainting.id}</p>
                         <p><strong>Title:</strong> {createdPainting.title}</p>
                         <p><strong>Type:</strong> {createdPainting.type}</p>
                         <p><strong>Size:</strong> {createdPainting.width} cm x {createdPainting.height} cm</p>
@@ -319,10 +346,12 @@ const CreatePainting: React.FC = () => {
                     {filteredOptions.length === 0 ? (
                     <p>No options available.</p>
                     ) : (
-                    <ul className="options-grid">
+                    <ul className="options-grid option-dimensions">
                         {filteredOptions.map((option, index) => (
                         <li key={index} className="option-item">
-                            {option.width}x{option.height}mm,  ${option.price} 
+                            <span className="option-cell">{option.width} x {option.height}mm</span>
+                            <span className="option-cell">${option.price}</span>
+                            <button className="add-option-button" onClick={() => handleAddOption(createdPainting.id, option.id)}>+</button>
                         </li>
                         ))}
                     </ul>
