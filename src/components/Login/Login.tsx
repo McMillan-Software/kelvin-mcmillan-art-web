@@ -15,10 +15,17 @@ const Login: React.FC = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}authentication/login`, {
-                username,
-                password,
-            });
+             // Create form data to send as 'application/x-www-form-urlencoded'
+            const formData = new URLSearchParams();
+            formData.append("username", username);
+            formData.append("password", password);
+
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}authentication/login`, 
+                formData,
+                {
+                    headers: {"Content-Type": "application/x-www-form-urlencoded"} // is this necessary?
+                }
+               );
 
             login(response.data.access_token);
             navigate("/admin");
