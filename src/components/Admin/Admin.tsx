@@ -95,7 +95,6 @@ const Admin: React.FC = () => {
   } else {
     return (
       <div className='admin-div'>
-          <h3>Admin</h3>
           <div>
           <button>
             <NavLink to="/CreatePainting">
@@ -105,96 +104,128 @@ const Admin: React.FC = () => {
           </div>
 
           <div className="painting-search-div">
-            <h4>Painting Search</h4>
+            <div className="paninting-search-div_title">
+              <h2>Painting Search</h2>
+            </div>
             <div className="painting-search-parameters">
-              <div className="painting-search-parameter-row">
-                <input
-                  type="text"
-                  placeholder=""
-                  value={searchParams.q}
-                  onChange={(e) => updateSearchParam("q", e.target.value)}
-                />
-                  <select value={searchParams.type} onChange={(e) => updateSearchParam("type", e.target.value)}>
-                            {paintingTypes.map((option) => (
-                                <option key={option} value={option}>
-                                    {option}
-                                </option>
-                            ))}
-                  </select>
-              </div>
-              <div className="painting-search-parameter-row">
-                <input
-                    type="number"
-                    placeholder="Min Width (mm)"
-                    value={searchParams.minWidth || ""}
-                    onChange={(e) => updateSearchParam("minWidth", Number(e.target.value))}
-                  />
-                <input
-                  type="number"
-                  placeholder="Max Width (mm)"
-                  value={searchParams.maxWidth || ""}
-                  onChange={(e) => updateSearchParam("maxWidth", Number(e.target.value))}
-                />
-              </div>
-              <div className="painting-search-parameter-row">
-                <input
-                  type="number"
-                  placeholder="Min Height (mm)"
-                  value={searchParams.minHeight || ""}
-                  onChange={(e) => updateSearchParam("minHeight", Number(e.target.value))}
-                />
-                <input
-                  type="number"
-                  placeholder="Max Height (mm)"
-                  value={searchParams.maxHeight || ""}
-                  onChange={(e) => updateSearchParam("maxHeight", Number(e.target.value))}
-                />
-              </div>
-              <div className="painting-search-parameter-row">
-                <input
-                      type="number"
-                      placeholder="Min price"
-                      value={searchParams.minPrice || ""}
-                      onChange={(e) => updateSearchParam("minPrice", Number(e.target.value))}
-                    />
+
+              <div className="painting-search-parameter-column">
+                <div className="painting-search-parameter-row_keyword">
                   <input
-                    type="number"
-                    placeholder="Max price"
-                    value={searchParams.maxPrice || ""}
-                    onChange={(e) => updateSearchParam("maxPrice", Number(e.target.value))}
+                    type="text"
+                    placeholder="Keywords"
+                    value={searchParams.q}
+                    onChange={(e) => updateSearchParam("q", e.target.value)}
                   />
-              </div>
-              <div className="painting-search-parameter-row">
+                </div>
+
+                <div className="painting-search-parameter-row">
+                  <label className="parameter-label">Type</label>
+                  <select value={searchParams.type} onChange={(e) => updateSearchParam("type", e.target.value)}>
+                                {paintingTypes.map((option) => (
+                                    <option key={option} value={option}>
+                                        {option}
+                                    </option>
+                                ))}
+                      </select>
+                </div>
+                <div className="painting-search-parameter-row">
+                  <label>
+                  <input
+                    type="checkbox"
+                    name="sold"
+                    checked={searchParams.sold}
+                    onChange={handleCheckboxChange}
+                  />
+                  Sold
+                </label>
+
                 <label>
-                <input
-                  type="checkbox"
-                  name="sold"
-                  checked={searchParams.sold}
-                  onChange={handleCheckboxChange}
-                />
-                Sold
-              </label>
+                  <input
+                    type="checkbox"
+                    name="framed"
+                    checked={searchParams.framed}
+                    onChange={handleCheckboxChange}
+                  />
+                  Framed
+                </label>
 
-              <label>
-                <input
-                  type="checkbox"
-                  name="framed"
-                  checked={searchParams.framed}
-                  onChange={handleCheckboxChange}
-                />
-                Framed
-              </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    name="giclee"
+                    checked={searchParams.giclee}
+                    onChange={handleCheckboxChange}
+                  />
+                  Giclee
+                </label>
+                </div>
+              </div>            
 
-              <label>
-                <input
-                  type="checkbox"
-                  name="giclee"
-                  checked={searchParams.giclee}
-                  onChange={handleCheckboxChange}
-                />
-                Giclee
-              </label>
+
+              <div className="painting-search-parameter-column">
+                <div className="painting-search-parameter-row">
+                  <label className="parameter-label">Width</label>
+                  <div className="painting-search-parameter-row_input">
+                    <input
+                      className="search-parameter-number-input"
+                      type="number"
+                      placeholder="Min mm"
+                      value={searchParams.minWidth || ""}
+                      onChange={(e) => updateSearchParam("minWidth", Number(e.target.value))}
+                    />
+                    <input
+                      className="search-parameter-number-input"
+                      type="number"
+                      placeholder="Max mm"
+                      value={searchParams.maxWidth || ""}
+                      onChange={(e) => updateSearchParam("maxWidth", Number(e.target.value))}
+                    />
+                  </div>
+                </div>
+
+                <div className="painting-search-parameter-row">
+                  <label className="parameter-label">Height</label>
+                  <div className="painting-search-parameter-row_input">
+                    <input
+                      className="search-parameter-number-input"
+                      type="number"
+                      placeholder="Min mm"
+                      value={searchParams.minHeight || ""}
+                      onChange={(e) => updateSearchParam("minHeight", Number(e.target.value))}
+                    />
+                    <input
+                      className="search-parameter-number-input"
+                      type="number"
+                      placeholder="Max mm"
+                      value={searchParams.maxHeight || ""}
+                      onChange={(e) => updateSearchParam("maxHeight", Number(e.target.value))}
+                    />
+                  </div>
+                </div>
+              
+
+                <div className="painting-search-parameter-row">
+                  <label className="parameter-label">Price</label>
+                  <div className="painting-search-parameter-row_input">               
+                    <input
+                        className="search-parameter-number-input"
+                        type="number"
+                        placeholder="Min $"
+                        value={searchParams.minPrice || ""}
+                        onChange={(e) => updateSearchParam("minPrice", Number(e.target.value))}
+                    />
+                    <input
+                      className="search-parameter-number-input"
+                      type="number"
+                      placeholder="Max $"
+                      value={searchParams.maxPrice || ""}
+                      onChange={(e) => updateSearchParam("maxPrice", Number(e.target.value))}
+                    />
+                  </div>     
+                </div>
               </div>
+
             </div>
             <button onClick={resetSearchParam}>Reset</button>
           </div>

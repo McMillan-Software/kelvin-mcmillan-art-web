@@ -2,12 +2,14 @@ import React, { useState, useContext  } from "react";
 import axios from "axios";
 import "./Login.css";
 import { useAuth }  from "../../AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
     const { isAuthenticated, login} = useAuth();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -19,7 +21,7 @@ const Login: React.FC = () => {
             });
 
             login(response.data.access_token);
-            alert("Login successful!");
+            navigate("/admin");
         } catch (err: any) {
             setError("Invalid username or password");
         }

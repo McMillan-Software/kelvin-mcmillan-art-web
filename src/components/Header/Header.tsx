@@ -19,7 +19,7 @@ const Header: React.FC = () => {
           </div>
           <ul className={showMenu ? "open" : "close"}>
             <li>
-              <NavLink to="/Home" 
+              <NavLink to="/" 
                   className={({ isActive }) => isActive ? 'active' : ''}>
                   Home
               </NavLink>
