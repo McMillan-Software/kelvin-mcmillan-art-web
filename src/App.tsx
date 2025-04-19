@@ -12,6 +12,7 @@ import Admin from './components/Admin/Admin';
 import Prints from './components/Prints/Prints';
 import Login from './components/Login/Login';
 import CreatePainting from './components/CreatePainting/CreatePainting';
+import EditPainting from './components/EditPainting/EditPainting';
 import { AuthProvider } from './AuthContext';
 
 
@@ -36,6 +37,7 @@ function App() {
                    <Route path="/Prints" element={<Prints/>}/> 
                   <Route path="/Login" element={<Login/>}/>
                   <Route path="/CreatePainting" element={<CreatePainting/>}/>
+                  <Route path="/EditPainting/:id" element={<EditPainting/>}/>
               </Routes>
             </div>
           </div>

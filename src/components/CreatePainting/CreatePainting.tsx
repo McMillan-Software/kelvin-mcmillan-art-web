@@ -2,13 +2,14 @@ import React, { useEffect, useState  } from "react";
 import axios from "axios";
 import './CreatePainting.css';
 import { useAuth }  from "../../AuthContext";
-import { NavLink, Navigate } from 'react-router-dom';
-import { giclee, option_attributes } from "../../types/giclee";
+import { NavLink , useNavigate } from 'react-router-dom';
+import { option_attributes } from "../../types/giclee";
 
 const paintingTypes = ["Watercolour", "Acrylic"];
 const pageOptions = ["Marine", "Rural", "Landscape"];
 
 const CreatePainting: React.FC = () => {
+    const navigate = useNavigate();
     const { isAuthenticated} = useAuth(); // why { } here 
     const[error, setError] = useState("");
     const [title, setTitle] = useState("");
@@ -25,10 +26,6 @@ const CreatePainting: React.FC = () => {
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string>("");
     const [pages, setPages] = useState<string[]>([]);
-
-    // are we holdingthwe painting object? Doesnt look like it. Need to to do further work on it.  
-    const [createdPainting, setCreatedPainting] = useState<any>(null)
-
     const [availableAspectRatios, setAvailableAspectRatios] = useState([]);
     const [filteredOptions, setFilteredOptions] = useState<option_attributes[]>([]);
 
@@ -56,7 +53,6 @@ const CreatePainting: React.FC = () => {
                 }
               );
 
-            setCreatedPainting(response.data)
             alert("Painting created successfully");
 
             if (image) {
@@ -74,7 +70,7 @@ const CreatePainting: React.FC = () => {
                 );
                 alert("Image uploaded successfully");
             }
-            return <Navigate to="/admin" />;
+            return navigate("/editPainting/" + response.data.id);
         } catch (err: any) {
             setError(err.response?.data?.message || "Error creating painting");
         }
