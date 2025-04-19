@@ -9,13 +9,14 @@ const paintingTypes = ["Watercolour", "Acrylic"];
 const pageOptions = ["Marine", "Rural", "Landscape"];
 
 const CreatePainting: React.FC = () => {
-    const { isAuthenticated, login} = useAuth(); // why { } here 
+    const { isAuthenticated} = useAuth(); // why { } here 
     const[error, setError] = useState("");
     const [title, setTitle] = useState("");
     const [type, setType] = useState("Watercolour");
     const [width, setWidth] = useState<number | "">("");
     const [height, setHeight] = useState<number | "">("");
     const [sold, setSold] = useState(false);
+    const [framed, setFramed] = useState(false);
     const [price, setPrice] = useState<number | "">("");
     const [info, setInfo] = useState("");
     const [aspectRatio, setAspectRatio] = useState("");
@@ -42,6 +43,7 @@ const CreatePainting: React.FC = () => {
                   width: width || 0, // default values for width and height??? ahh ahh, perhaps we add validation to the back end
                   height: height || 0, 
                   sold,
+                  framed,
                   price: price || 0.0, // I was forced to enter a price so what is the point if this? 
                   info,
                   aspectRatio,
@@ -236,7 +238,14 @@ const handleAddOption = async (paintingId: number, optionAttributesId: number) =
                             type="checkbox"
                             checked={sold}
                             onChange={(e) => setSold(e.target.checked)}
-                            required
+                        />
+                    </div>
+                    <div>
+                        <label>Framed:</label>
+                        <input
+                            type="checkbox"
+                            checked={framed}
+                            onChange={(e) => setFramed(e.target.checked)}
                         />
                     </div>
                     <div>
