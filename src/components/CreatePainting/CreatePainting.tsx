@@ -11,7 +11,7 @@ const pageOptions = ["Marine", "Rural", "Landscape"];
 const CreatePainting: React.FC = () => {
     const navigate = useNavigate();
     const { isAuthenticated} = useAuth(); // why { } here 
-    const[error, setError] = useState("");
+    const [error, setError] = useState("");
     const [title, setTitle] = useState("");
     const [type, setType] = useState("Watercolour");
     const [width, setWidth] = useState<number | "">("");
@@ -295,6 +295,7 @@ const handleAddOption = async (paintingId: number, optionAttributesId: number) =
                     <button type="submit">Create Painting</button>
                 </form>
                 </div>
+
                 <div className="painting-creation-image-div">
                     <h2>Painting Image</h2>
                     <img src={imagePreview || "/images/placeholder.jpg"} alt="Placeholder"   
@@ -304,25 +305,6 @@ const handleAddOption = async (paintingId: number, optionAttributesId: number) =
                             }}/>
                     <input type="file" accept="image/jpeg, image/png" onChange={handleImageUpload} />
                 </div>
-
-               
-                {createdPainting && (
-                    <div className="created-painting-info">
-                        <h3>Painting Created</h3>
-                        <p><strong>Id:</strong> {createdPainting.id}</p>
-                        <p><strong>Title:</strong> {createdPainting.title}</p>
-                        <p><strong>Type:</strong> {createdPainting.type}</p>
-                        <p><strong>Size:</strong> {createdPainting.width} cm x {createdPainting.height} cm</p>
-                        <p><strong>Price:</strong> ${createdPainting.price}</p>
-                        <p><strong>Sold:</strong> {createdPainting.sold}</p>
-                        <p><strong>framed:</strong> {createdPainting.framed}</p>
-                        <p><strong>Giclee:</strong> {createdPainting.giclee}</p>
-                        <p><strong>Image Path:</strong> {createdPainting.image_path}</p>
-                        <p><strong>Info:</strong> {createdPainting.info}</p>
-                        <p><strong>Gallery Link:</strong> {createdPainting.galleryName}</p>
-                        <p><strong>Gallery Name:</strong> {createdPainting.galleryLink}</p>
-                    </div>
-                )}
 
 
 

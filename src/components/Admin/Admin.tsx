@@ -252,7 +252,7 @@ const Admin: React.FC = () => {
                       Edit
                     </NavLink>
                   </button>
-                  <button>y
+                  <button>
                     Delete
                   </button>
                 </div>
