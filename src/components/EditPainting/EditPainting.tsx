@@ -1,13 +1,14 @@
-import React, { useState, useContext, useEffect  } from "react";
+import React, { useState , useEffect  } from "react";
 import { useParams,  } from 'react-router-dom';
 import { useAuth }  from "../../AuthContext";
-import { original} from "../../types/original";
+import { editPainting } from "../../types/editPainting";
+
 import axios from "axios";
 
 const EditPainting: React.FC = () => {
     const { isAuthenticated} = useAuth();
     let { id } = useParams<{ id: string }>();
-    const [original, setOrginal] = React.useState<original>({} as original);
+    const [editPainting, setEditPaitning] = React.useState<editPainting>({} as editPainting);
     const [error, setError] = useState("");
     const [image, setImage] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -15,26 +16,47 @@ const EditPainting: React.FC = () => {
 
     useEffect(() => {
       axios.get(`${import.meta.env.VITE_API_URL}paintings/${id}`).then((response) => {
-        setOrginal(response.data);
+        setEditPaitning(response.data);
       })
       .catch((error) => {
         console.error(`Error fetching data: ${error}`);
       });
     }, []);
 
-    const handleFieldChange = (key: keyof original, value: string | number | boolean) => {
-        setOrginal((prev) => ({
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type, checked } = e.target;
+
+        const finalValue =
+            type === "checkbox" ? checked :
+            type === "number" ? Number(value) :
+            value;
+
+        setEditPaitning((prev) => ({
             ...prev,
-            [key]: value,
+            [name]: finalValue,
         }));
     };
 
-    const handleEditPaintingDetails = () => {
+    const handleEditPainting = (e: React.FormEvent) => {
+        e.preventDefault();
+        axios.put(
+            `${import.meta.env.VITE_API_URL}admin/painting/${id}`,
+            editPainting   
+            ,
+            {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            }
+        ).then((response) => {
+            setEditPaitning(response.data);
+            alert("Painting created edited");
+        })
+        .catch((error) => {
+            console.error(`Error fetching data: ${error}`);
+            setError(error)
+        });
+        }
 
-    } ;
-
-
-    //IMAGE UPLOAD 
+    //Images
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && (file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg")) {
@@ -61,7 +83,7 @@ const EditPainting: React.FC = () => {
 
         try {
             await axios.post(
-                `${import.meta.env.VITE_API_URL}admin/painting/${original.id}/image`,
+                `${import.meta.env.VITE_API_URL}admin/painting/${editPainting.id}/image`,
                 formData,
                 {
                     headers: {
@@ -79,8 +101,6 @@ const EditPainting: React.FC = () => {
 
 
 
-
-
     if (!isAuthenticated) {
         return <div>User must login</div>;
       } else {
@@ -91,109 +111,125 @@ const EditPainting: React.FC = () => {
             <div className="painting-details">
                 <h2>Edit Painting Details</h2>
                                 <h2>Painting Details</h2>    
-                <form className="painting-form" onSubmit={handleEditPaintingDetails}>
+                <form className="painting-form" onSubmit={handleEditPainting}>
 
                     <div>
                         <label>Title:</label>
                         <input
                             type="text"
-                            value={original.title}
-                            onChange={(e) => handleFieldChange("title", e.target.value)}
-                            placeholder= {original.title}
+                            value={editPainting.title}
+                            onChange={handleChange}
+                            placeholder= {editPainting.title}
                             
                         />
                     </div>
-                    {/* <div>
-                        <label>Type:</label>
-                        <select value={type} onChange={(e) => setType(e.target.value)}>
-                            {paintingTypes.map((option) => (
-                                <option key={option} value={option}>
-                                    {option}
-                                </option>
-                            ))}
-                        </select>
-                    </div> */}
-                    {/* <div>
-                        <label>Width (mm):</label>
-                        <input
-                            type="number"
-                            value={width}
-                            onChange={(e) => setWidth(e.target.value ? parseInt(e.target.value) : "")}
-                            required
-                        />
-                    </div>
+
                     <div>
-                        <label>Height (mm):</label>
+                        <label>Location:</label>
                         <input
-                            type="number"
-                            value={height}
-                            onChange={(e) => setHeight(e.target.value ? parseInt(e.target.value) : "")}
-                            required
+                            type="text"
+                            name="location"
+                            value={editPainting.location ?? ""}
+                            onChange={handleChange}
+                            placeholder="Location"
                         />
                     </div>
+
+                    <div>
+                        <label>Type:</label>
+                        <input
+                            type="text"
+                            name="type"
+                            value={editPainting.type}
+                            onChange={handleChange}
+                            placeholder="Type"
+                        />
+                    </div>
+
+                    <div>
+                        <label>Width:</label>
+                        <input
+                            type="number"
+                            name="width"
+                            value={editPainting.width}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div>
+                        <label>Height:</label>
+                        <input
+                            type="number"
+                            name="height"
+                            value={editPainting.height}
+                            onChange={handleChange}
+                        />
+                    </div>
+
                     <div>
                         <label>Sold:</label>
                         <input
                             type="checkbox"
-                            checked={sold}
-                            onChange={(e) => setSold(e.target.checked)}
+                            name="sold"
+                            checked={!!editPainting.sold}
+                            onChange={handleChange}
                         />
                     </div>
+
                     <div>
                         <label>Framed:</label>
                         <input
                             type="checkbox"
-                            checked={framed}
-                            onChange={(e) => setFramed(e.target.checked)}
+                            name="framed"
+                            checked={!!editPainting.framed}
+                            onChange={handleChange}
                         />
                     </div>
+
                     <div>
-                        <label>Price ($):</label>
+                        <label>Price:</label>
                         <input
                             type="number"
+                            name="price"
+                            value={editPainting.price}
+                            onChange={handleChange}
                             step="0.01"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value ? parseFloat(e.target.value) : "")}
                         />
                     </div>
+
                     <div>
-                        <label>Info:</label>
-                        <textarea
-                            value={info}
-                            onChange={(e) => setInfo(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label>Gallery Link:</label>
+                        <label>Information:</label>
                         <input
                             type="text"
-                            value={galleryLink}
-                            onChange={(e) => setGalleryLink(e.target.value)}
+                            name="info"
+                            value={editPainting.info}
+                            onChange={handleChange}
+                            placeholder="Info"
                         />
                     </div>
+
                     <div>
                         <label>Gallery Name:</label>
                         <input
                             type="text"
-                            value={galleryName}
-                            onChange={(e) => setGalleryName(e.target.value)}
+                            name="galleryName"
+                            value={editPainting.galleryName ?? ""}
+                            onChange={handleChange}
+                            placeholder="Gallery Name"
                         />
                     </div>
+
                     <div>
-                        <label>Pages:</label>
-                        {pageOptions.map((option) => (
-                            <div key={option}>
-                                <input
-                                    type="checkbox"
-                                    id={option}
-                                    value={option}
-                                    checked={pages.includes(option)}
-                                    onChange={() => handlePageSelection(option)}
-                                />
-                                <label htmlFor={option}>{option}</label>
-                            </div>
-                        ))} */}
-                    {/* </div> */}
+                        <label>Gallery Link:</label>
+                        <input
+                            type="text"
+                            name="galleryLink"
+                            value={editPainting.galleryLink ?? ""}
+                            onChange={handleChange}
+                            placeholder="Gallery Link"
+                        />
+                    </div>
+
                     {error && <p style={{ color: "red" }}>{error}</p>}
                     <button type="submit">Save Painting Details</button>
                 </form>
@@ -207,11 +243,11 @@ const EditPainting: React.FC = () => {
                         src={
                             previewUrl
                                 ? previewUrl
-                                : original.image_path
-                                    ? `${import.meta.env.VITE_IMAGE_BASE_PATH}${original.image_path}`
+                                : editPainting.image_path
+                                    ? `${import.meta.env.VITE_IMAGE_BASE_PATH}${editPainting.image_path}`
                                     : "/images/placeholder.jpg"
                         }
-                        alt={original.title}
+                        alt={editPainting.title}
                         style={{
                             width: "100%",
                             height: "300px",
@@ -226,7 +262,6 @@ const EditPainting: React.FC = () => {
                     )}
                 </div>
             </div>
-
 
             <div className="painting-giclee"> 
 

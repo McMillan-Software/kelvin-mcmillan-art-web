@@ -23,8 +23,6 @@ const CreatePainting: React.FC = () => {
     const [aspectRatio, setAspectRatio] = useState("");
     const [galleryLink, setGalleryLink] = useState("");
     const [galleryName, setGalleryName] = useState("");
-    const [image, setImage] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string>("");
     const [pages, setPages] = useState<string[]>([]);
     const [availableAspectRatios, setAvailableAspectRatios] = useState([]);
     const [filteredOptions, setFilteredOptions] = useState<option_attributes[]>([]);
@@ -55,21 +53,6 @@ const CreatePainting: React.FC = () => {
 
             alert("Painting created successfully");
 
-            if (image) {
-                const formData = new FormData();
-                formData.append("file", image);
-                await axios.post(
-                    `${import.meta.env.VITE_API_URL}admin/painting/${response.data.id}/image`,
-                    formData,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem("token")}`,
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
-                );
-                alert("Image uploaded successfully");
-            }
             return navigate("/editPainting/" + response.data.id);
         } catch (err: any) {
             setError(err.response?.data?.message || "Error creating painting");
@@ -84,19 +67,6 @@ const CreatePainting: React.FC = () => {
         );
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file && (file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg")) {
-            setImage(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            setError("Please upload a valid image file (jpg or png)");
-        }
-    };
 
     if (!isAuthenticated) {
         return <div>User must log in</div>;
@@ -296,17 +266,6 @@ const handleAddOption = async (paintingId: number, optionAttributesId: number) =
                 </form>
                 </div>
 
-                <div className="painting-creation-image-div">
-                    <h2>Painting Image</h2>
-                    <img src={imagePreview || "/images/placeholder.jpg"} alt="Placeholder"   
-                    style={{    width: "100%",
-                                height: "300px",
-                                objectFit: "contain",
-                            }}/>
-                    <input type="file" accept="image/jpeg, image/png" onChange={handleImageUpload} />
-                </div>
-
-
 
                
             </div>
@@ -338,7 +297,7 @@ const handleAddOption = async (paintingId: number, optionAttributesId: number) =
                         <li key={index} className="option-item">
                             <span className="option-cell">{option.width} x {option.height}mm</span>
                             <span className="option-cell">${option.price}</span>
-                            <button className="add-option-button" onClick={() => handleAddOption(createdPainting.id, option.id)}>+</button>
+                            {/* <button className="add-option-button" onClick={() => handleAddOption(createdPainting.id, option.id)}>+</button> */}
                         </li>
                         ))}
                     </ul>
