@@ -4,7 +4,7 @@ import { original } from "./original"
 export interface giclee {
     painting_id: number,
     page_order: number,
-    painting: original,
+    painting: original, // TODO: why is original here...? 
     options: option[]  
 }
 
@@ -20,4 +20,9 @@ export interface option_attributes {
     height: number,
     aspect_ratio: string,
     price: number
+}
+
+export interface valid_giclee_options {
+    painting_has_option: boolean, // different case
+    attributes: option_attributes
 }

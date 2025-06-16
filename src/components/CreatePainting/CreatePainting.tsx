@@ -3,7 +3,7 @@ import axios from "axios";
 import './CreatePainting.css';
 import { useAuth }  from "../../AuthContext";
 import { NavLink, Navigate } from 'react-router-dom';
-import { giclee, option_attributes } from "../../types/giclee";
+import { giclee, option_attributes, valid_giclee_options } from "../../types/giclee";
 
 const paintingTypes = ["Watercolour", "Acrylic"];
 const pageOptions = ["Marine", "Rural", "Landscape"];
@@ -11,6 +11,8 @@ const pageOptions = ["Marine", "Rural", "Landscape"];
 const CreatePainting: React.FC = () => {
     const { isAuthenticated} = useAuth(); // why { } here 
     const[error, setError] = useState("");
+    
+    // create painting
     const [title, setTitle] = useState("");
     const [type, setType] = useState("Watercolour");
     const [width, setWidth] = useState<number | "">("");
@@ -19,18 +21,19 @@ const CreatePainting: React.FC = () => {
     const [framed, setFramed] = useState(false);
     const [price, setPrice] = useState<number | "">("");
     const [info, setInfo] = useState("");
-    const [aspectRatio, setAspectRatio] = useState("");
     const [galleryLink, setGalleryLink] = useState("");
     const [galleryName, setGalleryName] = useState("");
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string>("");
-    const [pages, setPages] = useState<string[]>([]);
-
-    // are we holdingthwe painting object? Doesnt look like it. Need to to do further work on it.  
+    const [pages, setPages] = useState<string[]>([]); 
     const [createdPainting, setCreatedPainting] = useState<any>(null)
-
-    const [availableAspectRatios, setAvailableAspectRatios] = useState([]);
-    const [filteredOptions, setFilteredOptions] = useState<option_attributes[]>([]);
+    
+    // create giclees
+    const [dropDownSelectedAspectRatio, setDropDownAspectRatio] = useState(""); // selected aspect ratio - set by user interacting with the drop down
+    const [availableAspectRatios, setAvailableAspectRatios] = useState([]); // aspect ratios for dropdown
+    const [filteredOptions, setFilteredOptions] = useState<option_attributes[]>([]); // TODO: remove (old giclee options)
+    const [validGicleeOptions, setValidGicleeOptions] = useState<valid_giclee_options[]>([]) // new giclee options, contains what options have been added
+    const [gicleeOptionsRefreshTrigger, setGicleeOptionsRefreshTrigger] = useState(0);
 
     const handlePaintingCreation = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -40,13 +43,13 @@ const CreatePainting: React.FC = () => {
                 {
                   title,
                   type,
-                  width: width || 0, // default values for width and height??? ahh ahh, perhaps we add validation to the back end
+                  width: width || 0,
                   height: height || 0, 
                   sold,
                   framed,
-                  price: price || 0.0, // I was forced to enter a price so what is the point if this? 
+                  price: price || 0.0,
                   info,
-                  aspectRatio,
+                  aspectRatio: dropDownSelectedAspectRatio,
                   galleryLink,
                   galleryName,
                   pages,
@@ -80,6 +83,7 @@ const CreatePainting: React.FC = () => {
         }
     };
 
+
     const handlePageSelection = (selectedPage: string) => {
         setPages((prevPages) =>
             prevPages.includes(selectedPage)
@@ -87,6 +91,7 @@ const CreatePainting: React.FC = () => {
                 : [...prevPages, selectedPage]
         );
     };
+
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -131,17 +136,17 @@ const CreatePainting: React.FC = () => {
 
         fetchAspectRatios();
 
-    }, [] ); // only runs once at mount.... this should change. 
+    }, [] ); // only runs once at mount.
 
 
     // Get available Giclee option for the selected aspect ratio. 
     useEffect(() => {
-        if (!aspectRatio) return; // Don't fetch if no aspect ratio is selected
+        if (!dropDownSelectedAspectRatio) return; // Don't fetch if no aspect ratio is selected
     
         const fetchOptions = async () => {
             try {
-                console.log(`Fetching options for aspect ratio: ${aspectRatio}`);
-                const encodedAspectRatio = encodeURIComponent(aspectRatio);
+                console.log(`Fetching options for aspect ratio: ${dropDownSelectedAspectRatio}`);
+                const encodedAspectRatio = encodeURIComponent(dropDownSelectedAspectRatio);
                 const token = localStorage.getItem("token"); // Get stored token
                 const response = await axios.get(
                     `${import.meta.env.VITE_API_URL}admin/giclee/dimensions?aspect_ratio=${encodedAspectRatio}`, 
@@ -156,12 +161,41 @@ const CreatePainting: React.FC = () => {
         };
     
         fetchOptions();
-    }, [aspectRatio]);  // ✅ Runs whenever aspectRatio changes
+    }, [dropDownSelectedAspectRatio]);  // ✅ Runs whenever aspectRatio changes
+
+
+    // Note, could have be done without defining the function and calling it
+    useEffect(() => {
+
+        console.log('VALID OPTIONS:  use effect valid giclee options called')
+        if (!dropDownSelectedAspectRatio || createdPainting == null) return; // Don't fetch if no aspect ratio 
+    
+        // defines t
+        const fetchOptions2 = async () => {
+            try {
+                console.log(`VALID OPTIONS: Fetching VALID options for aspect_ratio: ${dropDownSelectedAspectRatio}`);
+                const encodedAspectRatio = encodeURIComponent(dropDownSelectedAspectRatio);
+                const token = localStorage.getItem("token"); // Get stored token
+                const response = await axios.get(
+                    `${import.meta.env.VITE_API_URL}admin/giclee/${createdPainting.id}/valid-options?aspect_ratio=${encodedAspectRatio}`, 
+                    {headers: { Authorization: `Bearer ${token}` }}
+                );
+    
+                console.log("Fetched valid giclee options:", response.data);
+                setValidGicleeOptions(response.data.valid_options);
+                console.log("valid giclee options has been set:", validGicleeOptions);
+            } catch (error) {
+                console.error("Error fetching valid giclee options:", error);
+            }
+        };
+    
+        fetchOptions2(); // calls the function 
+    }, [dropDownSelectedAspectRatio, createdPainting, gicleeOptionsRefreshTrigger]);  //  Runs whenever aspectRatio  or created painting (only once on painting create) changes
+
 
 const handleAddOption = async (paintingId: number, optionAttributesId: number) => {
 
     console.log("paintingId: ", paintingId)
-
     try {
         const token = localStorage.getItem("token");
         const response = await axios.post(
@@ -176,16 +210,36 @@ const handleAddOption = async (paintingId: number, optionAttributesId: number) =
             headers: { Authorization: `Bearer ${token}` },
         }
     );
-
         console.log("Option added successfully:", response.data);
+
+        // Trigger a refresh: 
+        setGicleeOptionsRefreshTrigger(prev => prev+1);
 
         } catch (error) {
             console.error("Error adding Option: ", error)
     }
-
 }; 
     
 
+const handleDeleteGicleeOption = async(paintingId: number, optionAttributesId: number) => {
+
+    try {
+        console.log(`Deleting option - paitingId: ${paintingId}, optionAttributesId: ${optionAttributesId}`);
+        const token = localStorage.getItem("token")
+        const response = await axios.delete(
+            `${import.meta.env.VITE_API_URL}admin/giclee?painting_id=${paintingId}&option_attribute_id=${optionAttributesId}`, 
+            {headers: { Authorization: `Bearer ${token}` }}
+        );
+    
+        console.log("Delete Successful:", response.data); // TODO: remove. Curious what is actually returned and what format
+
+        // Trigger a refresh: 
+        setGicleeOptionsRefreshTrigger(prev => prev+1);
+
+    } catch (error) {
+        console.error("Error deleting Giclee Option", error);
+        }
+    }
 
     return (
         <div className="painting-creation-div">
@@ -308,8 +362,7 @@ const handleAddOption = async (paintingId: number, optionAttributesId: number) =
                             }}/>
                     <input type="file" accept="image/jpeg, image/png" onChange={handleImageUpload} />
                 </div>
-
-               
+                
                 {createdPainting && (
                     <div className="created-painting-info">
                         <h3>Painting Created</h3>
@@ -326,11 +379,7 @@ const handleAddOption = async (paintingId: number, optionAttributesId: number) =
                         <p><strong>Gallery Link:</strong> {createdPainting.galleryName}</p>
                         <p><strong>Gallery Name:</strong> {createdPainting.galleryLink}</p>
                     </div>
-                )}
-
-
-
-               
+                )}   
             </div>
             <div className="giclee-create">
                 <h2>Giclee Create</h2>
@@ -339,8 +388,8 @@ const handleAddOption = async (paintingId: number, optionAttributesId: number) =
                 <label htmlFor="aspect-ratio"> Aspect Ratio:</label>
                 <select 
                     id='aspect-ratio'
-                    value={aspectRatio}
-                    onChange={(e) => setAspectRatio(e.target.value)}
+                    value={dropDownSelectedAspectRatio}
+                    onChange={(e) => setDropDownAspectRatio(e.target.value)}
                 >
                     <option value="">Select an Aspect Ratio</option>
                     {availableAspectRatios.map((ratio, index) => (
@@ -350,24 +399,31 @@ const handleAddOption = async (paintingId: number, optionAttributesId: number) =
                     ))}
                 </select>
                 <div className="options-box">
-                    <h3>Options for Aspect Ratio: {aspectRatio || "None selected"}</h3>
-
+                    <h3>Options for Aspect Ratio: {dropDownSelectedAspectRatio || "None selected"}</h3>
                     {filteredOptions.length === 0 ? (
                     <p>No options available.</p>
                     ) : (
                     <ul className="options-grid option-dimensions">
-                        {filteredOptions.map((option, index) => (
+                        {validGicleeOptions.map((option, index) => (
                         <li key={index} className="option-item">
-                            <span className="option-cell">{option.width} x {option.height}mm</span>
-                            <span className="option-cell">${option.price}</span>
-                            <button className="add-option-button" onClick={() => handleAddOption(createdPainting.id, option.id)}>+</button>
+                            <span className="option-cell">{option.attributes.width} x {option.attributes.height}mm</span>
+                            <span className="option-cell">${option.attributes.price}</span>
+                            {option.painting_has_option ? (
+                                <button
+                                    className="delete-option-button"
+                                    onClick={() => handleDeleteGicleeOption(createdPainting.id, option.attributes.id)}
+                                    title="Remove Option">-</button>
+                            ) : (
+                                <button
+                                    className="add-option-button"
+                                    onClick={() => handleAddOption(createdPainting.id, option.attributes.id)}
+                                    title="Add Option">+</button>
+                            )}
                         </li>
                         ))}
                     </ul>
                     )}
                 </div>
-
-
             </div>
         </div>
     );
