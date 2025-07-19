@@ -1,9 +1,9 @@
 import React, { useState , useEffect  } from "react";
-import { useParams ,NavLink , useNavigate  } from 'react-router-dom';
+import { useParams , NavLink  } from 'react-router-dom';
 import { useAuth }  from "../../AuthContext";
 import { editPainting } from "../../types/editPainting";
 
-import { giclee, option_attributes, valid_giclee_options } from "../../types/giclee";
+import { option_attributes, valid_giclee_options } from "../../types/giclee";
 
 import "./EditPainting.css";
 
@@ -101,11 +101,12 @@ const EditPainting: React.FC = () => {
         );
 
             console.log("Option added successfully:", response.data);
+            // Trigger a refresh: 
+            setGicleeOptionsRefreshTrigger(prev => prev+1);
 
             } catch (error) {
                 console.error("Error adding Option: ", error)
         }
-
     };
 
         // Note, could have be done without defining the function and calling it
