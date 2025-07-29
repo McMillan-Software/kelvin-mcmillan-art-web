@@ -4,9 +4,9 @@ import './CreatePainting.css';
 import { useAuth }  from "../../AuthContext";
 import { giclee, option_attributes, valid_giclee_options } from "../../types/giclee";
 import { NavLink , useNavigate } from 'react-router-dom';
+import { page } from "../../types/page"
 
 const paintingTypes = ["Watercolour", "Acrylic"];
-const pageOptions = ["Marine", "Rural", "Landscape"];
 
 const CreatePainting: React.FC = () => {
     const navigate = useNavigate();
@@ -24,10 +24,24 @@ const CreatePainting: React.FC = () => {
     const [galleryName, setGalleryName] = useState("");
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string>("");
-    const [pages, setPages] = useState<string[]>([]); 
+    const [pages, setPages] = useState<number[]>([]); 
+    const [pageOptions, setPageOptions] = useState<page[]>([]);
     const [createdPainting, setCreatedPainting] = useState<any>(null)
     
-
+    useEffect(() => {
+        
+        const fetchPagesOptions = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}admin/pages`, {  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+                );
+                setPageOptions(response.data);
+            } catch (error) {
+                console.error("Error fetching pages:", error);
+            }
+        }
+        fetchPagesOptions();
+    });
+   
     const handlePaintingCreation = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -60,7 +74,7 @@ const CreatePainting: React.FC = () => {
     };
 
 
-    const handlePageSelection = (selectedPage: string) => {
+    const handlePageSelection = (selectedPage: number) => {
         setPages((prevPages) =>
             prevPages.includes(selectedPage)
                 ? prevPages.filter((page) => page !== selectedPage)
@@ -163,16 +177,15 @@ const CreatePainting: React.FC = () => {
                     </div>
                     <div>
                         <label>Pages:</label>
-                        {pageOptions.map((option) => (
-                            <div key={option}>
+                        {pageOptions.map((page) => (
+                            <div key={page.id}>
                                 <input
                                     type="checkbox"
-                                    id={option}
-                                    value={option}
-                                    checked={pages.includes(option)}
-                                    onChange={() => handlePageSelection(option)}
+                                    value={page.name}
+                                    checked={pages.includes(page.id)}
+                                    onChange={() => handlePageSelection(page.id)}
                                 />
-                                <label htmlFor={option}>{option}</label>
+                                <label htmlFor={page.name}>{page.name}</label>
                             </div>
                         ))}
                     </div>
