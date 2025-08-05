@@ -6,7 +6,7 @@ import axios from "axios";
 
 const Originals: React.FC = () => {
     const [originals, setOriginals] = React.useState<original[]>([]);
-    const [category, setCategory] = React.useState<String>("");
+    const [category, setCategory] = React.useState<String>("Marine");
 
     useEffect(() => {
         console.log("Getting oringals for page: " + category);
@@ -29,13 +29,12 @@ const Originals: React.FC = () => {
             <div className="category-selector">
                 <label htmlFor="Category">Category</label>
                 <select className="category-dropdown" id="catergory" onChange={handleCategoryChange}>
-                    <option value="">All</option>
-                    <option value="marine">Marine</option>
-                    <option value="rural">Rural</option>
-                    <option value="landscape">Landscape</option>
-                    <option value="architectural">Architectural</option>
-                    <option value="portrait">Portrait</option>
-                    <option value="sport">Sport</option>
+                    <option value="Marine">Marine</option>
+                    <option value="Rural">Rural</option>
+                    <option value="Landscape">Landscape</option>
+                    <option value="Architectural">Architectural</option>
+                    <option value="Portrait">Portrait</option>
+                    <option value="Sport">Sport</option>
                 </select>
             </div>
             <OriginalsList originals={originals} />    
