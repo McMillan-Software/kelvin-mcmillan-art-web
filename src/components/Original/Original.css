@@ -13,9 +13,6 @@
     transition: transform 0.3s ease;
 }
 
-.orginal-image:hover {
-    transform: scale(1.2);
-  }
 
 a {
     color: #000;
