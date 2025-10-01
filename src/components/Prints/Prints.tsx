@@ -28,22 +28,22 @@ const Prints: React.FC = () => {
             <div className="prints-content">
                 <ul className="prints-list">
                     {giclees.map((item: giclee) => (
-                        <li key={item.painting.title}>
+                        <li key={item.painting.id}>
                             <div className="giclee-list-item">
-                                <img className="painting-image" src={"./src/mocks/images/" + item.painting.title + ".jpg"} alt={item.painting.title} />
+                                <img className="painting-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${item.painting.image_path}`} alt={item.painting.title} />
                                 <div className="giclee-list-item-text">
                                     <div className="giclee-title">
                                         {item.painting.title}. {item.painting.width}x{item.painting.height}mm.
                                     </div>
                                     <div className="giclee-options">
                                         <div className="options-grid">
-                                            {item.options.map( (option: option) => (
-                                                <React.Fragment>
+                                            {item.options.map((option: option, index: number) => (
+                                                <div key={option.id ?? index} className="option-row">
                                                     <div className="cell">{option.option_attributes.width}mm</div>
                                                     <div className="cell">x</div>
                                                     <div className="cell">{option.option_attributes.height}mm</div>
                                                     <div className="cell">${option.option_attributes.price}</div>
-                                                </React.Fragment>
+                                                </div>
                                             ))}
                                         </div>
 
