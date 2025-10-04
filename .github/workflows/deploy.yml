@@ -22,22 +22,15 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - name: Verify pnpm install
-        run: pnpm -v  
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build React app
-        run: pnpm build
+      - name: Install pnpm, dependencies & build
+        run: |
+          npm install -g pnpm
+          pnpm install
+          pnpm build
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
-          VITE_IMAGE_BASE_PATH: ${{ secrets.VITE_IMAGE_BASE_PATH}}
+          VITE_IMAGE_BASE_PATH: ${{ secrets.VITE_IMAGE_BASE_PATH }}
+
 
       - name: Copy build to EC2
         uses: appleboy/scp-action@v0.1.7
