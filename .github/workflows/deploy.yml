@@ -29,17 +29,8 @@ jobs:
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_IMAGE_BASE_PATH: ${{ secrets.VITE_IMAGE_BASE_PATH }}
-                
-      - name: Test SSH connection to EC2
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: echo "✅ SSH connection successful"
 
-
-      - name: Copy build to EC2
+      - name: Copy build build to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -48,11 +39,22 @@ jobs:
           source: "dist/*"
           target: "/var/www/kelvin-mcmillan-art-web/"
 
-      - name: Restart Nginx on EC2
+      - name: Copy nginx config
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_KEY }}
+          source: "deploy/nginx.conf"
+          target: "/etc/nginx/sites-available/kelvin-mcmillan-art-web"
+
+      - name: Enable and reload nginx
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ secrets.HOST }}
           username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo systemctl restart nginx
+            sudo ln -sf /etc/nginx/sites-available/kelvin-mcmillan-art-web /etc/nginx/sites-enabled/
+            sudo nginx -t
+            sudo systemctl reload nginx
