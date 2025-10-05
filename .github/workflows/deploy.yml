@@ -45,7 +45,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "nginx/kelvin-mcmillan-art-web"
+          source: "deploy/"
           target: "/home/ubuntu/temp-nginx/"
 
       - name: Move nginx config into sites-available
