@@ -42,18 +42,18 @@ jobs:
       - name: Copy nginx config
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.HOST }}
+          host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY }}
           source: "deploy/nginx.conf"
           target: "/etc/nginx/sites-available/kelvin-mcmillan-art-web"
 
       - name: Enable and reload nginx
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.HOST }}
+          host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             sudo ln -sf /etc/nginx/sites-available/kelvin-mcmillan-art-web /etc/nginx/sites-enabled/
             sudo nginx -t
