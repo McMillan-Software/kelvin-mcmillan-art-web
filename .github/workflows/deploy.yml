@@ -45,7 +45,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "deploy/"
+          source: "deploy/nginx.conf"
           target: "/home/ubuntu/temp-nginx/"
 
       - name: Move nginx config into sites-available
@@ -55,7 +55,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo mv /home/ubuntu/temp-nginx/deploy/nginx.conf /etc/nginx/sites-available/kelvin-mcmillan-art-web
+            sudo mv /home/ubuntu/temp-nginx/nginx.conf /etc/nginx/sites-available/kelvin-mcmillan-art-web
             sudo ln -sf /etc/nginx/sites-available/kelvin-mcmillan-art-web /etc/nginx/sites-enabled/
             sudo nginx -t
             sudo systemctl reload nginx
