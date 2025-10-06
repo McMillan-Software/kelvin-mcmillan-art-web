@@ -55,7 +55,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo mv /home/ubuntu/temp-nginx/kelvin-mcmillan-art-web /etc/nginx/sites-available/
+            sudo mv /home/ubuntu/temp-nginx/nginx.conf /etc/nginx/sites-available/kelvin-mcmillan-art-web
             sudo ln -sf /etc/nginx/sites-available/kelvin-mcmillan-art-web /etc/nginx/sites-enabled/
             sudo nginx -t
             sudo systemctl reload nginx
