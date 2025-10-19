@@ -1,8 +1,11 @@
 import React, { createContext, useState, ReactNode, useEffect } from "react";
+import axios from "axios";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (token: string) => void;
+  login: (token: string, refreshToken: string) => void;
+  getAccessToken: () => string | null;
+  getRefreshToken: () => string | null;
   logout: () => void;
 }
 
@@ -18,13 +21,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return Boolean(localStorage.getItem("token"));
   });
 
-  const login = (token: string) => {
+  const getAccessToken = (): string | null => {
+    return localStorage.getItem("token");
+  };
+
+  const getRefreshToken = (): string | null => {
+    return localStorage.getItem("refreshToken");
+  };
+
+  const login = (token: string, refreshToken: string) => {
     localStorage.setItem("token", token);
+    localStorage.setItem("refreshToken", refreshToken);
     setIsAuthenticated(true);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
     setIsAuthenticated(false);
   };
 
@@ -34,7 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, getAccessToken, getRefreshToken }}>
       {children}
     </AuthContext.Provider>
   );
@@ -47,5 +60,30 @@ export const useAuth = (): AuthContextType => {
   }
   return context;
 };
+
+
+export async function refreshAccessToken(): Promise<string | null> {
+ 
+  const refreshToken = localStorage.getItem("refreshToken");
+  if(!refreshToken) return null;
+ 
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_API_URL}authentication/refresh`,
+    {refresh_token: refreshToken},
+    {headers: { "Content-Type": "application/json"}}
+  )
+
+    console.log("Refresh response: ", response.data);
+    const {access_token, refresh_token} = response.data;
+    localStorage.setItem("token", access_token);
+    localStorage.setItem("refreshToken", refresh_token);
+    return access_token;
+  }
+  catch (err) {
+    console.error("Failed to refresh access token", err);
+    return null;
+  } 
+}
+
 
 export default { AuthProvider, useAuth };
