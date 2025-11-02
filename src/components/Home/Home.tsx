@@ -11,7 +11,7 @@ const Home: React.FC = () => {
   const [slide, setSlide] = useState(0);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/paintings/home').then((response) => {
+    axios.get(`${import.meta.env.VITE_API_URL}paintings/home`).then((response) => {
       setOriginals(response.data);
     })
     .catch((error) => {
@@ -39,15 +39,8 @@ const Home: React.FC = () => {
           <div>
             <OriginalsList originals={originals} />
           </div>
-        
+
         </div>
-
-        <hr></hr>
-
-        <div className="prints-div">
-          <h1>Fine Art Prints</h1>
-        </div>
-
       </div>
     );
 }
