@@ -28,7 +28,7 @@ const CreatePainting: React.FC = () => {
         e.preventDefault();
         try {
             const response = await axios.post(
-                'http://localhost:8000/admin/painting', 
+                `${import.meta.env.VITE_API_URL}/admin/painting`, 
                 {
                   title,
                   type,
