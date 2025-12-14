@@ -8,7 +8,6 @@ import OriginalsList from "../Shared/OriginalsList"
 const Home: React.FC = () => {
 
   const [originals, setOriginals] = React.useState<original[]>([]);
-  const [slide, setSlide] = useState(0);
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}paintings/home`).then((response) => {
