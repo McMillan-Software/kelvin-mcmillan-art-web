@@ -1,16 +1,14 @@
 import React, { useEffect, useState  } from "react";
 import axios from "axios";
+import api from "../../api";
 import './CreatePainting.css';
-import { useAuth }  from "../../AuthContext";
-import { giclee, option_attributes, valid_giclee_options } from "../../types/giclee";
 import { NavLink , useNavigate } from 'react-router-dom';
-import { page } from "../../types/page"
+import { page } from "../../types/page";
 
 const paintingTypes = ["Watercolour", "Acrylic"];
 
 const CreatePainting: React.FC = () => {
     const navigate = useNavigate();
-    const { isAuthenticated} = useAuth(); // why { } here 
     const [error, setError] = useState("");
     const [title, setTitle] = useState("");
     const [type, setType] = useState("Watercolour");
@@ -22,18 +20,14 @@ const CreatePainting: React.FC = () => {
     const [info, setInfo] = useState("");
     const [galleryLink, setGalleryLink] = useState("");
     const [galleryName, setGalleryName] = useState("");
-    const [image, setImage] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string>("");
     const [pages, setPages] = useState<number[]>([]); 
     const [pageOptions, setPageOptions] = useState<page[]>([]);
-    const [createdPainting, setCreatedPainting] = useState<any>(null)
     
     useEffect(() => {
         
         const fetchPagesOptions = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}admin/pages`, {  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-                );
+                const response = await api.get('/admin/pages');
                 setPageOptions(response.data);
             } catch (error) {
                 console.error("Error fetching pages:", error);
@@ -45,8 +39,7 @@ const CreatePainting: React.FC = () => {
     const handlePaintingCreation = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}admin/painting`, 
+            const response = await api.post('/admin/painting', 
                 {
                   title,
                   type,
@@ -59,14 +52,8 @@ const CreatePainting: React.FC = () => {
                   galleryLink,
                   galleryName,
                   pages,
-                },
-                {
-                  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-                }
-              );
-
+                });
             alert("Painting created successfully");
-
             return navigate("/editPainting/" + response.data.id);
         } catch (err: any) {
             setError(err.response?.data?.message || "Error creating painting");

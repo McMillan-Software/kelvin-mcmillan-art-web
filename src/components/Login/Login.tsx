@@ -27,7 +27,7 @@ const Login: React.FC = () => {
                 }
                );
 
-            login(response.data.access_token);
+            login(response.data.access_token, response.data.refresh_token);
             navigate("/admin");
         } catch (err: any) {
             setError("Invalid username or password");

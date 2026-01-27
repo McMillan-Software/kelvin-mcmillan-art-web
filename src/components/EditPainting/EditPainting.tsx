@@ -2,6 +2,7 @@ import React, { useState , useEffect  } from "react";
 import { useParams , NavLink  } from 'react-router-dom';
 import { useAuth }  from "../../AuthContext";
 import { editPainting } from "../../types/editPainting";
+import api from "../../api";
 
 import { option_attributes, valid_giclee_options } from "../../types/giclee";
 
@@ -38,15 +39,8 @@ const EditPainting: React.FC = () => {
         const fetchAspectRatios = async () => {
             try {
                 console.log("Fetching aspect ratios...");
-                const token = localStorage.getItem("token"); // surely there is a better way to holdthe token then getting it each time...?
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}admin/aspectratios`, {
-                    headers: {
-                        Authorization: `Bearer ${token}` // ✅ Include the token
-                    }
-                });
-                console.log("Response:", response.data);
+                const response = await api.get('admin/aspectratios');
                 setAvailableAspectRatios( response.data)
-
             } catch (error) {
                 console.error("Error fetcghing aspect ratios");
             }
@@ -64,11 +58,7 @@ const EditPainting: React.FC = () => {
             try {
                 console.log(`Fetching options for aspect ratio: ${dropDownSelectedAspectRatio}`);
                 const encodedAspectRatio = encodeURIComponent(dropDownSelectedAspectRatio);
-                const token = localStorage.getItem("token"); // Get stored token
-                const response = await axios.get(
-                    `${import.meta.env.VITE_API_URL}admin/giclee/dimensions?aspect_ratio=${encodedAspectRatio}`, 
-                    {headers: { Authorization: `Bearer ${token}` }}
-                );
+                const response = await api.get(`admin/giclee/dimensions?aspect_ratio=${encodedAspectRatio}`);
     
                 console.log("Fetched Options:", response.data);
                 setFilteredOptions(response.data);
@@ -78,7 +68,7 @@ const EditPainting: React.FC = () => {
         };
     
         fetchOptions();
-    }, [dropDownSelectedAspectRatio]);  // ✅ Runs whenever aspectRatio changes
+    }, [dropDownSelectedAspectRatio]);  
     
 
     const handleAddOption = async (paintingId: number, optionAttributesId: number) => {
@@ -87,23 +77,16 @@ const EditPainting: React.FC = () => {
 
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.post(
-            `${import.meta.env.VITE_API_URL}admin/giclee`, 
+            const response = await api.post('admin/giclee', 
             {
                 painting_id: paintingId,
                 page_order: 0, 
                 goa_ids: [optionAttributesId],
                 create_all_for_aspect_ratio: false
-            },
-            {
-                headers: { Authorization: `Bearer ${token}` },
-            }
-        );
+            });
 
             console.log("Option added successfully:", response.data);
-            // Trigger a refresh: 
             setGicleeOptionsRefreshTrigger(prev => prev+1);
-
             } catch (error) {
                 console.error("Error adding Option: ", error)
         }
@@ -121,11 +104,7 @@ const EditPainting: React.FC = () => {
                 console.log(`VALID OPTIONS: Fetching VALID options for aspect_ratio: ${dropDownSelectedAspectRatio}`);
                 const encodedAspectRatio = encodeURIComponent(dropDownSelectedAspectRatio);
                 const token = localStorage.getItem("token"); // Get stored token
-                const response = await axios.get(
-                    `${import.meta.env.VITE_API_URL}admin/giclee/${editPainting.id}/valid-options?aspect_ratio=${encodedAspectRatio}`, 
-                    {headers: { Authorization: `Bearer ${token}` }}
-                );
-    
+                const response = await api.get(`admin/giclee/${editPainting.id}/valid-options?aspect_ratio=${encodedAspectRatio}`);
                 console.log("Fetched valid giclee options:", response.data);
                 setValidGicleeOptions(response.data.valid_options);
                 console.log("valid giclee options has been set:", validGicleeOptions);
@@ -141,15 +120,9 @@ const EditPainting: React.FC = () => {
 
     try {
         console.log(`Deleting option - paitingId: ${paintingId}, optionAttributesId: ${optionAttributesId}`);
-        const token = localStorage.getItem("token")
-        const response = await axios.delete(
-            `${import.meta.env.VITE_API_URL}admin/giclee?painting_id=${paintingId}&option_attribute_id=${optionAttributesId}`, 
-            {headers: { Authorization: `Bearer ${token}` }}
-        );
-    
-        console.log("Delete Successful:", response.data); // TODO: remove. Curious what is actually returned and what format
+        const response = await api.delete(`${import.meta.env.VITE_API_URL}admin/giclee?painting_id=${paintingId}&option_attribute_id=${optionAttributesId}`);
+        console.log("Delete Successful:", response.data); 
 
-        // Trigger a refresh: 
         setGicleeOptionsRefreshTrigger(prev => prev+1);
 
     } catch (error) {
@@ -173,13 +146,7 @@ const EditPainting: React.FC = () => {
 
     const handleEditPainting = (e: React.FormEvent) => {
         e.preventDefault();
-        axios.put(
-            `${import.meta.env.VITE_API_URL}admin/painting/${id}`,
-            editPainting   
-            ,
-            {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-            }
+        api.put(`admin/painting/${id}`, editPainting   
         ).then((response) => {
             setEditPaitning(response.data);
             alert("Painting details updated");
@@ -216,16 +183,8 @@ const EditPainting: React.FC = () => {
         formData.append("file", image);
 
         try {
-            await axios.post(
-                `${import.meta.env.VITE_API_URL}admin/painting/${editPainting.id}/image`,
-                formData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
-            );
+            await api.post(`admin/painting/${editPainting.id}/image`, formData);
+
             alert("Image uploaded successfully");
         } catch (err) {
             console.error("Upload error:", err);

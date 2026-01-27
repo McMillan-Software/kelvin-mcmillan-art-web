@@ -1,37 +1,36 @@
-import React, { createContext, useState, ReactNode, useEffect } from "react";
+import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (token: string) => void;
+  login: (accessToken: string, refreshToken: string) => void;
   logout: () => void;
-}
-
-interface AuthProviderProps {
-  children: ReactNode;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    // Initialize state based on localStorage token
-    return Boolean(localStorage.getItem("token"));
-  });
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
-  const login = (token: string) => {
-    localStorage.setItem("token", token);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  // Check authentication status on app load
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    setIsAuthenticated(!!token);
+  }, []);
+  
+
+  const login = (accessToken: string, refreshToken: string) => {
+    localStorage.setItem("access_token", accessToken);
+    localStorage.setItem("refresh_token", refreshToken);
     setIsAuthenticated(true);
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
+const logout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    
     setIsAuthenticated(false);
   };
-
-  useEffect(() => {
-    // Ensure `isAuthenticated` stays in sync with the presence of a token
-    setIsAuthenticated(Boolean(localStorage.getItem("token")));
-  }, []);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
@@ -40,12 +39,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   );
 };
 
-export const useAuth = (): AuthContextType => {
-  const context = React.useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be used within AuthProvider");
   return context;
 };
-
-export default { AuthProvider, useAuth };

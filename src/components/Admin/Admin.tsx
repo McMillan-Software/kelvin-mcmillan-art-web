@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import api from '../../api'; 
 import './Admin.css';
 import { original } from "../../types/original";
 import { PaintingSearchParams } from '../../types/paintingSearch';
@@ -7,7 +8,7 @@ import { useAuth }  from "../../AuthContext";
 import { NavLink } from 'react-router-dom';
 
 const Admin: React.FC = () => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, logout } = useAuth();
     const [paintings, setPaintings] = useState<original[]>([]);
     const paintingTypes = ["", "Watercolour", "Acrylic"];
     const [searchParams, setSearchParams] = useState<PaintingSearchParams>({
@@ -68,12 +69,12 @@ const Admin: React.FC = () => {
       );
     };
   
-      // Function to fetch paintings (debounced)
     const fetchPaintings = async () => {
       const filteredParams = getFilteredParams(searchParams);
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}admin/paintings`, { params: filteredParams,  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-        );
+        const response = await api.get('/admin/paintings', { 
+            params: filteredParams 
+        });
         setPaintings(response.data);
       } catch (error) {
         console.error("Error fetching paintings:", error);
@@ -95,12 +96,16 @@ const Admin: React.FC = () => {
   } else {
     return (
       <div className='admin-div'>
+          <h1>Admin Dashboard</h1>
           <div>
           <button>
             <NavLink to="/CreatePainting">
                 Create Painting
             </NavLink>
           </button>
+            <button onClick={logout} className="logout-btn">
+              Logout
+            </button>
           </div>
 
           <div className="painting-search-div">
@@ -251,9 +256,6 @@ const Admin: React.FC = () => {
                     <NavLink to={`/EditPainting/${painting.id}`}>
                       Edit
                     </NavLink>
-                  </button>
-                  <button>
-                    Delete
                   </button>
                 </div>
                 </div>
