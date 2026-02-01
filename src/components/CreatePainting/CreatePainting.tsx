@@ -34,7 +34,7 @@ const CreatePainting: React.FC = () => {
             }
         }
         fetchPagesOptions();
-    });
+    }, []);
    
     const handlePaintingCreation = async (e: React.FormEvent) => {
         e.preventDefault();
