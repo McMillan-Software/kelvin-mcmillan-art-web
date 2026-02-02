@@ -5,6 +5,7 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL, // Update with your actual API URL
 });
 
+
 // 2. Request Interceptor: Attach Token ONLY for Admin/Auth endpoints
 api.interceptors.request.use(
   (config) => {
