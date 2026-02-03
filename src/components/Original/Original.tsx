@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { original} from "../../types/original";
 import "./Original.css";
 import axios from "axios";
@@ -7,6 +7,7 @@ import axios from "axios";
 const Original: React.FC = () => {
 
   let { id } = useParams<{ id: string }>();
+  const navigate = useNavigate(); 
   const [original, setOrginal] = React.useState<original>({} as original);
 
     useEffect(() => {
@@ -22,6 +23,13 @@ const Original: React.FC = () => {
     return (
       <div className="orignal-content">   
         <div className="original-container">
+        
+        <div className="back-button_div">
+          <button className="back-button" onClick={() => navigate(-1)}>
+            &#8592; Back
+          </button>
+        </div>
+
           <div className="original-image-container">
             <img className="orginal-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${original.image_path}`} alt={original.title} />
           </div>
@@ -30,7 +38,7 @@ const Original: React.FC = () => {
 
           <p>{original.type} - ${original.price} - {original.width}x{original.height} </p>
           {original.galleryLink ? (
-            <p>Available at <Link to={`http://${original.galleryLink}`} target="_blank" rel="noopener noreferrer">{original.galleryName}</Link></p>
+            <p>Available at <Link to={`https://${original.galleryLink}`} target="_blank" rel="noopener noreferrer">{original.galleryName}</Link></p>
           ) : (
             <br/>
           )}
