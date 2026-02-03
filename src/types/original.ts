@@ -2,6 +2,7 @@ export interface original {
     id : number,
     title : string,
     type : string,
+    location: string,
     aspectRatio: number,
     height: number,
     width: number,

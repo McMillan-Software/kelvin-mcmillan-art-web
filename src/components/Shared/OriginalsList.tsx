@@ -16,7 +16,30 @@ const OriginalsList: React.FC<OriginalsListProps> = ({ originals }) => {
             <NavLink className="originals-image-link" to={`/Originals/${original.id}`}>
               <img className="orginals-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${original.image_path}`} />
             </NavLink>
-            <div><p>{original.title}</p></div>
+            <div className="caption-container">
+              <p className="caption-text">
+                <strong>{original.title}</strong>
+                
+                {original.location && `, ${original.location}`}
+                
+                {` · ${original.type} · ${original.width} × ${original.height}mm `}
+                
+                {!original.sold && (
+                  original.galleryLink ? (
+                    <a 
+                      href={original.galleryLink.startsWith('http') ? original.galleryLink : `https://${original.galleryLink}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="available-link"
+                    >
+                      Available 
+                    </a>
+                  ) : (
+                    <span className="available-text">Available</span>
+                  )
+                )}
+              </p>
+            </div>
           </div>
         </li>
       ))}
