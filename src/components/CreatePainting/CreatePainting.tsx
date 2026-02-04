@@ -11,6 +11,7 @@ const CreatePainting: React.FC = () => {
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const [title, setTitle] = useState("");
+    const [location, setLocation] = useState("");
     const [type, setType] = useState("Watercolour");
     const [width, setWidth] = useState<number | "">("");
     const [height, setHeight] = useState<number | "">("");
@@ -42,6 +43,7 @@ const CreatePainting: React.FC = () => {
             const response = await api.post('/admin/painting', 
                 {
                   title,
+                  location,
                   type,
                   width: width || 0,
                   height: height || 0, 
@@ -85,6 +87,15 @@ const CreatePainting: React.FC = () => {
                             onChange={(e) => setTitle(e.target.value)}
                             required
                         />
+                    </div>
+                    <div>
+                        <label>Location:</label>
+                        <input
+                            type="text"
+                            value={location}
+                            onChange={(e) => setLocation(e.target.value)}
+                        >
+                        </input>
                     </div>
                     <div>
                         <label>Type:</label>
@@ -177,7 +188,7 @@ const CreatePainting: React.FC = () => {
                         ))}
                     </div>
                     {error && <p style={{ color: "red" }}>{error}</p>}
-                    <button type="submit">Create Painting</button>
+                    <button type="submit">Contiune</button>
                 </form>
                 </div>
             </div>
