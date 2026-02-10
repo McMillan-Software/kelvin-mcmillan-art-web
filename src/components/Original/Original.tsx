@@ -31,7 +31,7 @@ const Original: React.FC = () => {
         </div>
 
           <div className="original-image-container">
-            <img className="orginal-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${original.image_path}`} alt={original.title} />
+            <img className="orginal-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${original.imagePath}`} alt={original.title} />
           </div>
           <h2>{original.title}</h2>
           <p>{original.info}</p>

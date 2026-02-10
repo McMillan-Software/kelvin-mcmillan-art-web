@@ -17,7 +17,7 @@ api.interceptors.request.use(
 
     if (isProtectedEndpoint) {
         console.log("end point is protected... fetching access token");
-      const token = localStorage.getItem('access_token');
+      const token = localStorage.getItem('accessToken');
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -40,7 +40,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
         console.log("Token has expired");
       try {
-        const refreshToken = localStorage.getItem('refresh_token');
+        const refreshToken = localStorage.getItem('refreshToken');
 
         if (!refreshToken) {
           throw new Error("No refresh token available");
@@ -50,17 +50,16 @@ api.interceptors.response.use(
         // NOTE: We use 'axios' directly here, not 'api', to avoid circular logic
         console.log("fetching refresh token");
         const response = await axios.post(`${import.meta.env.VITE_API_URL}authentication/refresh`, {
-          refresh_token: refreshToken,
+          refreshToken: refreshToken,
         });
 
         // Extract new tokens from the response
-        const { access_token, refresh_token: newRefreshToken } = response.data;
-
-        localStorage.setItem('access_token', access_token);
-        localStorage.setItem('refresh_token', newRefreshToken);
+        const { accessToken, refreshToken: newRefreshToken } = response.data;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', newRefreshToken);
 
         // 2. Update the header of the failed request with the NEW token
-        originalRequest.headers.Authorization = `Bearer ${access_token}`;
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
 
         // 3. Retry the original request with the new token
         return api(originalRequest);
@@ -68,10 +67,10 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // If the refresh token is also invalid/expired, log the user out
         console.error("Session expired. Logging out...");
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         
-        window.location.href = '/login'; 
+        // window.location.href = '/login'; 
         
         return Promise.reject(refreshError);
       }

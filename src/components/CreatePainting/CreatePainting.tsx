@@ -7,11 +7,20 @@ import { page } from "../../types/page";
 
 const paintingTypes = ["Watercolour", "Acrylic"];
 
+const getNZDate = () => {
+    // Returns date string in YYYY-MM-DD format for NZ timezone
+    return new Date().toLocaleDateString('en-CA', { 
+        timeZone: 'Pacific/Auckland' 
+    });
+};
+    
+
 const CreatePainting: React.FC = () => {
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const [title, setTitle] = useState("");
     const [location, setLocation] = useState("");
+    const [creationDate, setCreationDate] = useState(getNZDate());
     const [type, setType] = useState("Watercolour");
     const [width, setWidth] = useState<number | "">("");
     const [height, setHeight] = useState<number | "">("");
@@ -23,7 +32,7 @@ const CreatePainting: React.FC = () => {
     const [galleryName, setGalleryName] = useState("");
     const [pages, setPages] = useState<number[]>([]); 
     const [pageOptions, setPageOptions] = useState<page[]>([]);
-    
+
     useEffect(() => {
         
         const fetchPagesOptions = async () => {
@@ -36,6 +45,7 @@ const CreatePainting: React.FC = () => {
         }
         fetchPagesOptions();
     }, []);
+
    
     const handlePaintingCreation = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -45,6 +55,7 @@ const CreatePainting: React.FC = () => {
                   title,
                   location,
                   type,
+                  creationDate,
                   width: width || 0,
                   height: height || 0, 
                   sold,
@@ -75,11 +86,13 @@ const CreatePainting: React.FC = () => {
         <div className="painting-creation-div">
             <NavLink to="/Admin" className="back-link">Back to Admin</NavLink>
             <h2>Create Painting</h2>
+
             <div className="painting-creation-input-div">
                 <div className="painting-form-div">
-                <h2>Painting Details</h2>    
+                <h2>Painting Details</h2> 
+
                 <form className="painting-form" onSubmit={handlePaintingCreation}>
-                    <div>
+                    <div className="form-group">
                         <label>Title:</label>
                         <input
                             type="text"
@@ -88,7 +101,7 @@ const CreatePainting: React.FC = () => {
                             required
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label>Location:</label>
                         <input
                             type="text"
@@ -97,7 +110,7 @@ const CreatePainting: React.FC = () => {
                         >
                         </input>
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label>Type:</label>
                         <select value={type} onChange={(e) => setType(e.target.value)}>
                             {paintingTypes.map((option) => (
@@ -107,7 +120,16 @@ const CreatePainting: React.FC = () => {
                             ))}
                         </select>
                     </div>
-                    <div>
+                    <div className="form-group">
+                    <label htmlFor="completion-date">Date of completion:</label>
+                    <input
+                        id="completion-date"
+                        type="date"
+                        value={creationDate}
+                        onChange={(e) => setCreationDate(e.target.value)}
+                    />
+                    </div>
+                    <div className="form-group">
                         <label>Width (mm):</label>
                         <input
                             type="number"
@@ -116,7 +138,7 @@ const CreatePainting: React.FC = () => {
                             required
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label>Height (mm):</label>
                         <input
                             type="number"
@@ -125,7 +147,7 @@ const CreatePainting: React.FC = () => {
                             required
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label>Sold:</label>
                         <input
                             type="checkbox"
@@ -133,7 +155,7 @@ const CreatePainting: React.FC = () => {
                             onChange={(e) => setSold(e.target.checked)}
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label>Framed:</label>
                         <input
                             type="checkbox"
@@ -141,7 +163,7 @@ const CreatePainting: React.FC = () => {
                             onChange={(e) => setFramed(e.target.checked)}
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label>Price ($):</label>
                         <input
                             type="number"
@@ -150,14 +172,14 @@ const CreatePainting: React.FC = () => {
                             onChange={(e) => setPrice(e.target.value ? parseFloat(e.target.value) : "")}
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label>Info:</label>
                         <textarea
                             value={info}
                             onChange={(e) => setInfo(e.target.value)}
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label>Gallery Link:</label>
                         <input
                             type="text"
@@ -165,7 +187,7 @@ const CreatePainting: React.FC = () => {
                             onChange={(e) => setGalleryLink(e.target.value)}
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label>Gallery Name:</label>
                         <input
                             type="text"
@@ -173,7 +195,7 @@ const CreatePainting: React.FC = () => {
                             onChange={(e) => setGalleryName(e.target.value)}
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <label>Pages:</label>
                         {pageOptions.map((page) => (
                             <div key={page.id}>

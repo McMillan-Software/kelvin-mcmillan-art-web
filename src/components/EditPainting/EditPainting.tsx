@@ -4,7 +4,7 @@ import { useAuth }  from "../../AuthContext";
 import { editPainting } from "../../types/editPainting";
 import api from "../../api";
 
-import { option_attributes, valid_giclee_options } from "../../types/giclee";
+import { optionAttributes, validGicleeOptions } from "../../types/giclee";
 
 import "./EditPainting.css";
 
@@ -21,8 +21,8 @@ const EditPainting: React.FC = () => {
   // create giclees
     const [dropDownSelectedAspectRatio, setDropDownAspectRatio] = useState(""); // selected aspect ratio - set by user interacting with the drop down
     const [availableAspectRatios, setAvailableAspectRatios] = useState([]); // aspect ratios for dropdown
-    const [filteredOptions, setFilteredOptions] = useState<option_attributes[]>([]); // TODO: remove (old giclee options)
-    const [validGicleeOptions, setValidGicleeOptions] = useState<valid_giclee_options[]>([]) // new giclee options, contains what options have been added
+    const [filteredOptions, setFilteredOptions] = useState<optionAttributes[]>([]); // TODO: remove (old giclee options)
+    const [validGicleeOptions, setValidGicleeOptions] = useState<validGicleeOptions[]>([]) // new giclee options, contains what options have been added
     const [gicleeOptionsRefreshTrigger, setGicleeOptionsRefreshTrigger] = useState(0);
 
 
@@ -76,13 +76,12 @@ const EditPainting: React.FC = () => {
         console.log("paintingId: ", paintingId)
 
         try {
-            const token = localStorage.getItem("token");
             const response = await api.post('admin/giclee', 
             {
-                painting_id: paintingId,
-                page_order: 0, 
-                goa_ids: [optionAttributesId],
-                create_all_for_aspect_ratio: false
+                paintingId: paintingId,
+                pageOrder: 0, 
+                goaIds: [optionAttributesId],
+                createAllForAspectRatio: false
             });
 
             console.log("Option added successfully:", response.data);
@@ -103,10 +102,9 @@ const EditPainting: React.FC = () => {
             try {
                 console.log(`VALID OPTIONS: Fetching VALID options for aspect_ratio: ${dropDownSelectedAspectRatio}`);
                 const encodedAspectRatio = encodeURIComponent(dropDownSelectedAspectRatio);
-                const token = localStorage.getItem("token"); // Get stored token
                 const response = await api.get(`admin/giclee/${editPainting.id}/valid-options?aspect_ratio=${encodedAspectRatio}`);
                 console.log("Fetched valid giclee options:", response.data);
-                setValidGicleeOptions(response.data.valid_options);
+                setValidGicleeOptions(response.data.validOptions);
                 console.log("valid giclee options has been set:", validGicleeOptions);
             } catch (error) {
                 console.error("Error fetching valid giclee options:", error);
@@ -133,10 +131,15 @@ const EditPainting: React.FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
 
-        const finalValue =
-            type === "checkbox" ? checked :
-            type === "number" ? Number(value) :
-            value;
+        let finalValue: any = value;
+
+        if (type === "checkbox") {
+            finalValue = checked;
+        } else if (type === "number") {
+            finalValue = Number(value);
+        } else if (type === "date") {
+            finalValue = value === "" ? null : value;
+        }
 
         setEditPaitning((prev) => ({
             ...prev,
@@ -155,7 +158,7 @@ const EditPainting: React.FC = () => {
             console.error(`Error fetching data: ${error}`);
             setError(error)
         });
-        }
+    }
 
     //Images
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -212,7 +215,7 @@ const EditPainting: React.FC = () => {
                     <h3>Painting Details</h3>    
                     <form className="painting-form" onSubmit={handleEditPainting}>
 
-                        <div>
+                        <div className="form-group">
                             <label>Title:</label>
                             <input
                                 type="text"
@@ -224,7 +227,7 @@ const EditPainting: React.FC = () => {
                             />
                         </div>
 
-                        <div>
+                        <div className="form-group">
                             <label>Location:</label>
                             <input
                                 type="text"
@@ -235,7 +238,7 @@ const EditPainting: React.FC = () => {
                             />
                         </div>
 
-                        <div>
+                        <div className="form-group">
                             <label>Type:</label>
                             <input
                                 type="text"
@@ -246,7 +249,17 @@ const EditPainting: React.FC = () => {
                             />
                         </div>
 
-                        <div>
+                        <div className="form-group">
+                            <label>Creation Date:</label>
+                            <input
+                                type="date"
+                                name="creationDate"
+                                value={editPainting.creationDate ?? ""} 
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className="form-group">
                             <label>Width:</label>
                             <input
                                 type="number"
@@ -256,7 +269,7 @@ const EditPainting: React.FC = () => {
                             />
                         </div>
 
-                        <div>
+                        <div className="form-group">
                             <label>Height:</label>
                             <input
                                 type="number"
@@ -266,7 +279,7 @@ const EditPainting: React.FC = () => {
                             />
                         </div>
 
-                        <div>
+                        <div className="form-group">
                             <label>Sold:</label>
                             <input
                                 type="checkbox"
@@ -276,7 +289,7 @@ const EditPainting: React.FC = () => {
                             />
                         </div>
 
-                        <div>
+                        <div className="form-group">
                             <label>Framed:</label>
                             <input
                                 type="checkbox"
@@ -286,7 +299,7 @@ const EditPainting: React.FC = () => {
                             />
                         </div>
 
-                        <div>
+                        <div className="form-group">
                             <label>Price:</label>
                             <input
                                 type="number"
@@ -297,7 +310,7 @@ const EditPainting: React.FC = () => {
                             />
                         </div>
 
-                        <div>
+                        <div className="form-group">
                             <label>Information:</label>
                             <input
                                 type="text"
@@ -308,7 +321,7 @@ const EditPainting: React.FC = () => {
                             />
                         </div>
 
-                        <div>
+                        <div className="form-group">
                             <label>Gallery Name:</label>
                             <input
                                 type="text"
@@ -319,7 +332,7 @@ const EditPainting: React.FC = () => {
                             />
                         </div>
 
-                        <div>
+                        <div className="form-group">
                             <label>Gallery Link:</label>
                             <input
                                 type="text"
@@ -342,8 +355,8 @@ const EditPainting: React.FC = () => {
                             src={
                                 previewUrl
                                     ? previewUrl
-                                    : editPainting.image_path
-                                        ? `${import.meta.env.VITE_IMAGE_BASE_PATH}${editPainting.image_path}`
+                                    : editPainting.imagePath
+                                        ? `${import.meta.env.VITE_IMAGE_BASE_PATH}${editPainting.imagePath}`
                                         : "/images/placeholder.jpg"
                             }
                             alt={editPainting.title}
@@ -389,7 +402,7 @@ const EditPainting: React.FC = () => {
                             <li key={index} className="option-item">
                                 <span className="option-cell">{option.attributes.width} x {option.attributes.height}mm</span>
                                 <span className="option-cell">${option.attributes.price}</span>
-                                {option.painting_has_option ? (
+                                {option.paintingHasOption ? (
                                     <button
                                         className="delete-option-button"
                                         onClick={() => handleDeleteGicleeOption(editPainting.id, option.attributes.id)}

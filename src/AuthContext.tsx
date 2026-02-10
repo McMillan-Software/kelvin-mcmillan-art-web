@@ -14,20 +14,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Check authentication status on app load
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("accessToken");
     setIsAuthenticated(!!token);
   }, []);
   
 
   const login = (accessToken: string, refreshToken: string) => {
-    localStorage.setItem("access_token", accessToken);
-    localStorage.setItem("refresh_token", refreshToken);
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
     setIsAuthenticated(true);
   };
 
 const logout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     
     setIsAuthenticated(false);
   };
