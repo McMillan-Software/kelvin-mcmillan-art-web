@@ -21,6 +21,8 @@ api.interceptors.request.use(
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
+    } else {
+      console.log("Endpoint is not protected");
     }
     return config;
   },
@@ -31,9 +33,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response, // Return success responses immediately
   async (error) => {
-    console.log("Interceptor");
     const originalRequest = error.config;
-    console.log(error)
     // Check if error is 401 AND it came from a protected endpoint
     // We also check !originalRequest._retry to prevent infinite loops
     if (error.response?.status === 401 && !originalRequest._retry) {

@@ -1,132 +1,40 @@
-import React, { useState , useEffect  } from "react";
-import { useParams , NavLink  } from 'react-router-dom';
-import { useAuth }  from "../../AuthContext";
+import React, { useState, useEffect } from "react";
+import { useParams, NavLink } from 'react-router-dom';
+import { useAuth } from "../../AuthContext";
 import { editPainting } from "../../types/editPainting";
 import api from "../../api";
 
-import { optionAttributes, validGicleeOptions } from "../../types/giclee";
+import GicleeManager from "./GicleeManager";
 
 import "./EditPainting.css";
 
-import axios from "axios";
+
 
 const EditPainting: React.FC = () => {
-    const { isAuthenticated} = useAuth();
+    const { isAuthenticated } = useAuth();
     let { id } = useParams<{ id: string }>();
-    const [editPainting, setEditPaitning] = React.useState<editPainting>({} as editPainting);
+    const [editPainting, setEditPainting] = React.useState<editPainting>({} as editPainting);
     const [error, setError] = useState("");
     const [image, setImage] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  // create giclees
-    const [dropDownSelectedAspectRatio, setDropDownAspectRatio] = useState(""); // selected aspect ratio - set by user interacting with the drop down
-    const [availableAspectRatios, setAvailableAspectRatios] = useState([]); // aspect ratios for dropdown
-    const [filteredOptions, setFilteredOptions] = useState<optionAttributes[]>([]); // TODO: remove (old giclee options)
-    const [validGicleeOptions, setValidGicleeOptions] = useState<validGicleeOptions[]>([]) // new giclee options, contains what options have been added
-    const [gicleeOptionsRefreshTrigger, setGicleeOptionsRefreshTrigger] = useState(0);
+
 
 
     useEffect(() => {
         const getPaintingToEdit = async () => {
-                axios.get(`${import.meta.env.VITE_API_URL}paintings/${id}`).then((response) => {
-                setEditPaitning(response.data);
-            })
-            .catch((error) => {
-                console.error(`Error fetching data: ${error}`);
-            });
-        }
-
-        const fetchAspectRatios = async () => {
             try {
-                console.log("Fetching aspect ratios...");
-                const response = await api.get('admin/aspectratios');
-                setAvailableAspectRatios( response.data)
+                const response = await api.get(`paintings/${id}`);
+                setEditPainting(response.data);
             } catch (error) {
                 console.error("Error fetcghing aspect ratios");
             }
         };
-        getPaintingToEdit();
-        fetchAspectRatios();
-        
+        getPaintingToEdit();        
     }, []);
 
-        // Get available Giclee option for the selected aspect ratio. 
-    useEffect(() => {
-        if (!dropDownSelectedAspectRatio) return; // Don't fetch if no aspect ratio is selected
-    
-        const fetchOptions = async () => {
-            try {
-                console.log(`Fetching options for aspect ratio: ${dropDownSelectedAspectRatio}`);
-                const encodedAspectRatio = encodeURIComponent(dropDownSelectedAspectRatio);
-                const response = await api.get(`admin/giclee/dimensions?aspect_ratio=${encodedAspectRatio}`);
-    
-                console.log("Fetched Options:", response.data);
-                setFilteredOptions(response.data);
-            } catch (error) {
-                console.error("Error fetching options:", error);
-            }
-        };
-    
-        fetchOptions();
-    }, [dropDownSelectedAspectRatio]);  
     
 
-    const handleAddOption = async (paintingId: number, optionAttributesId: number) => {
-
-        console.log("paintingId: ", paintingId)
-
-        try {
-            const response = await api.post('admin/giclee', 
-            {
-                paintingId: paintingId,
-                pageOrder: 0, 
-                goaIds: [optionAttributesId],
-                createAllForAspectRatio: false
-            });
-
-            console.log("Option added successfully:", response.data);
-            setGicleeOptionsRefreshTrigger(prev => prev+1);
-            } catch (error) {
-                console.error("Error adding Option: ", error)
-        }
-    };
-
-        // Note, could have be done without defining the function and calling it
-    useEffect(() => {
-
-        console.log('VALID OPTIONS:  use effect valid giclee options called')
-        if (!dropDownSelectedAspectRatio || editPainting == null) return; // Don't fetch if no aspect ratio 
-    
-        // defines t
-        const fetchOptions2 = async () => {
-            try {
-                console.log(`VALID OPTIONS: Fetching VALID options for aspect_ratio: ${dropDownSelectedAspectRatio}`);
-                const encodedAspectRatio = encodeURIComponent(dropDownSelectedAspectRatio);
-                const response = await api.get(`admin/giclee/${editPainting.id}/valid-options?aspect_ratio=${encodedAspectRatio}`);
-                console.log("Fetched valid giclee options:", response.data);
-                setValidGicleeOptions(response.data.validOptions);
-                console.log("valid giclee options has been set:", validGicleeOptions);
-            } catch (error) {
-                console.error("Error fetching valid giclee options:", error);
-            }
-        };
-    
-        fetchOptions2(); // calls the function 
-    }, [dropDownSelectedAspectRatio, editPainting, gicleeOptionsRefreshTrigger]);  //  Runs whenever aspectRatio  or created painting (only once on painting create) changes
-
-    const handleDeleteGicleeOption = async(paintingId: number, optionAttributesId: number) => {
-
-    try {
-        console.log(`Deleting option - paitingId: ${paintingId}, optionAttributesId: ${optionAttributesId}`);
-        const response = await api.delete(`${import.meta.env.VITE_API_URL}admin/giclee?painting_id=${paintingId}&option_attribute_id=${optionAttributesId}`);
-        console.log("Delete Successful:", response.data); 
-
-        setGicleeOptionsRefreshTrigger(prev => prev+1);
-
-    } catch (error) {
-        console.error("Error deleting Giclee Option", error);
-        }
-    } 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
@@ -141,7 +49,7 @@ const EditPainting: React.FC = () => {
             finalValue = value === "" ? null : value;
         }
 
-        setEditPaitning((prev) => ({
+        setEditPainting((prev) => ({
             ...prev,
             [name]: finalValue,
         }));
@@ -149,9 +57,9 @@ const EditPainting: React.FC = () => {
 
     const handleEditPainting = (e: React.FormEvent) => {
         e.preventDefault();
-        api.put(`admin/painting/${id}`, editPainting   
+        api.put(`admin/painting/${id}`, editPainting
         ).then((response) => {
-            setEditPaitning(response.data);
+            setEditPainting(response.data);
             alert("Painting details updated");
         })
         .catch((error) => {
@@ -199,21 +107,19 @@ const EditPainting: React.FC = () => {
 
     if (!isAuthenticated) {
         return <div>User must login</div>;
-      } else {
+    } else {
         return (
-        <div className="painting-edit-main-div">
-            <NavLink to="/Admin" className="back-link">Back to Admin</NavLink>
-            <div className="painting-edit-title-div">
+            <div className="edit-painting-header">
+                <NavLink to="/Admin" className="back-link">Back to Admin</NavLink>
                 <h2>Edit Painting</h2>
-            </div>
 
-            <div className="painting-edit-sub-div">
-                {error && <p style={{ color: "red" }}>{error}</p>}
+                <div className="edit-painting-columns">
+                    {error && <p style={{ color: "red" }}>{error}</p>}
 
-                <div className="painting-details-div">
+                    <div className="details-column">
 
-                    <h3>Painting Details</h3>    
-                    <form className="painting-form" onSubmit={handleEditPainting}>
+                        <h3>Painting Details</h3>
+                        <form className="painting-form" onSubmit={handleEditPainting}>
 
                         <div className="form-group">
                             <label>Title:</label>
@@ -343,13 +249,13 @@ const EditPainting: React.FC = () => {
                             />
                         </div>
 
-                        {error && <p style={{ color: "red" }}>{error}</p>}
-                        <button type="submit">Save Painting Details</button>
-                    </form>
-                </div>
+                            {error && <p style={{ color: "red" }}>{error}</p>}
+                            <button type="submit">Save Painting Details</button>
+                        </form>
+                    </div>
 
 
-                <div className="painting-image-div">
+                    <div className="image-column">
                         <h3>Painting Image</h3>
                         <img
                             src={
@@ -367,64 +273,20 @@ const EditPainting: React.FC = () => {
                             }}
                         />
                         <input type="file" accept="image/jpeg, image/png" onChange={handleImageUpload} />
-                            {previewUrl && (
+                        {previewUrl && (
                             <button onClick={handleUploadSubmit} style={{ marginTop: "10px" }}>
                                 Upload Image
                             </button>
                         )}
-                </div>
-
-                <div className="painting-giclee-div"> 
-                    
-                    <h3>Giclee Create</h3>
-                    <div className="set-aspect-ratio"></div>
-                    <p>Set Aspect Ratio</p>
-                    <label htmlFor="aspect-ratio"> Aspect Ratio:</label>
-                    <select 
-                        id='aspect-ratio'
-                        value={dropDownSelectedAspectRatio}
-                        onChange={(e) => setDropDownAspectRatio(e.target.value)}
-                    >
-                        <option value="">Select an Aspect Ratio</option>
-                        {availableAspectRatios.map((ratio, index) => (
-                            <option key={index} value={ratio}>
-                                {ratio}
-                            </option>
-                        ))}
-                    </select>
-                <div className="options-box">
-                        <h3>Options for Aspect Ratio: {dropDownSelectedAspectRatio || "None selected"}</h3>
-                        {filteredOptions.length === 0 ? (
-                        <p>No options available.</p>
-                        ) : (
-                        <ul className="options-grid option-dimensions">
-                            {validGicleeOptions.map((option, index) => (
-                            <li key={index} className="option-item">
-                                <span className="option-cell">{option.attributes.width} x {option.attributes.height}mm</span>
-                                <span className="option-cell">${option.attributes.price}</span>
-                                {option.paintingHasOption ? (
-                                    <button
-                                        className="delete-option-button"
-                                        onClick={() => handleDeleteGicleeOption(editPainting.id, option.attributes.id)}
-                                        title="Remove Option">-</button>
-                                ) : (
-                                    <button
-                                        className="add-option-button"
-                                        onClick={() => handleAddOption(editPainting.id, option.attributes.id)}
-                                        title="Add Option">+</button>
-                                )}
-                            </li>
-                            ))}
-                        </ul>
-                        )}
                     </div>
 
+                    {/* Giclee Manager Component */}
+                    {editPainting.id && <GicleeManager paintingId={editPainting.id} width={editPainting.width} height={editPainting.height} />}
                 </div>
-            </div>
 
-        </div>
+            </div>
         );
-      }
+    }
 };
 
 export default EditPainting;

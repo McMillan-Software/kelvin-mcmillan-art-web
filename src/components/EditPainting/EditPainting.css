@@ -1,65 +1,168 @@
-.painting-edit-main-div {
+.edit-painting-header {
     display: flex;
     flex-direction: column;
 }
 
-.painting-edit-title-div {
-    width: 100%
-}
 
-.painting-edit-sub-div {
+
+.edit-painting-columns {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    gap: 40px;
+    /* Add spacing between columns */
+    align-items: flex-start;
+    /* Align columns to the top */
+    width: 100%;
 }
 
 
-.painting-details-div {
+.details-column {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    /* Take up 1/3 of the space */
+    min-width: 300px;
+    /* Prevent it from getting too small */
+}
+
+.image-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+}
+
+.giclee-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 
 .giclee-create {
-    overflow: visible; /* What does this do? */
-    display: block;  /* Ensures it takes up full width */
-    clear: both;  /* Prevents floating elements from affecting it */
-    margin-top: 50px;  /* Space between above section */
+    overflow: visible;
+    /* What does this do? */
+    display: block;
+    /* Ensures it takes up full width */
+    clear: both;
+    /* Prevents floating elements from affecting it */
+    margin-top: 50px;
+    /* Space between above section */
 }
 
-.set-aspect-ratio {
-    display:block;
+/* Giclee Manager Specific Styles */
+
+.aspect-ratio-controls {
+    display: flex;
+    align-items: flex-end;
+    /* Align bottom of input with badge */
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    /* Handle smaller screens */
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-label {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.aspect-ratio-select {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 200px;
+    background-color: white;
+}
+
+.recommended-badge {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #e8f5e9;
+    /* Light green background */
+    border: 1px solid #c8e6c9;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: #2e7d32;
+    /* Darker green text */
+    height: fit-content;
+}
+
+.badge-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #4caf50;
+    margin-bottom: 2px;
+}
+
+.badge-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.empty-state-message {
+    color: #888;
+    font-style: italic;
+    padding: 10px 0;
+}
+
+.options-box {
+    margin-top: 10px;
 }
 
 .options-grid {
     display: flex;
-    flex-direction: column; /* Ensures items stack properly */
-    align-items: flex-start; /* Aligns all text to the left */
-    width: 100%; /* Makes sure there is enough room */
+    flex-direction: column;
+    /* Ensures items stack properly */
+    align-items: flex-start;
+    /* Aligns all text to the left */
+    width: 100%;
+    /* Makes sure there is enough room */
     padding: 0;
-    list-style: none; /* Optional: Removes bullet points */
+    list-style: none;
+    /* Optional: Removes bullet points */
 }
 
 
 .option-item {
-    display: flex; /* Use flexbox for alignment */
-    align-items: center; /* Align items vertically */
-    gap: 20px; /* Adjust spacing between fields */
+    display: flex;
+    /* Use flexbox for alignment */
+    align-items: center;
+    /* Align items vertically */
+    gap: 20px;
+    /* Adjust spacing between fields */
     padding: 8px;
-    border-bottom: 1px solid #ddd; /* Add a separator between rows */
+    border-bottom: 1px solid #ddd;
+    /* Add a separator between rows */
 }
 
 
 
 .option-cell {
-    flex: 1; /* Make fields take equal space */
-    text-align: left; /* Align text */
+    flex: 1;
+    /* Make fields take equal space */
+    text-align: left;
+    /* Align text */
 }
+
 .option-dimensions {
-    white-space: nowrap; /* Prevents line breaks */
-    min-width: 150px; /* Ensures enough space */
-    text-align: left; /* Keeps alignment consistent */
-  }
+    white-space: nowrap;
+    /* Prevents line breaks */
+    min-width: 150px;
+    /* Ensures enough space */
+    text-align: left;
+    /* Keeps alignment consistent */
+}
 
 
 
@@ -82,7 +185,7 @@
     cursor: pointer;
     border-radius: 4px;
 }
-  
+
 .add-option-button:hover {
     background-color: #0056b3;
 }
