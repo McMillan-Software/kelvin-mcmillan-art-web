@@ -32,9 +32,9 @@ const Prints: React.FC = () => {
                             <div className="giclee-list-item">
                                 <img className="painting-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${item.painting.image_path}`} alt={item.painting.title} />
                                 <div className="giclee-list-item-text">
-                                    <div className="giclee-title">
-                                        {item.painting.title}. {item.painting.width}x{item.painting.height}mm.
-                                    </div>
+                                    <p className="giclee-title">
+                                        <strong>{item.painting.title}</strong>. {item.painting.width}x{item.painting.height}mm.
+                                    </p>
                                     <div className="giclee-options">
                                         <div className="options-grid">
                                             {item.options.map((option: option, index: number) => (
