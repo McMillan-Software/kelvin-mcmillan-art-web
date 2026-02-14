@@ -2,6 +2,7 @@ export interface original {
     id : number,
     title : string,
     type : string,
+    creationDate: Date
     location: string,
     aspectRatio: number,
     height: number,
@@ -12,7 +13,7 @@ export interface original {
     info : string,
     galleryLink : string,
     galleryName: string,
-    image_path: string
+    imagePath: string
 }
 
 

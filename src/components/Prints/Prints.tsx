@@ -30,7 +30,7 @@ const Prints: React.FC = () => {
                     {giclees.map((item: giclee) => (
                         <li key={item.painting.id}>
                             <div className="giclee-list-item">
-                                <img className="painting-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${item.painting.image_path}`} alt={item.painting.title} />
+                                <img className="painting-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${item.painting.imagePath}`} alt={item.painting.title} />
                                 <div className="giclee-list-item-text">
                                     <p className="giclee-title">
                                         <strong>{item.painting.title}</strong>. {item.painting.width}x{item.painting.height}mm.
@@ -39,10 +39,10 @@ const Prints: React.FC = () => {
                                         <div className="options-grid">
                                             {item.options.map((option: option, index: number) => (
                                                 <div key={option.id ?? index} className="option-row">
-                                                    <div className="cell">{option.option_attributes.width}mm</div>
+                                                    <div className="cell">{option.optionAttributes.width}mm</div>
                                                     <div className="cell">x</div>
-                                                    <div className="cell">{option.option_attributes.height}mm</div>
-                                                    <div className="cell">${option.option_attributes.price}</div>
+                                                    <div className="cell">{option.optionAttributes.height}mm</div>
+                                                    <div className="cell">${option.optionAttributes.price}</div>
                                                 </div>
                                             ))}
                                         </div>

@@ -30,8 +30,18 @@ const Original: React.FC = () => {
           </button>
         </div>
 
-        <div className="original-image-container">
-          <img className="orginal-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${original.image_path}`} alt={original.title} />
+          <div className="original-image-container">
+            <img className="orginal-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${original.imagePath}`} alt={original.title} />
+          </div>
+          <h2>{original.title}</h2>
+          <p>{original.info}</p>
+
+          <p>{original.type} - ${original.price} - {original.width}x{original.height} </p>
+          {original.galleryLink ? (
+            <p>Available at <Link to={`https://${original.galleryLink}`} target="_blank" rel="noopener noreferrer">{original.galleryName}</Link></p>
+          ) : (
+            <br/>
+          )}
         </div>
         <h2>{original.title}</h2>
         <p className="original-info">{original.info}</p>

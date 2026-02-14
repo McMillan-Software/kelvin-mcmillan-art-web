@@ -27,26 +27,27 @@ const EditPainting: React.FC = () => {
                 const response = await api.get(`paintings/${id}`);
                 setEditPainting(response.data);
             } catch (error) {
-                console.error(`Error fetching data: ${error}`);
+                console.error("Error fetcghing aspect ratios");
             }
         };
+        getPaintingToEdit();        
+    }, []);
 
-        // probs always will have an id, this check is just for safety
-        if (id) {
-            getPaintingToEdit();
-        }
-    }, [id]);
-
-
+    
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
 
-        const finalValue =
-            type === "checkbox" ? checked :
-                type === "number" ? Number(value) :
-                    value;
+        let finalValue: any = value;
+
+        if (type === "checkbox") {
+            finalValue = checked;
+        } else if (type === "number") {
+            finalValue = Number(value);
+        } else if (type === "date") {
+            finalValue = value === "" ? null : value;
+        }
 
         setEditPainting((prev) => ({
             ...prev,
@@ -61,10 +62,10 @@ const EditPainting: React.FC = () => {
             setEditPainting(response.data);
             alert("Painting details updated");
         })
-            .catch((error) => {
-                console.error(`Error fetching data: ${error}`);
-                setError(error)
-            });
+        .catch((error) => {
+            console.error(`Error fetching data: ${error}`);
+            setError(error)
+        });
     }
 
     //Images
@@ -120,123 +121,133 @@ const EditPainting: React.FC = () => {
                         <h3>Painting Details</h3>
                         <form className="painting-form" onSubmit={handleEditPainting}>
 
-                            <div>
-                                <label>Title:</label>
-                                <input
-                                    type="text"
-                                    name="title"
-                                    value={editPainting.title}
-                                    onChange={handleChange}
-                                    placeholder={editPainting.title}
+                        <div className="form-group">
+                            <label>Title:</label>
+                            <input
+                                type="text"
+                                name="title"
+                                value={editPainting.title}
+                                onChange={handleChange}
+                                placeholder= {editPainting.title}
+                                
+                            />
+                        </div>
 
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Location:</label>
+                            <input
+                                type="text"
+                                name="location"
+                                value={editPainting.location ?? ""}
+                                onChange={handleChange}
+                                placeholder="Location"
+                            />
+                        </div>
 
-                            <div>
-                                <label>Location:</label>
-                                <input
-                                    type="text"
-                                    name="location"
-                                    value={editPainting.location ?? ""}
-                                    onChange={handleChange}
-                                    placeholder="Location"
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Type:</label>
+                            <input
+                                type="text"
+                                name="type"
+                                value={editPainting.type}
+                                onChange={handleChange}
+                                placeholder="Type"
+                            />
+                        </div>
 
-                            <div>
-                                <label>Type:</label>
-                                <input
-                                    type="text"
-                                    name="type"
-                                    value={editPainting.type}
-                                    onChange={handleChange}
-                                    placeholder="Type"
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Creation Date:</label>
+                            <input
+                                type="date"
+                                name="creationDate"
+                                value={editPainting.creationDate ?? ""} 
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                            <div>
-                                <label>Width:</label>
-                                <input
-                                    type="number"
-                                    name="width"
-                                    value={editPainting.width}
-                                    onChange={handleChange}
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Width:</label>
+                            <input
+                                type="number"
+                                name="width"
+                                value={editPainting.width}
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                            <div>
-                                <label>Height:</label>
-                                <input
-                                    type="number"
-                                    name="height"
-                                    value={editPainting.height}
-                                    onChange={handleChange}
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Height:</label>
+                            <input
+                                type="number"
+                                name="height"
+                                value={editPainting.height}
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                            <div>
-                                <label>Sold:</label>
-                                <input
-                                    type="checkbox"
-                                    name="sold"
-                                    checked={!!editPainting.sold}
-                                    onChange={handleChange}
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Sold:</label>
+                            <input
+                                type="checkbox"
+                                name="sold"
+                                checked={!!editPainting.sold}
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                            <div>
-                                <label>Framed:</label>
-                                <input
-                                    type="checkbox"
-                                    name="framed"
-                                    checked={!!editPainting.framed}
-                                    onChange={handleChange}
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Framed:</label>
+                            <input
+                                type="checkbox"
+                                name="framed"
+                                checked={!!editPainting.framed}
+                                onChange={handleChange}
+                            />
+                        </div>
 
-                            <div>
-                                <label>Price:</label>
-                                <input
-                                    type="number"
-                                    name="price"
-                                    value={editPainting.price}
-                                    onChange={handleChange}
-                                    step="0.01"
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Price:</label>
+                            <input
+                                type="number"
+                                name="price"
+                                value={editPainting.price}
+                                onChange={handleChange}
+                                step="0.01"
+                            />
+                        </div>
 
-                            <div>
-                                <label>Information:</label>
-                                <input
-                                    type="text"
-                                    name="info"
-                                    value={editPainting.info}
-                                    onChange={handleChange}
-                                    placeholder="Info"
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Information:</label>
+                            <input
+                                type="text"
+                                name="info"
+                                value={editPainting.info}
+                                onChange={handleChange}
+                                placeholder="Info"
+                            />
+                        </div>
 
-                            <div>
-                                <label>Gallery Name:</label>
-                                <input
-                                    type="text"
-                                    name="galleryName"
-                                    value={editPainting.galleryName ?? ""}
-                                    onChange={handleChange}
-                                    placeholder="Gallery Name"
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Gallery Name:</label>
+                            <input
+                                type="text"
+                                name="galleryName"
+                                value={editPainting.galleryName ?? ""}
+                                onChange={handleChange}
+                                placeholder="Gallery Name"
+                            />
+                        </div>
 
-                            <div>
-                                <label>Gallery Link:</label>
-                                <input
-                                    type="text"
-                                    name="galleryLink"
-                                    value={editPainting.galleryLink ?? ""}
-                                    onChange={handleChange}
-                                    placeholder="Gallery Link"
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Gallery Link:</label>
+                            <input
+                                type="text"
+                                name="galleryLink"
+                                value={editPainting.galleryLink ?? ""}
+                                onChange={handleChange}
+                                placeholder="Gallery Link"
+                            />
+                        </div>
 
                             {error && <p style={{ color: "red" }}>{error}</p>}
                             <button type="submit">Save Painting Details</button>
@@ -250,8 +261,8 @@ const EditPainting: React.FC = () => {
                             src={
                                 previewUrl
                                     ? previewUrl
-                                    : editPainting.image_path
-                                        ? `${import.meta.env.VITE_IMAGE_BASE_PATH}${editPainting.image_path}`
+                                    : editPainting.imagePath
+                                        ? `${import.meta.env.VITE_IMAGE_BASE_PATH}${editPainting.imagePath}`
                                         : "/images/placeholder.jpg"
                             }
                             alt={editPainting.title}
