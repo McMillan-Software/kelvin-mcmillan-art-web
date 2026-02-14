@@ -2,27 +2,27 @@ import { original } from "./original"
 
 // export allows this to be used elsewhere other than just this file
 export interface giclee {
-    painting_id: number,
-    page_order: number,
-    painting: original, // TODO: why is original here...? 
+    paintingId: number,
+    pageOrder: number,
+    painting: original, 
     options: option[]  
 }
-
+  
 export interface option {
     id: number,
-    painting_id: number,
-    option_attributes: option_attributes
+    paintingId: number,
+    optionAttributes: optionAttributes
 }
 
-export interface option_attributes {
+export interface optionAttributes {
     id: number,
     width: number,
     height: number,
-    aspect_ratio: string,
+    aspectRatio: string,
     price: number
 }
 
-export interface valid_giclee_options {
-    painting_has_option: boolean, // different case
-    attributes: option_attributes
+export interface validGicleeOptions {
+    paintingHasOption: boolean, 
+    attributes: optionAttributes
 }

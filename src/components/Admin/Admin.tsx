@@ -241,8 +241,8 @@ const Admin: React.FC = () => {
                 <div className="admin-painting-list-item">
                   <img
                     className="admin-painting-image"
-                    src={painting.image_path 
-                      ? `${import.meta.env.VITE_IMAGE_BASE_PATH}${painting.image_path}` 
+                    src={painting.imagePath 
+                      ? `${import.meta.env.VITE_IMAGE_BASE_PATH}${painting.imagePath}` 
                       : "/images/placeholder.jpg"}
                     alt={painting.title}
                   />  
