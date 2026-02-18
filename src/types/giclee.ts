@@ -4,14 +4,14 @@ import { original } from "./original"
 export interface giclee {
     paintingId: number,
     pageOrder: number,
-    painting: original, 
-    options: option[]  
+    painting: original,
+    options: option[]
 }
-  
+
 export interface option {
     id: number,
     paintingId: number,
-    optionAttributes: optionAttributes
+    option_attributes: optionAttributes
 }
 
 export interface optionAttributes {
@@ -23,6 +23,6 @@ export interface optionAttributes {
 }
 
 export interface validGicleeOptions {
-    paintingHasOption: boolean, 
+    paintingHasOption: boolean,
     attributes: optionAttributes
 }

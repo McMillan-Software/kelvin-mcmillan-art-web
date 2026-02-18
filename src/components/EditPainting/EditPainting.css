@@ -79,8 +79,33 @@
     font-size: 0.9rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-    min-width: 200px;
+    min-width: 120px;
     background-color: white;
+}
+
+.aspect-ratio-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.lock-button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.lock-button:hover {
+    background-color: #f0f0f0;
+}
+
+.lock-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .recommended-badge {
@@ -95,7 +120,13 @@
     color: #2e7d32;
     /* Darker green text */
     height: fit-content;
+    position: relative;
+    /* Make it a positioning context for the tooltip */
+    cursor: help;
+    /* Indicate hover interaction */
 }
+
+/* ... badge-label and badge-value ... */
 
 .badge-label {
     font-size: 0.75rem;
@@ -108,6 +139,49 @@
 .badge-value {
     font-size: 1.1rem;
     font-weight: 700;
+}
+
+.badge-subtext {
+    /* Tooltip styling */
+    visibility: hidden;
+    width: 200px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1000;
+
+    /* Position the tooltip */
+    bottom: 125%;
+    /* Position above the badge */
+    left: 50%;
+    margin-left: -100px;
+    /* Center the tooltip horizontally */
+
+    /* Fade in transition */
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.75rem;
+    font-weight: 400;
+}
+
+/* Tooltip arrow */
+.badge-subtext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+
+.recommended-badge:hover .badge-subtext {
+    visibility: visible;
+    opacity: 1;
 }
 
 .empty-state-message {

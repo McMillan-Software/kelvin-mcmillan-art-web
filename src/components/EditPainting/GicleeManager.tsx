@@ -3,15 +3,20 @@ import api from "../../api";
 import { validGicleeOptions } from "../../types/giclee";
 import "./EditPainting.css";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
+
 interface GicleeManagerProps {
     paintingId: number;
     width: number;
     height: number;
+    aspectRatio?: string;
+    onAspectRatioLock: (ratio: string) => void;
 }
 
-const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height }) => {
+const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height, aspectRatio, onAspectRatioLock }) => {
     const [recommendedAspectRatio, setRecommendedAspectRatio] = useState<string>("");
-    const [dropDownSelectedAspectRatio, setDropDownAspectRatio] = useState("");
+    const [dropDownSelectedAspectRatio, setDropDownAspectRatio] = useState(aspectRatio || "");
     const [availableAspectRatios, setAvailableAspectRatios] = useState<string[]>([]);
     const [validGicleeOptions, setValidGicleeOptions] = useState<validGicleeOptions[]>([]);
     const [gicleeOptionsRefreshTrigger, setGicleeOptionsRefreshTrigger] = useState(0);
@@ -32,6 +37,16 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
     }, []);
 
 
+
+    // Sync dropdown with currently selected painting's aspect ratio if it has been set
+    useEffect(() => {
+        if (aspectRatio) {
+            console.log("dropdown aspect ratio changing from:", dropDownSelectedAspectRatio, "to:", aspectRatio);
+            setDropDownAspectRatio(aspectRatio);
+        }
+    }, [aspectRatio]);
+
+
     // calculate actual aspect ratio of the painting to help guide aspect ratio selection
     useEffect(() => {
         const calculateAspectRatio = () => {
@@ -43,6 +58,8 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
 
         calculateAspectRatio();
     }, [width, height]);
+
+
 
     // Get available Giclee option for the selected aspect ratio.
     useEffect(() => {
@@ -67,8 +84,15 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
         fetchOptions();
     }, [dropDownSelectedAspectRatio, paintingId, gicleeOptionsRefreshTrigger]);
 
+
+
     const handleAddOption = async (paintingId: number, optionAttributesId: number) => {
         console.log("paintingId: ", paintingId);
+
+        // Auto-lock aspect ratio if not already locked
+        if (!aspectRatio && dropDownSelectedAspectRatio) {
+            onAspectRatioLock(dropDownSelectedAspectRatio);
+        }
 
         try {
             const response = await api.post('/admin/giclee',
@@ -86,6 +110,8 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
         }
     };
 
+
+
     const handleDeleteGicleeOption = async (paintingId: number, optionAttributesId: number) => {
         try {
             console.log(`Deleting option - paitingId: ${paintingId}, optionAttributesId: ${optionAttributesId}`);
@@ -98,31 +124,64 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
         }
     };
 
+
+
+    const toggleLock = () => {
+        if (aspectRatio) {
+            // Aspect ratio has a valid value and is locked, unlock aspect ratio - set to "", api cannot update to null currently
+            onAspectRatioLock("");
+        } else {
+            // Aspect ratio is not locked, lock to current dropdown value
+            if (dropDownSelectedAspectRatio) {
+                onAspectRatioLock(dropDownSelectedAspectRatio);
+            } else {
+                // should not happen... 
+                console.warn("Attempted to lock with empty string!");
+            }
+        }
+    };
+
+
+
+
     return (
         <div className="giclee-column">
             <h3>Giclees</h3>
             <div className="aspect-ratio-controls">
                 <div className="control-group">
                     <label htmlFor="aspect-ratio" className="input-label">Select Aspect Ratio:</label>
-                    <select
-                        id='aspect-ratio'
-                        value={dropDownSelectedAspectRatio}
-                        onChange={(e) => setDropDownAspectRatio(e.target.value)}
-                        className="aspect-ratio-select"
-                    >
-                        <option value="">-- Select --</option>
-                        {availableAspectRatios.map((ratio, index) => (
-                            <option key={index} value={ratio}>
-                                {ratio}
-                            </option>
-                        ))}
-                    </select>
+                    <div className="aspect-ratio-input-row">
+                        <select
+                            id='aspect-ratio'
+                            value={dropDownSelectedAspectRatio}
+                            onChange={(e) => setDropDownAspectRatio(e.target.value)}
+                            className="aspect-ratio-select"
+                            disabled={!!aspectRatio} // TODO understand this
+                        >
+                            <option value="">-- Select --</option>
+                            {availableAspectRatios.map((ratio, index) => (
+                                <option key={index} value={ratio}>
+                                    {ratio}
+                                </option>
+                            ))}
+                        </select>
+
+                        <button
+                            className={`lock-button ${aspectRatio ? 'locked' : ''}`} // conditional styling 
+                            onClick={toggleLock}
+                            disabled={!dropDownSelectedAspectRatio && !aspectRatio}
+                            title={aspectRatio ? "Unlock Aspect Ratio" : "Lock Aspect Ratio"}
+                        >
+                            {aspectRatio ? <FontAwesomeIcon icon={faLock} /> : <FontAwesomeIcon icon={faLockOpen} />}
+                        </button>
+                    </div>
                 </div>
 
                 {recommendedAspectRatio && (
-                    <div className="recommended-badge" title="Calculated from original dimensions">
-                        <span className="badge-label">Original Ratio:</span>
+                    <div className="recommended-badge">
+                        <span className="badge-label">Exact Ratio:</span>
                         <span className="badge-value">{parseFloat(recommendedAspectRatio).toFixed(2)}</span>
+                        <span className="badge-subtext">Calculated from original dimensions</span>
                     </div>
                 )}
             </div>
