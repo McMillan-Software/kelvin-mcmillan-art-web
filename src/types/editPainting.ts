@@ -2,7 +2,7 @@ export interface editPainting {
     id: number;
     title: string;
     location?: string;
-    creationDate: string | null; 
+    creationDate: string | null;
     type: string;
     width: number;
     height: number;
@@ -11,7 +11,7 @@ export interface editPainting {
     giclee: boolean;
     price: number;
     info: string;
-    aspectRatio?: string;
+    aspectRatio?: string | null;
     galleryName?: string;
     galleryLink?: string;
     imagePath?: string;
