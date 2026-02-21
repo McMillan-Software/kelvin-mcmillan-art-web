@@ -17,13 +17,32 @@ const OriginalsList: React.FC<OriginalsListProps> = ({ originals }) => {
               <img className="orginals-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${original.imagePath}`} />
             </NavLink>
             <div className="caption-container">
-              <p className="caption-text">
+              {/* Line 1: Title & Location */}
+              <p className="caption-line title-location">
                 <strong>{original.title}</strong>
-                
                 {original.location && `, ${original.location}`}
+              </p>
+
+              {/* Line 2: Type, Dimensions, and Price */}
+              <p className="caption-line details">
+                {original.type}
                 
-                {` · ${original.type} · ${original.width} × ${original.height}mm `}
+                <span className="separator">·</span>
                 
+                <span className="no-break">
+                  {`${original.width} × ${original.height}mm`}
+                </span>
+
+                {!original.sold && original.price && (
+                  <>
+                    <span className="separator">·</span>
+                    {`$${original.price}`}
+                  </>
+                )}
+              </p>
+
+              {/* Line 3: Availability */}
+              <div className="caption-line availability">
                 {!original.sold && (
                   original.galleryLink ? (
                     <a 
@@ -32,13 +51,13 @@ const OriginalsList: React.FC<OriginalsListProps> = ({ originals }) => {
                       rel="noopener noreferrer"
                       className="available-link"
                     >
-                      Available 
+                      Available
                     </a>
                   ) : (
                     <span className="available-text">Available</span>
                   )
                 )}
-              </p>
+              </div>
             </div>
           </div>
         </li>
