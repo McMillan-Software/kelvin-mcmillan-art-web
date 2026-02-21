@@ -39,10 +39,10 @@ const Prints: React.FC = () => {
                                         <div className="options-grid">
                                             {item.options.map((option: option, index: number) => (
                                                 <div key={option.id ?? index} className="option-row">
-                                                    <div className="cell">{option.option_attributes.width}mm</div>
+                                                    <div className="cell">{option.optionAttributes.width}mm</div>
                                                     <div className="cell">x</div>
-                                                    <div className="cell">{option.option_attributes.height}mm</div>
-                                                    <div className="cell">${option.option_attributes.price}</div>
+                                                    <div className="cell">{option.optionAttributes.height}mm</div>
+                                                    <div className="cell">${option.optionAttributes.price}</div>
                                                 </div>
                                             ))}
                                         </div>

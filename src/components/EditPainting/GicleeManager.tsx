@@ -87,7 +87,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
 
 
     const handleAddOption = async (paintingId: number, optionAttributesId: number) => {
-        console.log("paintingId: ", paintingId);
+        console.log("Adding giclee option for paintingId: ", paintingId);
 
         // Auto-lock aspect ratio if not already locked
         if (!aspectRatio && dropDownSelectedAspectRatio) {

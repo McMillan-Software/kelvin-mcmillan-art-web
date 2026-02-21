@@ -11,7 +11,7 @@ export interface giclee {
 export interface option {
     id: number,
     paintingId: number,
-    option_attributes: optionAttributes
+    optionAttributes: optionAttributes
 }
 
 export interface optionAttributes {
