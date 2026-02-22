@@ -1,4 +1,4 @@
-export interface page {
+export interface Page {
     id: number,
     name: string
 }

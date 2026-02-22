@@ -1,20 +1,20 @@
-import { original } from "./original"
+import { Original } from "./original"
 
-// export allows this to be used elsewhere other than just this file
-export interface giclee {
+
+export interface Giclee {
     paintingId: number,
     pageOrder: number,
-    painting: original,
-    options: option[]
+    painting: Original,
+    options: GicleeOption[]
 }
 
-export interface option {
+export interface GicleeOption {
     id: number,
     paintingId: number,
-    optionAttributes: optionAttributes
+    optionAttributes: GicleeOptionAttributes
 }
 
-export interface optionAttributes {
+export interface GicleeOptionAttributes {
     id: number,
     width: number,
     height: number,
@@ -22,7 +22,7 @@ export interface optionAttributes {
     price: number
 }
 
-export interface validGicleeOptions {
+export interface ValidGicleeOptions {
     paintingHasOption: boolean,
-    attributes: optionAttributes
+    attributes: GicleeOptionAttributes
 }

@@ -11,12 +11,12 @@ api.interceptors.request.use(
   (config) => {
     // Define which paths require authentication
     // We check if the URL starts with '/admin' OR if it is the validation endpoint
-    const isProtectedEndpoint = 
-        config.url?.startsWith('/admin') || 
-        config.url?.includes('/validate-authentication');
+    const isProtectedEndpoint =
+      config.url?.startsWith('/admin') ||
+      config.url?.includes('/validate-authentication');
 
     if (isProtectedEndpoint) {
-        console.log("end point is protected... fetching access token");
+      console.log("end point is protected... fetching access token");
       const token = localStorage.getItem('accessToken');
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -34,11 +34,14 @@ api.interceptors.response.use(
   (response) => response, // Return success responses immediately
   async (error) => {
     const originalRequest = error.config;
+
+    // Handle 401 errors:
+
     // Check if error is 401 AND it came from a protected endpoint
     // We also check !originalRequest._retry to prevent infinite loops
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-        console.log("Token has expired");
+      console.log("Token has expired");
       try {
         const refreshToken = localStorage.getItem('refreshToken');
 
@@ -69,14 +72,21 @@ api.interceptors.response.use(
         console.error("Session expired. Logging out...");
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        
+
         // window.location.href = '/login'; 
-        
+
         return Promise.reject(refreshError);
       }
     }
 
-    return Promise.reject(error);
+    // Handle all other axios errors
+
+    // Extract the specific error string from the backend (if any)
+    const data = error.response?.data;
+    const cleanMessage = data?.detail || data?.message || data?.error || error.message || "An unexpected API error occurred.";
+
+    // Reject the promise with a standard JavaScript Error object containing the string
+    return Promise.reject(new Error(cleanMessage));
   }
 );
 

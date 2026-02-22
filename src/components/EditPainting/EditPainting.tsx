@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, NavLink } from 'react-router-dom';
 import { useAuth } from "../../AuthContext";
-import { editPainting } from "../../types/editPainting";
+import { Painting } from "../../types/editPainting";
 import api from "../../api";
 
 import GicleeManager from "./GicleeManager";
@@ -13,7 +13,7 @@ import "./EditPainting.css";
 const EditPainting: React.FC = () => {
     const { isAuthenticated } = useAuth();
     let { id } = useParams<{ id: string }>();
-    const [editPainting, setEditPainting] = React.useState<editPainting>({} as editPainting);
+    const [editPainting, setEditPainting] = React.useState<Painting>({} as Painting);
     const [error, setError] = useState("");
     const [image, setImage] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -55,6 +55,7 @@ const EditPainting: React.FC = () => {
         }));
     };
 
+
     const handleEditPainting = (e: React.FormEvent) => {
         e.preventDefault();
         api.put(`admin/painting/${id}`, editPainting
@@ -62,13 +63,14 @@ const EditPainting: React.FC = () => {
             setEditPainting(response.data);
             alert("Painting details updated");
         })
-            .catch((error) => {
-                console.error(`Error fetching data: ${error}`);
-                setError(error)
+            .catch((error: Error) => {
+                console.error(`Error saving painting:`, error.message);
+                setError(error.message);
             });
     }
 
-    //Images
+
+    //Image Upload
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && (file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg")) {
@@ -103,7 +105,6 @@ const EditPainting: React.FC = () => {
         }
     };
 
-    // TODO: known bug where aspect ratio error appear on adding a giclee when the aspect ratio has not been set. 
     const handleAspectRatioLock = (ratio: string) => {
         console.log("EditPainting: handleAspectRatioLock called with ratio:", ratio);
 

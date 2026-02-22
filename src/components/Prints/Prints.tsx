@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import './Prints.css';
-import { giclee, option } from "../../types/giclee";
+import { Giclee, GicleeOption } from "../../types/giclee";
 import axios from "axios";
 
 const Prints: React.FC = () => {
-    const [giclees, setGiclees] = useState<giclee[]>([])
+    const [giclees, setGiclees] = useState<Giclee[]>([])
 
     useEffect(() => {
         console.log("Getting Giclees")
@@ -27,7 +27,7 @@ const Prints: React.FC = () => {
             <h3>Prints</h3>
             <div className="prints-content">
                 <ul className="prints-list">
-                    {giclees.map((item: giclee) => (
+                    {giclees.map((item: Giclee) => (
                         <li key={item.painting.id}>
                             <div className="giclee-list-item">
                                 <img className="painting-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${item.painting.imagePath}`} alt={item.painting.title} />
@@ -37,7 +37,7 @@ const Prints: React.FC = () => {
                                     </p>
                                     <div className="giclee-options">
                                         <div className="options-grid">
-                                            {item.options.map((option: option, index: number) => (
+                                            {item.options.map((option: GicleeOption, index: number) => (
                                                 <div key={option.id ?? index} className="option-row">
                                                     <div className="cell">{option.optionAttributes.width}mm</div>
                                                     <div className="cell">x</div>

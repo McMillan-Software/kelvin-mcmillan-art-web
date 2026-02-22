@@ -1,4 +1,4 @@
-export interface editPainting {
+export interface Painting {
     id: number;
     title: string;
     location?: string;

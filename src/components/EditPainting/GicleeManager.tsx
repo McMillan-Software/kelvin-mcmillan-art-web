@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import api from "../../api";
-import { validGicleeOptions } from "../../types/giclee";
-import "./EditPainting.css";
+import { ValidGicleeOptions } from "../../types/giclee";
+import "./GicleeManager.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
@@ -18,7 +18,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
     const [recommendedAspectRatio, setRecommendedAspectRatio] = useState<string>("");
     const [dropDownSelectedAspectRatio, setDropDownAspectRatio] = useState(aspectRatio || "");
     const [availableAspectRatios, setAvailableAspectRatios] = useState<string[]>([]);
-    const [validGicleeOptions, setValidGicleeOptions] = useState<validGicleeOptions[]>([]);
+    const [validGicleeOptions, setValidGicleeOptions] = useState<ValidGicleeOptions[]>([]);
     const [gicleeOptionsRefreshTrigger, setGicleeOptionsRefreshTrigger] = useState(0);
 
 
@@ -26,7 +26,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
         const fetchAspectRatios = async () => {
             try {
                 console.log("Fetching aspect ratios...");
-                const response = await api.get(`/admin/aspectratios`);
+                const response = await api.get(`admin/aspectratios`);
                 setAvailableAspectRatios(response.data);
             } catch (error) {
                 console.error("Error fetching aspect ratios");
@@ -72,7 +72,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
             try {
                 console.log(`VALID OPTIONS: Fetching VALID options for aspect_ratio: ${dropDownSelectedAspectRatio}`);
                 const encodedAspectRatio = encodeURIComponent(dropDownSelectedAspectRatio);
-                const response = await api.get(`/admin/giclee/${paintingId}/valid-options?aspect_ratio=${encodedAspectRatio}`);
+                const response = await api.get(`admin/giclee/${paintingId}/valid-options?aspect_ratio=${encodedAspectRatio}`);
                 console.log("Fetched valid giclee options:", response.data);
                 setValidGicleeOptions(response.data.validOptions);
                 console.log("valid giclee options has been set:", response.data.validOptions);
@@ -89,13 +89,8 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
     const handleAddOption = async (paintingId: number, optionAttributesId: number) => {
         console.log("Adding giclee option for paintingId: ", paintingId);
 
-        // Auto-lock aspect ratio if not already locked
-        if (!aspectRatio && dropDownSelectedAspectRatio) {
-            onAspectRatioLock(dropDownSelectedAspectRatio);
-        }
-
         try {
-            const response = await api.post('/admin/giclee',
+            const response = await api.post('admin/giclee',
                 {
                     paintingId: paintingId,
                     pageOrder: 0,
@@ -115,7 +110,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
     const handleDeleteGicleeOption = async (paintingId: number, optionAttributesId: number) => {
         try {
             console.log(`Deleting option - paitingId: ${paintingId}, optionAttributesId: ${optionAttributesId}`);
-            const response = await api.delete(`/admin/giclee?painting_id=${paintingId}&option_attribute_id=${optionAttributesId}`);
+            const response = await api.delete(`admin/giclee?painting_id=${paintingId}&option_attribute_id=${optionAttributesId}`);
             console.log("Delete Successful:", response.data);
 
             setGicleeOptionsRefreshTrigger(prev => prev + 1);
@@ -126,7 +121,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
 
 
 
-    const toggleLock = () => {
+    const toggleAspectRatioLock = () => {
         if (aspectRatio) {
             // Aspect ratio has a valid value and is locked, unlock aspect ratio - set to "", api cannot update to null currently
             onAspectRatioLock("");
@@ -168,7 +163,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
 
                         <button
                             className={`lock-button ${aspectRatio ? 'locked' : ''}`} // conditional styling 
-                            onClick={toggleLock}
+                            onClick={toggleAspectRatioLock}
                             disabled={!dropDownSelectedAspectRatio && !aspectRatio}
                             title={aspectRatio ? "Unlock Aspect Ratio" : "Lock Aspect Ratio"}
                         >
@@ -188,7 +183,15 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
 
             <div className="options-box">
                 {dropDownSelectedAspectRatio ? (
-                    <h3>Options for {dropDownSelectedAspectRatio}</h3>
+                    <>
+                        <h3>Options for {dropDownSelectedAspectRatio}</h3>
+                        {/* Display a warning when aspect ratio is not set */}
+                        {!aspectRatio && (
+                            <div className="warning-message" style={{ color: '#888', fontStyle: 'italic', marginBottom: '10px', fontSize: '0.9em' }}>
+                                Lock the aspect ratio first to enable adding options.
+                            </div>
+                        )}
+                    </>
                 ) : (
                     <div className="empty-state-message">
                         Please select an aspect ratio to view or add Giclee options.
@@ -211,7 +214,9 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
                                     <button
                                         className="add-option-button"
                                         onClick={() => handleAddOption(paintingId, option.attributes.id)}
-                                        title="Add Option">+</button>
+                                        disabled={!aspectRatio}
+                                        title={aspectRatio ? "Add Option" : "Lock aspect ratio first to add options"}
+                                    >+</button>
                                 )}
                             </li>
                         ))}

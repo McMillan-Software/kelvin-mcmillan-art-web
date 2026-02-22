@@ -1,6 +1,6 @@
-export interface originals {
-    id : number,
-    title : string
+export interface Originals {
+    id: number,
+    title: string
 }
 
 
