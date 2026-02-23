@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, NavLink } from 'react-router-dom';
 import { useAuth } from "../../AuthContext";
-import { Painting } from "../../types/editPainting";
+import { Painting } from "../../types/painting";
 import api from "../../api";
 
 import GicleeManager from "./GicleeManager";
