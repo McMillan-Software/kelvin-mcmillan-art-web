@@ -1,19 +1,19 @@
-import React, { useEffect, useState  } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import api from "../../api";
 import './CreatePainting.css';
-import { NavLink , useNavigate } from 'react-router-dom';
-import { page } from "../../types/page";
+import { NavLink, useNavigate } from 'react-router-dom';
+import { Page } from "../../types/page";
 
 const paintingTypes = ["Watercolour", "Acrylic"];
 
 const getNZDate = () => {
     // Returns date string in YYYY-MM-DD format for NZ timezone
-    return new Date().toLocaleDateString('en-CA', { 
-        timeZone: 'Pacific/Auckland' 
+    return new Date().toLocaleDateString('en-CA', {
+        timeZone: 'Pacific/Auckland'
     });
 };
-    
+
 
 const CreatePainting: React.FC = () => {
     const navigate = useNavigate();
@@ -30,11 +30,11 @@ const CreatePainting: React.FC = () => {
     const [info, setInfo] = useState("");
     const [galleryLink, setGalleryLink] = useState("");
     const [galleryName, setGalleryName] = useState("");
-    const [pages, setPages] = useState<number[]>([]); 
-    const [pageOptions, setPageOptions] = useState<page[]>([]);
+    const [pages, setPages] = useState<number[]>([]);
+    const [pageOptions, setPageOptions] = useState<Page[]>([]);
 
     useEffect(() => {
-        
+
         const fetchPagesOptions = async () => {
             try {
                 const response = await api.get('/admin/pages');
@@ -46,25 +46,25 @@ const CreatePainting: React.FC = () => {
         fetchPagesOptions();
     }, []);
 
-   
+
     const handlePaintingCreation = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await api.post('/admin/painting', 
+            const response = await api.post('/admin/painting',
                 {
-                  title,
-                  location,
-                  type,
-                  creationDate,
-                  width: width || 0,
-                  height: height || 0, 
-                  sold,
-                  framed,
-                  price: price || 0.0,
-                  info,
-                  galleryLink,
-                  galleryName,
-                  pages,
+                    title,
+                    location,
+                    type,
+                    creationDate,
+                    width: width || 0,
+                    height: height || 0,
+                    sold,
+                    framed,
+                    price: price || 0.0,
+                    info,
+                    galleryLink,
+                    galleryName,
+                    pages,
                 });
             alert("Painting created successfully");
             return navigate("/editPainting/" + response.data.id);
@@ -89,129 +89,129 @@ const CreatePainting: React.FC = () => {
 
             <div className="painting-creation-input-div">
                 <div className="painting-form-div">
-                <h2>Painting Details</h2> 
+                    <h2>Painting Details</h2>
 
-                <form className="painting-form" onSubmit={handlePaintingCreation}>
-                    <div className="form-group">
-                        <label>Title:</label>
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Location:</label>
-                        <input
-                            type="text"
-                            value={location}
-                            onChange={(e) => setLocation(e.target.value)}
-                        >
-                        </input>
-                    </div>
-                    <div className="form-group">
-                        <label>Type:</label>
-                        <select value={type} onChange={(e) => setType(e.target.value)}>
-                            {paintingTypes.map((option) => (
-                                <option key={option} value={option}>
-                                    {option}
-                                </option>
+                    <form className="painting-form" onSubmit={handlePaintingCreation}>
+                        <div className="form-group">
+                            <label>Title:</label>
+                            <input
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Location:</label>
+                            <input
+                                type="text"
+                                value={location}
+                                onChange={(e) => setLocation(e.target.value)}
+                            >
+                            </input>
+                        </div>
+                        <div className="form-group">
+                            <label>Type:</label>
+                            <select value={type} onChange={(e) => setType(e.target.value)}>
+                                {paintingTypes.map((option) => (
+                                    <option key={option} value={option}>
+                                        {option}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="completion-date">Date of completion:</label>
+                            <input
+                                id="completion-date"
+                                type="date"
+                                value={creationDate}
+                                onChange={(e) => setCreationDate(e.target.value)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Width (mm):</label>
+                            <input
+                                type="number"
+                                value={width}
+                                onChange={(e) => setWidth(e.target.value ? parseInt(e.target.value) : "")}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Height (mm):</label>
+                            <input
+                                type="number"
+                                value={height}
+                                onChange={(e) => setHeight(e.target.value ? parseInt(e.target.value) : "")}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Sold:</label>
+                            <input
+                                type="checkbox"
+                                checked={sold}
+                                onChange={(e) => setSold(e.target.checked)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Framed:</label>
+                            <input
+                                type="checkbox"
+                                checked={framed}
+                                onChange={(e) => setFramed(e.target.checked)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Price ($):</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value ? parseFloat(e.target.value) : "")}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Info:</label>
+                            <textarea
+                                value={info}
+                                onChange={(e) => setInfo(e.target.value)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Gallery Link:</label>
+                            <input
+                                type="text"
+                                value={galleryLink}
+                                onChange={(e) => setGalleryLink(e.target.value)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Gallery Name:</label>
+                            <input
+                                type="text"
+                                value={galleryName}
+                                onChange={(e) => setGalleryName(e.target.value)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Pages:</label>
+                            {pageOptions.map((page) => (
+                                <div key={page.id}>
+                                    <input
+                                        type="checkbox"
+                                        value={page.name}
+                                        checked={pages.includes(page.id)}
+                                        onChange={() => handlePageSelection(page.id)}
+                                    />
+                                    <label htmlFor={page.name}>{page.name}</label>
+                                </div>
                             ))}
-                        </select>
-                    </div>
-                    <div className="form-group">
-                    <label htmlFor="completion-date">Date of completion:</label>
-                    <input
-                        id="completion-date"
-                        type="date"
-                        value={creationDate}
-                        onChange={(e) => setCreationDate(e.target.value)}
-                    />
-                    </div>
-                    <div className="form-group">
-                        <label>Width (mm):</label>
-                        <input
-                            type="number"
-                            value={width}
-                            onChange={(e) => setWidth(e.target.value ? parseInt(e.target.value) : "")}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Height (mm):</label>
-                        <input
-                            type="number"
-                            value={height}
-                            onChange={(e) => setHeight(e.target.value ? parseInt(e.target.value) : "")}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Sold:</label>
-                        <input
-                            type="checkbox"
-                            checked={sold}
-                            onChange={(e) => setSold(e.target.checked)}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Framed:</label>
-                        <input
-                            type="checkbox"
-                            checked={framed}
-                            onChange={(e) => setFramed(e.target.checked)}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Price ($):</label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value ? parseFloat(e.target.value) : "")}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Info:</label>
-                        <textarea
-                            value={info}
-                            onChange={(e) => setInfo(e.target.value)}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Gallery Link:</label>
-                        <input
-                            type="text"
-                            value={galleryLink}
-                            onChange={(e) => setGalleryLink(e.target.value)}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Gallery Name:</label>
-                        <input
-                            type="text"
-                            value={galleryName}
-                            onChange={(e) => setGalleryName(e.target.value)}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Pages:</label>
-                        {pageOptions.map((page) => (
-                            <div key={page.id}>
-                                <input
-                                    type="checkbox"
-                                    value={page.name}
-                                    checked={pages.includes(page.id)}
-                                    onChange={() => handlePageSelection(page.id)}
-                                />
-                                <label htmlFor={page.name}>{page.name}</label>
-                            </div>
-                        ))}
-                    </div>
-                    {error && <p style={{ color: "red" }}>{error}</p>}
-                    <button type="submit">Contiune</button>
-                </form>
+                        </div>
+                        {error && <p style={{ color: "red" }}>{error}</p>}
+                        <button type="submit">Contiune</button>
+                    </form>
                 </div>
             </div>
         </div>

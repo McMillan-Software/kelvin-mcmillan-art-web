@@ -1,16 +1,16 @@
 import React from "react";
-import { original } from "../../types/original";
+import { Original } from "../../types/original";
 import { NavLink } from "react-router-dom";
 import "./OriginalsList.css";
 
 interface OriginalsListProps {
-  originals: original[];
+  originals: Original[];
 }
 
 const OriginalsList: React.FC<OriginalsListProps> = ({ originals }) => {
   return (
     <ul className="orginals-list">
-      {originals.map((original: original) => (
+      {originals.map((original: Original) => (
         <li key={original.id}>
           <div className="originals-list-item">
             <NavLink className="originals-image-link" to={`/Originals/${original.id}`}>
@@ -26,9 +26,9 @@ const OriginalsList: React.FC<OriginalsListProps> = ({ originals }) => {
               {/* Line 2: Type, Dimensions, and Price */}
               <p className="caption-line details">
                 {original.type}
-                
+
                 <span className="separator">·</span>
-                
+
                 <span className="no-break">
                   {`${original.width} × ${original.height}mm`}
                 </span>
@@ -45,9 +45,9 @@ const OriginalsList: React.FC<OriginalsListProps> = ({ originals }) => {
               <div className="caption-line availability">
                 {!original.sold && (
                   original.galleryLink ? (
-                    <a 
-                      href={original.galleryLink.startsWith('http') ? original.galleryLink : `https://${original.galleryLink}`} 
-                      target="_blank" 
+                    <a
+                      href={original.galleryLink.startsWith('http') ? original.galleryLink : `https://${original.galleryLink}`}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="available-link"
                     >

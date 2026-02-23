@@ -1,17 +1,34 @@
 import React, { useState, useEffect } from "react";
-import api from '../../api'; 
+import api from '../../api';
 import './Admin.css';
-import { original } from "../../types/original";
+import { Original } from "../../types/original";
 import { PaintingSearchParams } from '../../types/paintingSearch';
 import axios from "axios";
-import { useAuth }  from "../../AuthContext";
+import { useAuth } from "../../AuthContext";
 import { NavLink } from 'react-router-dom';
 
 const Admin: React.FC = () => {
-    const { isAuthenticated, logout } = useAuth();
-    const [paintings, setPaintings] = useState<original[]>([]);
-    const paintingTypes = ["", "Watercolour", "Acrylic"];
-    const [searchParams, setSearchParams] = useState<PaintingSearchParams>({
+  const { isAuthenticated, logout } = useAuth();
+  const [paintings, setPaintings] = useState<Original[]>([]);
+  const paintingTypes = ["", "Watercolour", "Acrylic"];
+  const [searchParams, setSearchParams] = useState<PaintingSearchParams>({
+    q: "",
+    type: "",
+    minWidth: undefined,
+    maxWidth: undefined,
+    minHeight: undefined,
+    maxHeight: undefined,
+    sold: undefined,
+    framed: undefined,
+    giclee: undefined,
+    minPrice: undefined,
+    maxPrice: undefined,
+    page: 1, // Default first page
+    limit: 1000, // Default page size
+  });
+
+  const resetSearchParam = () => {
+    setSearchParams({
       q: "",
       type: "",
       minWidth: undefined,
@@ -23,72 +40,55 @@ const Admin: React.FC = () => {
       giclee: undefined,
       minPrice: undefined,
       maxPrice: undefined,
-      page: 1, // Default first page
-      limit: 1000, // Default page size
+      page: 1, // Reset to first page
+      limit: 1000, // Reset page size
     });
+  };
 
-    const resetSearchParam = () => {
-      setSearchParams({
-        q: "",
-        type: "",
-        minWidth: undefined,
-        maxWidth: undefined,
-        minHeight: undefined,
-        maxHeight: undefined,
-        sold: undefined,
-        framed: undefined,
-        giclee: undefined,
-        minPrice: undefined,
-        maxPrice: undefined,
-        page: 1, // Reset to first page
-        limit: 1000, // Reset page size
+  // Function to update state dynamically
+  const updateSearchParam = (key: keyof PaintingSearchParams, value: any) => {
+    setSearchParams((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  // Function to update boolean fields dyanmically
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target;
+    setSearchParams((prev) => ({
+      ...prev,
+      [name]: checked, // Dynamically update the field
+    }));
+  };
+
+  // Function to remove undefined/empty values before sending request
+  const getFilteredParams = (params: PaintingSearchParams) => {
+    return Object.fromEntries(
+      Object.entries(params).filter(([_, v]) => v !== undefined && v !== "" && v !== 0)
+    );
+  };
+
+  const fetchPaintings = async () => {
+    const filteredParams = getFilteredParams(searchParams);
+    try {
+      const response = await api.get('/admin/paintings', {
+        params: filteredParams
       });
-    };
+      setPaintings(response.data);
+    } catch (error) {
+      console.error("Error fetching paintings:", error);
+    }
+  };
 
-    // Function to update state dynamically
-    const updateSearchParam = (key: keyof PaintingSearchParams, value: any) => {
-      setSearchParams((prev) => ({
-        ...prev,
-        [key]: value,
-      }));
-    };
+  // Automatically fetch when search params change (debounced)
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchPaintings();
+    }, 500); // Debounce API calls
 
-    // Function to update boolean fields dyanmically
-    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, checked } = event.target;
-      setSearchParams((prev) => ({
-        ...prev,
-        [name]: checked, // Dynamically update the field
-      }));
-    };
-  
-    // Function to remove undefined/empty values before sending request
-    const getFilteredParams = (params: PaintingSearchParams) => {
-      return Object.fromEntries(
-        Object.entries(params).filter(([_, v]) => v !== undefined && v !== "" && v !== 0) 
-      );
-    };
-  
-    const fetchPaintings = async () => {
-      const filteredParams = getFilteredParams(searchParams);
-      try {
-        const response = await api.get('/admin/paintings', { 
-            params: filteredParams 
-        });
-        setPaintings(response.data);
-      } catch (error) {
-        console.error("Error fetching paintings:", error);
-      }
-    };
-  
-    // Automatically fetch when search params change (debounced)
-    useEffect(() => {
-      const delayDebounce = setTimeout(() => {
-        fetchPaintings();
-      }, 500); // Debounce API calls
-  
-      return () => clearTimeout(delayDebounce);
-    }, [searchParams]);
+    return () => clearTimeout(delayDebounce);
+  }, [searchParams]);
 
 
   if (!isAuthenticated) {
@@ -96,46 +96,46 @@ const Admin: React.FC = () => {
   } else {
     return (
       <div className='admin-div'>
-          <h1>Admin Dashboard</h1>
-          <div>
+        <h1>Admin Dashboard</h1>
+        <div>
           <button>
             <NavLink to="/CreatePainting">
-                Create Painting
+              Create Painting
             </NavLink>
           </button>
-            <button onClick={logout} className="logout-btn">
-              Logout
-            </button>
+          <button onClick={logout} className="logout-btn">
+            Logout
+          </button>
+        </div>
+
+        <div className="painting-search-div">
+          <div className="paninting-search-div_title">
+            <h2>Painting Search</h2>
           </div>
+          <div className="painting-search-parameters">
 
-          <div className="painting-search-div">
-            <div className="paninting-search-div_title">
-              <h2>Painting Search</h2>
-            </div>
-            <div className="painting-search-parameters">
+            <div className="painting-search-parameter-column">
+              <div className="painting-search-parameter-row_keyword">
+                <input
+                  type="text"
+                  placeholder="Keywords"
+                  value={searchParams.q}
+                  onChange={(e) => updateSearchParam("q", e.target.value)}
+                />
+              </div>
 
-              <div className="painting-search-parameter-column">
-                <div className="painting-search-parameter-row_keyword">
-                  <input
-                    type="text"
-                    placeholder="Keywords"
-                    value={searchParams.q}
-                    onChange={(e) => updateSearchParam("q", e.target.value)}
-                  />
-                </div>
-
-                <div className="painting-search-parameter-row">
-                  <label className="parameter-label">Type</label>
-                  <select value={searchParams.type} onChange={(e) => updateSearchParam("type", e.target.value)}>
-                                {paintingTypes.map((option) => (
-                                    <option key={option} value={option}>
-                                        {option}
-                                    </option>
-                                ))}
-                      </select>
-                </div>
-                <div className="painting-search-parameter-row">
-                  <label>
+              <div className="painting-search-parameter-row">
+                <label className="parameter-label">Type</label>
+                <select value={searchParams.type} onChange={(e) => updateSearchParam("type", e.target.value)}>
+                  {paintingTypes.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="painting-search-parameter-row">
+                <label>
                   <input
                     type="checkbox"
                     name="sold"
@@ -164,104 +164,104 @@ const Admin: React.FC = () => {
                   />
                   Giclee
                 </label>
-                </div>
-              </div>            
+              </div>
+            </div>
 
 
-              <div className="painting-search-parameter-column">
-                <div className="painting-search-parameter-row">
-                  <label className="parameter-label">Width</label>
-                  <div className="painting-search-parameter-row_input">
-                    <input
-                      className="search-parameter-number-input"
-                      type="number"
-                      placeholder="Min mm"
-                      value={searchParams.minWidth || ""}
-                      onChange={(e) => updateSearchParam("minWidth", Number(e.target.value))}
-                    />
-                    <input
-                      className="search-parameter-number-input"
-                      type="number"
-                      placeholder="Max mm"
-                      value={searchParams.maxWidth || ""}
-                      onChange={(e) => updateSearchParam("maxWidth", Number(e.target.value))}
-                    />
-                  </div>
-                </div>
-
-                <div className="painting-search-parameter-row">
-                  <label className="parameter-label">Height</label>
-                  <div className="painting-search-parameter-row_input">
-                    <input
-                      className="search-parameter-number-input"
-                      type="number"
-                      placeholder="Min mm"
-                      value={searchParams.minHeight || ""}
-                      onChange={(e) => updateSearchParam("minHeight", Number(e.target.value))}
-                    />
-                    <input
-                      className="search-parameter-number-input"
-                      type="number"
-                      placeholder="Max mm"
-                      value={searchParams.maxHeight || ""}
-                      onChange={(e) => updateSearchParam("maxHeight", Number(e.target.value))}
-                    />
-                  </div>
-                </div>
-              
-
-                <div className="painting-search-parameter-row">
-                  <label className="parameter-label">Price</label>
-                  <div className="painting-search-parameter-row_input">               
-                    <input
-                        className="search-parameter-number-input"
-                        type="number"
-                        placeholder="Min $"
-                        value={searchParams.minPrice || ""}
-                        onChange={(e) => updateSearchParam("minPrice", Number(e.target.value))}
-                    />
-                    <input
-                      className="search-parameter-number-input"
-                      type="number"
-                      placeholder="Max $"
-                      value={searchParams.maxPrice || ""}
-                      onChange={(e) => updateSearchParam("maxPrice", Number(e.target.value))}
-                    />
-                  </div>     
+            <div className="painting-search-parameter-column">
+              <div className="painting-search-parameter-row">
+                <label className="parameter-label">Width</label>
+                <div className="painting-search-parameter-row_input">
+                  <input
+                    className="search-parameter-number-input"
+                    type="number"
+                    placeholder="Min mm"
+                    value={searchParams.minWidth || ""}
+                    onChange={(e) => updateSearchParam("minWidth", Number(e.target.value))}
+                  />
+                  <input
+                    className="search-parameter-number-input"
+                    type="number"
+                    placeholder="Max mm"
+                    value={searchParams.maxWidth || ""}
+                    onChange={(e) => updateSearchParam("maxWidth", Number(e.target.value))}
+                  />
                 </div>
               </div>
 
+              <div className="painting-search-parameter-row">
+                <label className="parameter-label">Height</label>
+                <div className="painting-search-parameter-row_input">
+                  <input
+                    className="search-parameter-number-input"
+                    type="number"
+                    placeholder="Min mm"
+                    value={searchParams.minHeight || ""}
+                    onChange={(e) => updateSearchParam("minHeight", Number(e.target.value))}
+                  />
+                  <input
+                    className="search-parameter-number-input"
+                    type="number"
+                    placeholder="Max mm"
+                    value={searchParams.maxHeight || ""}
+                    onChange={(e) => updateSearchParam("maxHeight", Number(e.target.value))}
+                  />
+                </div>
+              </div>
+
+
+              <div className="painting-search-parameter-row">
+                <label className="parameter-label">Price</label>
+                <div className="painting-search-parameter-row_input">
+                  <input
+                    className="search-parameter-number-input"
+                    type="number"
+                    placeholder="Min $"
+                    value={searchParams.minPrice || ""}
+                    onChange={(e) => updateSearchParam("minPrice", Number(e.target.value))}
+                  />
+                  <input
+                    className="search-parameter-number-input"
+                    type="number"
+                    placeholder="Max $"
+                    value={searchParams.maxPrice || ""}
+                    onChange={(e) => updateSearchParam("maxPrice", Number(e.target.value))}
+                  />
+                </div>
+              </div>
             </div>
-            <button onClick={resetSearchParam}>Reset</button>
+
           </div>
-          
-          <ul className="admin-painting-list">
-            {paintings.map((painting: original) => ( 
-              <li key={painting.id}>
-                <div className="admin-painting-list-item">
-                  <img
-                    className="admin-painting-image"
-                    src={painting.imagePath 
-                      ? `${import.meta.env.VITE_IMAGE_BASE_PATH}${painting.imagePath}` 
-                      : "/images/placeholder.jpg"}
-                    alt={painting.title}
-                  />  
-                  <p>{painting.title}</p>
-                  <p>Information: {painting.info}</p>
-                  <p>Height: {painting.height}mm</p>
-                  <p>Width: {painting.width}mm </p>
-                  <p>Price: ${painting.price} </p>
-                  <div>
+          <button onClick={resetSearchParam}>Reset</button>
+        </div>
+
+        <ul className="admin-painting-list">
+          {paintings.map((painting: Original) => (
+            <li key={painting.id}>
+              <div className="admin-painting-list-item">
+                <img
+                  className="admin-painting-image"
+                  src={painting.imagePath
+                    ? `${import.meta.env.VITE_IMAGE_BASE_PATH}${painting.imagePath}`
+                    : "/images/placeholder.jpg"}
+                  alt={painting.title}
+                />
+                <p>{painting.title}</p>
+                <p>Information: {painting.info}</p>
+                <p>Height: {painting.height}mm</p>
+                <p>Width: {painting.width}mm </p>
+                <p>Price: ${painting.price} </p>
+                <div>
                   <button>
                     <NavLink to={`/EditPainting/${painting.id}`}>
                       Edit
                     </NavLink>
                   </button>
                 </div>
-                </div>
-              </li>
-            ))}
-          </ul>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     );
   };

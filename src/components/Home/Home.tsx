@@ -1,47 +1,47 @@
 import React, { useEffect, useState } from "react";
 import './Home.css';
 import axios from "axios";
-import { original } from "../../types/original";
+import { Original } from "../../types/original";
 import { NavLink } from "react-router-dom";
 import OriginalsList from "../Shared/OriginalsList"
 
 const Home: React.FC = () => {
 
-  const [originals, setOriginals] = React.useState<original[]>([]);
+  const [originals, setOriginals] = React.useState<Original[]>([]);
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}paintings/home`).then((response) => {
       setOriginals(response.data);
     })
-    .catch((error) => {
-      console.error(`Error fetching data: ${error}`);
-    });
+      .catch((error) => {
+        console.error(`Error fetching data: ${error}`);
+      });
   }, []);
 
-    return (
-      <div className="home-div">
+  return (
+    <div className="home-div">
 
-        <div className="expression-div">
-          <img className="quote-image" src={"/images/quote.jpg"} alt='quote' />
-          <div className="quote-div">
-            <h3 className="quote-text">"The most important element in a painting is light, especially the light from either end of the day, 
+      <div className="expression-div">
+        <img className="quote-image" src={"/images/quote.jpg"} alt='quote' />
+        <div className="quote-div">
+          <h3 className="quote-text">"The most important element in a painting is light, especially the light from either end of the day,
             which can bring a painting to life. The interplay of colors, shadows, and contrasts illuminated by this type of light can transform even the most mundane subject into something truly captivating."</h3>
-          </div>
-        </div>
-
-        <hr></hr>
-
-        <div className="originals-div">
-          <NavLink className="originals-link" to={'/Originals'}>
-            <h1>Latest Originals</h1>
-          </NavLink>
-          <div>
-            <OriginalsList originals={originals} />
-          </div>
-
         </div>
       </div>
-    );
+
+      <hr></hr>
+
+      <div className="originals-div">
+        <NavLink className="originals-link" to={'/Originals'}>
+          <h1>Latest Originals</h1>
+        </NavLink>
+        <div>
+          <OriginalsList originals={originals} />
+        </div>
+
+      </div>
+    </div>
+  );
 }
 
 export default Home;

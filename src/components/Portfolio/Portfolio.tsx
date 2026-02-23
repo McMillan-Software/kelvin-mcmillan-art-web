@@ -1,23 +1,23 @@
 import React, { useEffect } from "react";
-import { original } from "../../types/original";
+import { Original } from "../../types/original";
 import './Portfolio.css';
 import OriginalsList from "../Shared/OriginalsList"
 import axios from "axios";
 
 const Originals: React.FC = () => {
-    const [originals, setOriginals] = React.useState<original[]>([]);
+    const [originals, setOriginals] = React.useState<Original[]>([]);
     const [category, setCategory] = React.useState<String>("Marine");
 
     useEffect(() => {
         console.log("Getting oringals for page: " + category);
         axios.get(`${import.meta.env.VITE_API_URL}paintings/portfolio/${category}`)
-        .then((response) => {
+            .then((response) => {
 
-        setOriginals(response.data);
-        })
-        .catch((error) => {
-            console.error(`Error fetching data: ${error}`);
-          });
+                setOriginals(response.data);
+            })
+            .catch((error) => {
+                console.error(`Error fetching data: ${error}`);
+            });
     }, [category]);
 
     const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -37,7 +37,7 @@ const Originals: React.FC = () => {
                     <option value="Sport">Sport</option>
                 </select>
             </div>
-            <OriginalsList originals={originals} />    
+            <OriginalsList originals={originals} />
         </div>
     );
 }
