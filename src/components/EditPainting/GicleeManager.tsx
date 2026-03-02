@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import api from "../../api";
 import { ValidGicleeOptions } from "../../types/giclee";
 import "./GicleeManager.css";
@@ -15,11 +15,16 @@ interface GicleeManagerProps {
 }
 
 const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height, aspectRatio, onAspectRatioLock }) => {
-    const [recommendedAspectRatio, setRecommendedAspectRatio] = useState<string>("");
-    const [dropDownSelectedAspectRatio, setDropDownAspectRatio] = useState(aspectRatio || "");
+    const recommendedAspectRatio = useMemo(() => {
+        if (width && height) {
+            return `${width / height}`;
+        }
+        return "";
+    }, [width, height]);
+    const [dropDownSelectedAspectRatio, setDropDownAspectRatio] = useState<string>(aspectRatio || "");
     const [availableAspectRatios, setAvailableAspectRatios] = useState<string[]>([]);
     const [validGicleeOptions, setValidGicleeOptions] = useState<ValidGicleeOptions[]>([]);
-    const [gicleeOptionsRefreshTrigger, setGicleeOptionsRefreshTrigger] = useState(0);
+    const [gicleeOptionsRefreshTrigger, setGicleeOptionsRefreshTrigger] = useState<number>(0);
 
 
     useEffect(() => {
@@ -46,18 +51,6 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
         }
     }, [aspectRatio]);
 
-
-    // calculate actual aspect ratio of the painting to help guide aspect ratio selection
-    useEffect(() => {
-        const calculateAspectRatio = () => {
-            if (width && height) {
-                const ratio = width / height;
-                setRecommendedAspectRatio(`${ratio}`);
-            }
-        }
-
-        calculateAspectRatio();
-    }, [width, height]);
 
 
 
@@ -86,7 +79,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
 
 
 
-    const handleAddOption = async (paintingId: number, optionAttributesId: number) => {
+    const handleAddOption = async (paintingId: number, optionAttributesId: number): Promise<void> => {
         console.log("Adding giclee option for paintingId: ", paintingId);
 
         try {
@@ -107,7 +100,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
 
 
 
-    const handleDeleteGicleeOption = async (paintingId: number, optionAttributesId: number) => {
+    const handleDeleteGicleeOption = async (paintingId: number, optionAttributesId: number): Promise<void> => {
         try {
             console.log(`Deleting option - paitingId: ${paintingId}, optionAttributesId: ${optionAttributesId}`);
             const response = await api.delete(`admin/giclee?painting_id=${paintingId}&option_attribute_id=${optionAttributesId}`);
@@ -121,7 +114,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
 
 
 
-    const toggleAspectRatioLock = () => {
+    const toggleAspectRatioLock = (): void => {
         if (aspectRatio) {
             // Aspect ratio has a valid value and is locked, unlock aspect ratio - set to "", api cannot update to null currently
             onAspectRatioLock("");
@@ -227,4 +220,4 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
     );
 };
 
-export default GicleeManager;
+export default React.memo(GicleeManager);
