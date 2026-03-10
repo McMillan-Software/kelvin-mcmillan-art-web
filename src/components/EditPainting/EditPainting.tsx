@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, NavLink } from 'react-router-dom';
 import { useAuth } from "../../AuthContext";
 import { Painting } from "../../types/painting";
@@ -105,38 +105,37 @@ const EditPainting: React.FC = () => {
         }
     };
 
-    const handleAspectRatioLock = (ratio: string) => {
+    const handleAspectRatioLock = useCallback((ratio: string) => {
         console.log("EditPainting: handleAspectRatioLock called with ratio:", ratio);
 
-        // Store previous state for rollback
-        const previousAspectRatio = editPainting.aspectRatio;
+        setEditPainting(currentPainting => {
+            // Store previous state for rollback
+            const previousAspectRatio = currentPainting.aspectRatio;
+            const updatedPainting = { ...currentPainting, aspectRatio: ratio };
 
-        // Backend treats empty string as unsetting the value
-        const newAspectRatio = ratio;
+            console.log("EditPainting: updatedPainting:", updatedPainting);
 
-        const updatedPainting = { ...editPainting, aspectRatio: newAspectRatio };
-        console.log("EditPainting: updatedPainting:", updatedPainting);
-        // @ts-ignore - existing type definition might be strict about string | undefined
-        setEditPainting(updatedPainting);
+            // Optimistically update state, then call API to persist
+            api.put(`admin/painting/${id}`, updatedPainting)
+                .then(response => {
+                    console.log("Aspect Ratio locked/unlocked saved:", response.data);
+                    setError("");
+                })
+                .catch(error => {
+                    console.error("Error saving aspect ratio:", error);
 
-        // Optimistically update state, then call API to persist
-        api.put(`admin/painting/${id}`, updatedPainting)
-            .then(response => {
-                console.log("Aspect Ratio locked/unlocked saved:", response.data);
-                setError("");
-            })
-            .catch(error => {
-                console.error("Error saving aspect ratio:", error);
+                    // Rollback state
+                    setEditPainting(prev => ({ ...prev, aspectRatio: previousAspectRatio }));
 
-                // Rollback state
-                setEditPainting(prev => ({ ...prev, aspectRatio: previousAspectRatio }));
+                    // Extract error message from backend (FastAPI uses 'detail', others use 'message')
+                    const data = error.response?.data;
+                    const errorMessage = data?.detail || data?.message || data?.error || "Failed to save aspect ratio lock.";
+                    alert(`Error: ${errorMessage}`);
+                });
 
-                // Extract error message from backend (FastAPI uses 'detail', others use 'message')
-                const data = error.response?.data;
-                const errorMessage = data?.detail || data?.message || data?.error || "Failed to save aspect ratio lock.";
-                alert(`Error: ${errorMessage}`);
-            });
-    }
+            return updatedPainting;
+        });
+    }, [id]);
 
     if (!isAuthenticated) {
         return <div>User must login</div>;
