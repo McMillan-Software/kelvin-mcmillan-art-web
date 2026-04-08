@@ -31,7 +31,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
         const fetchAspectRatios = async () => {
             try {
                 console.log("Fetching aspect ratios...");
-                const response = await api.get(`admin/aspectratios`);
+                const response = await api.get(`/admin/aspectratios`);
                 setAvailableAspectRatios(response.data);
             } catch (error) {
                 console.error("Error fetching aspect ratios");
@@ -65,7 +65,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
             try {
                 console.log(`VALID OPTIONS: Fetching VALID options for aspect_ratio: ${dropDownSelectedAspectRatio}`);
                 const encodedAspectRatio = encodeURIComponent(dropDownSelectedAspectRatio);
-                const response = await api.get(`admin/giclee/${paintingId}/valid-options?aspect_ratio=${encodedAspectRatio}`);
+                const response = await api.get(`/admin/giclee/${paintingId}/valid-options?aspect_ratio=${encodedAspectRatio}`);
                 console.log("Fetched valid giclee options:", response.data);
                 setValidGicleeOptions(response.data.validOptions);
                 console.log("valid giclee options has been set:", response.data.validOptions);
@@ -83,7 +83,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
         console.log("Adding giclee option for paintingId: ", paintingId);
 
         try {
-            const response = await api.post('admin/giclee',
+            const response = await api.post('/admin/giclee',
                 {
                     paintingId: paintingId,
                     pageOrder: 0,
@@ -103,7 +103,7 @@ const GicleeManager: React.FC<GicleeManagerProps> = ({ paintingId, width, height
     const handleDeleteGicleeOption = async (paintingId: number, optionAttributesId: number): Promise<void> => {
         try {
             console.log(`Deleting option - paitingId: ${paintingId}, optionAttributesId: ${optionAttributesId}`);
-            const response = await api.delete(`admin/giclee?painting_id=${paintingId}&option_attribute_id=${optionAttributesId}`);
+            const response = await api.delete(`/admin/giclee?painting_id=${paintingId}&option_attribute_id=${optionAttributesId}`);
             console.log("Delete Successful:", response.data);
 
             setGicleeOptionsRefreshTrigger(prev => prev + 1);

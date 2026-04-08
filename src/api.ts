@@ -9,6 +9,7 @@ const api = axios.create({
 // 2. Request Interceptor: Attach Token ONLY for Admin/Auth endpoints
 api.interceptors.request.use(
   (config) => {
+    console.log(config.url);
     // Define which paths require authentication
     // We check if the URL starts with '/admin' OR if it is the validation endpoint
     const isProtectedEndpoint =
@@ -16,13 +17,13 @@ api.interceptors.request.use(
       config.url?.includes('/validate-authentication');
 
     if (isProtectedEndpoint) {
-      console.log("end point is protected... fetching access token");
+      // console.log("end point is protected... fetching access token");
       const token = localStorage.getItem('accessToken');
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
     } else {
-      console.log("Endpoint is not protected");
+      // console.log("Endpoint is not protected");
     }
     return config;
   },
@@ -41,7 +42,7 @@ api.interceptors.response.use(
     // We also check !originalRequest._retry to prevent infinite loops
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      console.log("Token has expired");
+      // console.log("Token has expired");
       try {
         const refreshToken = localStorage.getItem('refreshToken');
 
@@ -51,7 +52,7 @@ api.interceptors.response.use(
 
         // Call the refresh endpoint
         // NOTE: We use 'axios' directly here, not 'api', to avoid circular logic
-        console.log("fetching refresh token");
+        // console.log("fetching refresh token");
         const response = await axios.post(`${import.meta.env.VITE_API_URL}authentication/refresh`, {
           refreshToken: refreshToken,
         });
@@ -69,11 +70,11 @@ api.interceptors.response.use(
 
       } catch (refreshError) {
         // If the refresh token is also invalid/expired, log the user out
-        console.error("Session expired. Logging out...");
+        // console.error("Session expired. Logging out...");
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
 
-        // window.location.href = '/login'; 
+        window.location.href = '/login'; 
 
         return Promise.reject(refreshError);
       }

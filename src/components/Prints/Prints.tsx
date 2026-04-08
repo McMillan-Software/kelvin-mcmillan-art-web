@@ -7,7 +7,7 @@ const Prints: React.FC = () => {
     const [giclees, setGiclees] = useState<Giclee[]>([])
 
     useEffect(() => {
-        console.log("Getting Giclees")
+        // console.log("Getting Giclees")
         axios.get(`${import.meta.env.VITE_API_URL}paintings/giclees/v2`)
             .then(
                 (response) => {
@@ -32,7 +32,7 @@ const Prints: React.FC = () => {
                             <div className="giclee-list-item">
                                 <img className="painting-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${item.painting.imagePath}`} alt={item.painting.title} />
                                 <div className="giclee-list-item-text">
-                                    <p className="giclee-title">
+                                    <p className="title-location">
                                         <strong>{item.painting.title}</strong>. {item.painting.width}x{item.painting.height}mm.
                                     </p>
                                     <div className="giclee-options">

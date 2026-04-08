@@ -23,8 +23,15 @@ body {
 }
 
 p {
-  color: #a1a1a1;
+  color: #818181;
 }
+
+.title-location {
+  color: #333;           
+  font-size: 1.2rem;    
+  margin-bottom: 20px;    
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {

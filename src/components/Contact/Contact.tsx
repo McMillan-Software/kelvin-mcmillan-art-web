@@ -24,7 +24,7 @@ const Contact: React.FC = () => {
       message: emailBody,
     };
 
-    console.log(emailPayload);
+    // console.log(emailPayload);
 
 try {
       await axios.post(
@@ -41,7 +41,7 @@ try {
       // 2. Error Path - VISIBLE feedback
       setIsError(true);
       setFeedback("Something went wrong sending your message. Please try again or email me directly.");
-      console.error("Inquiry failed", error);
+      // console.error("Inquiry failed", error);
     } finally {
       setIsLoading(false); // 3. Stop loading regardless of success/fail
     }
@@ -116,10 +116,10 @@ try {
           <p>For regular updates on what I currently working on</p>
           
           <div className="footer-icons">
-              <a className="contact-social-icon" href="https://www.facebook.com/kelvinmcmillanart" target="_blank" rel="noreferrer">
+              <a className="contact-social-icon" href="https://www.facebook.com/kelvin.mcmillan.481473" target="_blank" rel="noreferrer">
                 <FontAwesomeIcon icon={faFacebookSquare} size="2x" />
               </a>
-              <a className="contact-social-icon" href="https://www.instagram.com/kelvinmcmillanart/" target="_blank" rel="noreferrer">
+              <a className="contact-social-icon" href="https://www.instagram.com/kelvinmcmillan5/?hl=en" target="_blank" rel="noreferrer">
                 <FontAwesomeIcon icon={faInstagram} size="2x" />
               </a>
           </div>
