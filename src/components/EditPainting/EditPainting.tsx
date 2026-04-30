@@ -58,7 +58,7 @@ const EditPainting: React.FC = () => {
 
     const handleEditPainting = (e: React.FormEvent) => {
         e.preventDefault();
-        api.put(`admin/painting/${id}`, editPainting
+        api.put(`/admin/painting/${id}`, editPainting
         ).then((response) => {
             setEditPainting(response.data);
             alert("Painting details updated");
@@ -96,7 +96,7 @@ const EditPainting: React.FC = () => {
         formData.append("file", image);
 
         try {
-            await api.post(`admin/painting/${editPainting.id}/image`, formData);
+            await api.post(`/admin/painting/${editPainting.id}/image`, formData);
 
             alert("Image uploaded successfully");
         } catch (err) {
@@ -116,7 +116,7 @@ const EditPainting: React.FC = () => {
             console.log("EditPainting: updatedPainting:", updatedPainting);
 
             // Optimistically update state, then call API to persist
-            api.put(`admin/painting/${id}`, updatedPainting)
+            api.put(`/admin/painting/${id}`, updatedPainting)
                 .then(response => {
                     console.log("Aspect Ratio locked/unlocked saved:", response.data);
                     setError("");
