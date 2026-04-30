@@ -11,7 +11,7 @@ import Contact from './components/Contact/Contact';
 import Admin from './components/Admin/Admin';
 import Prints from './components/Prints/Prints';
 import Login from './components/Login/Login';
-import CreatePainting from './components/CreatePainting/CreatePainting';
+import CreatePainting from './components/CreatePainting/CreatePaintingWizard'; 
 import EditPainting from './components/EditPainting/EditPainting';
 import { AuthProvider } from './AuthContext';
 
@@ -34,7 +34,7 @@ function App() {
                   <Route path="/About" element={<About/>}/>
                   <Route path="/Contact" element={<Contact/>}/>
                   <Route path="/Admin" element={<Admin/>}/>
-                   <Route path="/Prints" element={<Prints/>}/> 
+                  <Route path="/Prints" element={<Prints/>}/> 
                   <Route path="/Login" element={<Login/>}/>
                   <Route path="/CreatePainting" element={<CreatePainting/>}/>
                   <Route path="/EditPainting/:id" element={<EditPainting/>}/>
