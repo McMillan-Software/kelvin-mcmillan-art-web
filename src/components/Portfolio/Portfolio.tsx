@@ -35,6 +35,7 @@ const Originals: React.FC = () => {
                     <option value="Architectural">Architectural</option>
                     <option value="Portrait">Portrait</option>
                     <option value="Sport">Sport</option>
+                    <option value="Urban">Urban</option>
                 </select>
             </div>
             <OriginalsList originals={originals} />

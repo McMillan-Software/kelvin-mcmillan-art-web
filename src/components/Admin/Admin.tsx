@@ -118,11 +118,10 @@ const Admin: React.FC = () => {
     return (
       <div className='admin-div'>
         <h1>Admin Dashboard</h1>
-        <div>
-          <button>
-            <NavLink to="/CreatePainting">Create Painting</NavLink>
-          </button>
-          <button onClick={logout} className="logout-btn">Logout</button>
+        <div className='admin-action-panel'>
+          <NavLink to="/GicleeAdmin" className='admin-action-button'>Giclee Admin</NavLink>
+          <NavLink to="/CreatePainting" className='admin-action-button'>Create Painting</NavLink>
+          <button onClick={logout} className='logout-btn admin-action-button'>Logout</button>
         </div>
 
         <div className="painting-search-div">
@@ -130,7 +129,6 @@ const Admin: React.FC = () => {
             <h2>Painting Search</h2>
           </div>
           <div className="painting-search-parameters">
-            {/* --- Existing Search Parameters (q, type, checkboxes, width, height, price) remain unchanged --- */}
             <div className="painting-search-parameter-column">
               <div className="painting-search-parameter-row_keyword">
                 <input
