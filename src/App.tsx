@@ -13,6 +13,7 @@ import Prints from './components/Prints/Prints';
 import Login from './components/Login/Login';
 import CreatePainting from './components/CreatePainting/CreatePaintingWizard'; 
 import EditPainting from './components/EditPainting/EditPainting';
+import GicleeAdmin from './components/GicleeAdmin/GicleeAdmin';
 import { AuthProvider } from './AuthContext';
 
 
@@ -38,6 +39,7 @@ function App() {
                   <Route path="/Login" element={<Login/>}/>
                   <Route path="/CreatePainting" element={<CreatePainting/>}/>
                   <Route path="/EditPainting/:id" element={<EditPainting/>}/>
+                  <Route path="/GicleeAdmin" element={<GicleeAdmin/>}/>
               </Routes>
             </div>
           </div>

@@ -1,0 +1,79 @@
+.giclee-admin-container {
+    padding: 20px;
+    font-size: 18px; /* Larger base font for readability */
+}
+
+.giclee-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+}
+
+.giclee-table th {
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-bottom: 3px solid #ccc;
+    font-size: 1.1em;
+}
+
+.giclee-table td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+/* Zebra Striping for easier row tracking */
+.giclee-table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+/* Highlight row on hover */
+.giclee-table tr:hover {
+    background-color: #f0f7ff;
+}
+
+/* Highlight the row being edited */
+.row-editing {
+    background-color: #fff9c4 !important; /* Soft yellow background */
+    border: 2px solid #fbc02d;
+}
+
+/* Large Inputs for easier clicking/typing */
+.large-input {
+    font-size: 18px;
+    padding: 10px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    width: 100%;
+}
+
+/* Big, chunky buttons */
+.btn-large {
+    font-size: 18px;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.1s;
+}
+
+.btn-large:active {
+    transform: scale(0.95);
+}
+
+.btn-edit { background-color: #e3f2fd; color: #1976d2; border: 1px solid #1976d2; }
+.btn-save { background-color: #4caf50; color: white; }
+.btn-cancel { background-color: #f44336; color: white; }
+.btn-add { background-color: #2196f3; color: white; font-weight: bold; margin-bottom: 15px; }
+
+.aspect-badge {
+    background-color: #333;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
