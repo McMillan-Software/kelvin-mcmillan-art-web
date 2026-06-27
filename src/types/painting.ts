@@ -15,5 +15,5 @@ export interface Painting {
     galleryName?: string;
     galleryLink?: string;
     imagePath?: string;
-    pages?: string[];
+    pages?: number[];
 }
