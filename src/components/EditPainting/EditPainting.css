@@ -3,16 +3,18 @@
     flex-direction: column;
 }
 
-
-
-.edit-painting-columns {
+.edit-painting-rows {
     display: flex;
-    flex-direction: row;
-    gap: 40px;
-    /* Add spacing between columns */
-    align-items: flex-start;
-    /* Align columns to the top */
-    width: 100%;
+    flex-direction: column;
+    gap: 30px; /* Space between each row section */
+    padding-bottom: 100px;
+}
+
+.edit-section-row {
+    background-color: #f9f9f9; /* Optional: light background to group sections */
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
 }
 
 

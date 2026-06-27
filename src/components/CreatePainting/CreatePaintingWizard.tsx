@@ -47,7 +47,7 @@ const CreatePaintingWizard: React.FC = () => {
     useEffect(() => {
         const fetchPagesOptions = async () => {
             try {
-                const response = await api.get('/admin/pages');
+                const response = await api.get('pages');
                 setPageOptions(response.data);
             } catch (error) {
                 console.error("Error fetching pages:", error);
