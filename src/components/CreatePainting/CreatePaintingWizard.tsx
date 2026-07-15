@@ -7,7 +7,7 @@ import GicleeManager from "../EditPainting/GicleeManager";
 
 import './CreatePainting.css'; // Assuming you'll consolidate your CSS here
 
-const paintingTypes = ["Watercolour", "Acrylic"];
+const paintingTypes = ["Watercolour", "Acrylic", "Pencil"];
 
 const getNZDate = () => {
     return new Date().toLocaleDateString('en-CA', {
@@ -31,6 +31,7 @@ const CreatePaintingWizard: React.FC = () => {
     const [width, setWidth] = useState<number | "">("");
     const [height, setHeight] = useState<number | "">("");
     const [sold, setSold] = useState(false);
+    const [artistCollection, setArtistCollection] = useState(false);
     const [framed, setFramed] = useState(false);
     const [price, setPrice] = useState<number | "">("");
     const [info, setInfo] = useState("");
@@ -72,7 +73,7 @@ const CreatePaintingWizard: React.FC = () => {
             const response = await api.post('/admin/painting', {
                 title, location, type, creationDate,
                 width: width || 0, height: height || 0,
-                sold, framed, price: price || 0.0,
+                sold, framed, artistCollection, price: price || 0.0,
                 info, galleryLink, galleryName, pages,
             });
             // Save the returned painting data and move to step 2
@@ -196,6 +197,10 @@ const CreatePaintingWizard: React.FC = () => {
                         <div className="form-group">
                             <label>Sold:</label>
                             <input type="checkbox" checked={sold} onChange={(e) => setSold(e.target.checked)} />
+                        </div>
+                        <div className="form-group">
+                            <label>Artist Collection:</label>
+                            <input type="checkbox" checked={artistCollection} onChange={(e) => setArtistCollection(e.target.checked)} />
                         </div>
                         <div className="form-group">
                             <label>Framed:</label>

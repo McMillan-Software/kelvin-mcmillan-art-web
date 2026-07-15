@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
             <p>Email: kelvinmcmillanart@xtra.co.nz</p>
           </div>
           <div className="footer-icons">
-            <a className="social-icon" href="https://www.facebook.com/kelvinmcmillanart" target="_blank" rel="noreferrer">
+            <a className="social-icon" href="https://www.facebook.com/profile.php?id=61559306564460" target="_blank" rel="noreferrer">
               <FontAwesomeIcon icon={faFacebookSquare} size="2x" />
             </a>
             <a className="social-icon" href="https://www.instagram.com/kelvinmcmillanart/" target="_blank" rel="noreferrer">

@@ -189,6 +189,10 @@ const EditPainting: React.FC = () => {
                             <input type="checkbox" name="sold" checked={!!editPainting.sold} onChange={handleChange} />
                         </div>
                         <div className="form-group">
+                            <label>Artist Collection:</label>
+                            <input type="checkbox" name="artistCollection" checked={!!editPainting.artistCollection} onChange={handleChange} />
+                        </div>
+                        <div className="form-group">
                             <label>Framed:</label>
                             <input type="checkbox" name="framed" checked={!!editPainting.framed} onChange={handleChange} />
                         </div>

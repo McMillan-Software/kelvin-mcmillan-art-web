@@ -33,7 +33,14 @@ const OriginalsList: React.FC<OriginalsListProps> = ({ originals }) => {
                   {`${original.width} × ${original.height}mm`}
                 </span>
 
-                {!original.sold && original.price && (
+                {original.framed && (
+                  <>
+                  <span className="separator">·</span>
+                  Framed
+                  </>
+                )}
+
+                {!original.artistCollection && !original.sold && original.price && (
                   <>
                     <span className="separator">·</span>
                     {`$${original.price}`}
@@ -43,19 +50,26 @@ const OriginalsList: React.FC<OriginalsListProps> = ({ originals }) => {
 
               {/* Line 3: Availability */}
               <div className="caption-line availability">
-                {!original.sold && (
-                  original.galleryLink ? (
-                    <a
-                      href={original.galleryLink.startsWith('http') ? original.galleryLink : `https://${original.galleryLink}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="available-link"
-                    >
-                      Available
-                    </a>
+                {original.artistCollection ? (
+                  <span className="available-text">Artist Personal Collection</span>
+                ) :
+                  original.sold ? (
+                    <span className="available-text">Sold</span>
                   ) : (
-                    <span className="available-text">Available</span>
-                  )
+                    original.galleryLink ? (
+                      <a
+                        href={original.galleryLink.startsWith('http')
+                          ? original.galleryLink
+                          : `https://${original.galleryLink}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="available-link"
+                      >
+                        Available
+                      </a>
+                    ) : (
+                      <span className="available-text">Available</span>
+                    )
                 )}
               </div>
             </div>

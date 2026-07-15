@@ -116,7 +116,7 @@ try {
           <p>For regular updates on what I currently working on</p>
           
           <div className="footer-icons">
-              <a className="contact-social-icon" href="https://www.facebook.com/kelvin.mcmillan.481473" target="_blank" rel="noreferrer">
+              <a className="contact-social-icon" href="https://www.facebook.com/profile.php?id=61559306564460" target="_blank" rel="noreferrer">
                 <FontAwesomeIcon icon={faFacebookSquare} size="2x" />
               </a>
               <a className="contact-social-icon" href="https://www.instagram.com/kelvinmcmillan5/?hl=en" target="_blank" rel="noreferrer">

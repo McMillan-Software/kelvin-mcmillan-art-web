@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import api from "../../api";
 import { GicleeOptionAttributes } from "../../types/giclee";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faSave, faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash, faSave, faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
 import "./GicleeAdmin.css";
 
 interface OmitIdGicleeOption extends Omit<GicleeOptionAttributes, 'id'> {}
@@ -66,6 +66,16 @@ const GicleeAttributesManager: React.FC = () => {
             setNewAttribute({ width: 0, height: 0, aspectRatio: "", price: 0 });
         } catch (error) {
             console.error("Error adding new attribute:", error);
+        }
+    };
+
+    // --- Delete ---
+    const handleDelete = async (id: number) => {
+        try {
+            await api.delete(`/admin/giclee/attribute/${id}`);
+            await fetchAttributes(); 
+        } catch (error) {
+            console.error("Error updating attribute:", error);
         }
     };
 
@@ -177,6 +187,9 @@ const GicleeAttributesManager: React.FC = () => {
                                             <td>
                                                 <button onClick={() => handleEditClick(attr)} className="btn-large btn-edit">
                                                     <FontAwesomeIcon icon={faEdit} /> Edit
+                                                </button>
+                                                    <button onClick={() => handleDelete(attr.id)} className="btn-large btn-edit">
+                                                    <FontAwesomeIcon icon={faTrash} /> Delete
                                                 </button>
                                             </td>
                                         </>
