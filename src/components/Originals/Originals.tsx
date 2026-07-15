@@ -10,6 +10,7 @@ const Originals: React.FC = () => {
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}paintings/originals`).then((response) => {
       setOriginals(response.data);
+      console.log(response.data)
     })
       .catch((error) => {
         console.error(`Error fetching data: ${error}`);

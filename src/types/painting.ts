@@ -7,6 +7,7 @@ export interface Painting {
     width: number;
     height: number;
     sold: boolean;
+    artistCollection: boolean;
     framed?: boolean;
     giclee: boolean;
     price: number;
