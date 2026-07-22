@@ -14,7 +14,12 @@ const OriginalsList: React.FC<OriginalsListProps> = ({ originals }) => {
         <li key={original.id}>
           <div className="originals-list-item">
             <NavLink className="originals-image-link" to={`/Originals/${original.id}`}>
-              <img className="orginals-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${original.imagePath}`} />
+              <img 
+                className="orginals-image" 
+                src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${original.imagePath}`} 
+                loading="lazy" 
+                alt={original.title} 
+              />
             </NavLink>
             <div className="caption-container">
               {/* Line 1: Title & Location */}
