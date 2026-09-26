@@ -1,0 +1,31 @@
+.heading {
+  margin: 0;
+  font-size: var(--fs-h1);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* Europa ships a single regular weight and :root sets `font-synthesis: none`,
+   so an italic <em> would render identically to the rest of the line. Re-enable
+   style synthesis here so the accent line actually reads as distinct. */
+.heading em {
+  font-style: italic;
+  font-weight: 400;
+  font-synthesis: style;
+}
+
+/* The mask clips the line while it slides up from below. The padding/margin
+   pair stops descenders being shaved off by overflow: hidden. */
+.mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.line {
+  display: block;
+  will-change: transform;
+}

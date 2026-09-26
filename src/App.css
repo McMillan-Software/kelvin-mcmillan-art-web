@@ -1,12 +1,11 @@
-header {
-    padding: 1rem;
-}
-
 .page-content {
 
   display: flex;
   min-height: 60vh;
   justify-content: center;
+  /* Clears the now-fixed header. The Home hero cancels this with a matching
+     negative margin so its image can run up behind the transparent bar. */
+  padding-top: var(--header-h);
 }
 
 footer {

@@ -1,0 +1,255 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  color: var(--paper);
+  transition: color 0.4s var(--ease-out), background 0.4s var(--ease-out);
+}
+
+/* Soft scrim so the light wordmark stays legible over a bright hero photo. */
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(rgba(10, 11, 13, 0.45), transparent);
+  transition: opacity 0.4s var(--ease-out);
+}
+
+/* The scrim is redundant once the bar has its own background. */
+.solid::before,
+.menuOpen::before {
+  opacity: 0;
+}
+
+.solid {
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: saturate(1.4) blur(14px);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  box-shadow: 0 1px 0 var(--line);
+  color: var(--ink);
+}
+
+/* While the drawer is open the bar sits on the dark overlay, so force light. */
+.menuOpen {
+  color: var(--paper);
+  background: transparent;
+  box-shadow: none;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  height: var(--header-h);
+}
+
+/* Brand ----------------------------------------------------------------- */
+
+.brand {
+  position: relative;
+  z-index: 2;
+  display: inline-grid;
+  justify-items: start;
+  line-height: 1;
+  color: inherit;
+  text-decoration: none;
+}
+
+.word {
+  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.25rem);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.sub {
+  margin-top: 0.4rem;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+/* Desktop nav ----------------------------------------------------------- */
+
+.nav {
+  display: none;
+  align-items: center;
+  gap: clamp(1.5rem, 2.5vw, 2.75rem);
+}
+
+.link {
+  position: relative;
+  padding-block: 0.35rem;
+  color: inherit;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+  opacity: 0.85;
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ease-out);
+}
+
+.link:hover,
+.link.active {
+  opacity: 1;
+}
+
+.link:hover::after,
+.link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Scoped under .nav so these win over the global .btn padding regardless of
+   the order Vite emits the two stylesheets in. */
+.nav .cta {
+  padding: 0.65rem 1.3rem;
+  font-size: 0.75rem;
+}
+
+/* Hamburger ------------------------------------------------------------- */
+
+.toggle {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 7px;
+  width: 48px;
+  height: 48px;
+  margin-right: -12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.toggle span {
+  display: block;
+  width: 26px;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.menuOpen .toggle span:first-child {
+  transform: translateY(4.25px) rotate(45deg);
+}
+
+.menuOpen .toggle span:last-child {
+  transform: translateY(-4.25px) rotate(-45deg);
+}
+
+/* Mobile drawer --------------------------------------------------------- */
+
+.drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  /* No global border-box reset in this project — see index.css. */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: calc(var(--header-h) + 2rem) var(--gutter) 2.5rem;
+  background: var(--ink);
+  color: var(--paper);
+  overflow-y: auto;
+  /* Stops touch scrolling inside the drawer chaining through to the page. */
+  overscroll-behavior: contain;
+}
+
+.drawer:focus {
+  outline: none;
+}
+
+.drawerNav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.drawerLink {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  color: var(--paper);
+  font-size: clamp(2.2rem, 10vw, 3.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.drawerLink:hover,
+.drawerLink.active {
+  opacity: 1;
+}
+
+.drawerIndex {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  opacity: 0.45;
+}
+
+.drawerFoot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line-light);
+  font-size: 0.9rem;
+}
+
+.drawerFoot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  transition: color 0.3s var(--ease-out);
+}
+
+.drawerFoot a:hover {
+  color: var(--paper);
+}
+
+.drawerSocial {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 0.35rem;
+}
+
+/* ----------------------------------------------------------------------- */
+
+@media (min-width: 900px) {
+  .nav {
+    display: flex;
+  }
+
+  .toggle {
+    display: none;
+  }
+}

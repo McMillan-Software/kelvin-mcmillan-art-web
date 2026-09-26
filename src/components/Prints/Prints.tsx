@@ -30,7 +30,7 @@ const Prints: React.FC = () => {
                     {giclees.map((item: Giclee) => (
                         <li key={item.painting.id}>
                             <div className="giclee-list-item">
-                                <img className="painting-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${item.painting.imagePath}`} alt={item.painting.title} />
+                                <img className="painting-image" src={`${import.meta.env.VITE_IMAGE_BASE_PATH}${item.painting.imagePath}`} loading="lazy" alt={item.painting.title} />
                                 <div className="giclee-list-item-text">
                                     <p className="title-location">
                                         <strong>{item.painting.title}</strong>. {item.painting.width}x{item.painting.height}mm.
