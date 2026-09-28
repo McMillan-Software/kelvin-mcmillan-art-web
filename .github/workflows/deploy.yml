@@ -20,7 +20,7 @@ jobs:
 
       - name: Install pnpm, dependencies & build
         run: |
-          npm install -g pnpm
+          npm install -g pnpm@9
           pnpm install
           pnpm build
 
