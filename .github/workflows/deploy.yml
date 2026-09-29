@@ -20,8 +20,8 @@ jobs:
 
       - name: Install pnpm, dependencies & build
         run: |
-          npm install -g pnpm@9
-          pnpm install
+          corepack enable
+          pnpm install --frozen-lockfile
           pnpm build
 
       - name: Copy build build to EC2
