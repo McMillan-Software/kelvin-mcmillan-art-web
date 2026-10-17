@@ -40,8 +40,9 @@ const Original: React.FC = () => {
       <div className="original-container">
 
         <div className="back-button_div">
-          <button className="back-button" onClick={() => navigate(-1)}>
-            &#8592; Back
+          <button type="button" className="back-button" onClick={() => navigate(-1)}>
+            <span className="back-button-arrow" aria-hidden="true">&#8592;</span>
+            Back
           </button>
         </div>
 

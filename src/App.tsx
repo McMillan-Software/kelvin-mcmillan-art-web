@@ -18,6 +18,7 @@ import GicleeAdmin from './components/GicleeAdmin/GicleeAdmin';
 import GicleeCollectionsAdmin from './components/GicleeCollectionsAdmin/GicleeCollectionsAdmin';
 import EditGicleeCollection from './components/GicleeCollectionsAdmin/EditGicleeCollection';
 import { AuthProvider } from './AuthContext';
+import ScrollManager from './components/Shared/ScrollManager';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
     <MotionConfig reducedMotion="user">
       <div>
         <Router>
+          <ScrollManager />
           <AuthProvider>
             <a href="#main" className="skip-link">Skip to content</a>
             <Header />
