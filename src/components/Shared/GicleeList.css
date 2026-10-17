@@ -1,0 +1,14 @@
+.giclee-list {
+    width: 100%;
+}
+
+.giclee-from-price a {
+    color: #a1a1a1;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.giclee-from-price a:hover {
+    color: #000;
+    text-decoration: underline;
+}

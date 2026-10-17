@@ -1,0 +1,99 @@
+.collection-admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 800px;
+}
+
+.collection-admin-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.collection-admin-form textarea {
+    font-family: inherit;
+    resize: vertical;
+}
+
+.collection-admin-order-input {
+    max-width: 150px;
+}
+
+.collection-admin-error {
+    color: red;
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.action-buttons a.btn-large {
+    text-decoration: none;
+}
+
+.collection-admin-section {
+    margin-top: 30px;
+}
+
+.collection-admin-search-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    max-width: 800px;
+}
+
+.collection-admin-search-row .large-input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.collection-admin-print-list {
+    list-style-type: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+}
+
+.collection-admin-print {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.collection-admin-print img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.collection-admin-print-title {
+    font-weight: 600;
+}
+
+.collection-admin-print-meta {
+    color: #777;
+    font-size: 0.85em;
+}
+
+.collection-admin-added {
+    color: #4caf50;
+    font-weight: 600;
+}
+
+.collection-admin-pagination {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+}

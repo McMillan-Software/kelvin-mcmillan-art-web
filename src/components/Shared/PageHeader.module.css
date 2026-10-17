@@ -1,0 +1,42 @@
+.header {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: clamp(1.5rem, 1rem + 2vw, 2.75rem) 1rem clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  margin-bottom: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+/* Mirror the eyebrow's leading rule on the right so the centred label balances */
+.eyebrow {
+  justify-content: center;
+}
+
+.eyebrow::after {
+  content: '';
+  width: 2rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+/* Doubled class beats SplitHeading's own .heading size regardless of CSS order */
+.header .title {
+  margin-top: 0.6rem;
+  font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.25rem);
+  color: var(--ink);
+}
+
+.intro {
+  max-width: 34rem;
+  margin: 0.6rem 0 0;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.controls {
+  margin-top: 1.25rem;
+}
