@@ -10,11 +10,6 @@
   color: inherit;
 }
 
-.original-info {
-  white-space: pre-wrap;
-  text-align: center;
-}
-
 .orginal-image {
   max-height: 800px;
   width: 100%;
@@ -56,4 +51,116 @@ a {
 
 .back-button::before {
   margin-right: 5px;
+}
+
+/* Placard-style details beneath the image -------------------------------- */
+
+.original-details {
+  width: 100%;
+  max-width: 640px;
+  margin: 2.5rem auto 4rem;
+  color: var(--ink-soft);
+}
+
+.original-heading {
+  text-align: center;
+}
+
+.original-heading .eyebrow {
+  justify-content: center;
+}
+
+/* Mirror the eyebrow's leading rule on the right so the centred label balances */
+.original-heading .eyebrow::after {
+  content: '';
+  width: 2rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.original-title {
+  margin: 0.75rem 0 0.25rem;
+  font-size: clamp(1.8rem, 1.4rem + 1.8vw, 2.75rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.original-subtitle {
+  margin: 0;
+  color: var(--muted);
+}
+
+.original-specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  margin: 2rem 0 0;
+  border-block: 1px solid var(--line);
+}
+
+.original-specs > div {
+  padding: 1rem 0.5rem;
+  text-align: center;
+}
+
+.original-specs dt {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.original-specs dd {
+  margin: 0.35rem 0 0;
+  color: var(--ink);
+}
+
+.original-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 1.75rem;
+  color: var(--muted);
+}
+
+.original-info {
+  margin: 2rem 0 0;
+  white-space: pre-wrap;
+  color: var(--ink-soft);
+}
+
+.original-giclee {
+  margin-top: 2.5rem;
+  padding: 1.5rem 1.75rem;
+  background: var(--paper-2);
+}
+
+.giclee-size-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 1rem 0 0;
+}
+
+.giclee-size-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.4rem 0;
+  white-space: nowrap;
+  color: var(--ink-soft);
+}
+
+/* Dotted leader between size and price, like a price list */
+.giclee-size-leader {
+  flex: 1;
+  border-bottom: 1px dotted var(--muted);
+}
+
+.giclee-collection-links {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
 }

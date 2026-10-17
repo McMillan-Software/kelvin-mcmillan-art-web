@@ -120,6 +120,7 @@ const Admin: React.FC = () => {
         <h1>Admin Dashboard</h1>
         <div className='admin-action-panel'>
           <NavLink to="/GicleeAdmin" className='admin-action-button'>Giclee Admin</NavLink>
+          <NavLink to="/GicleeCollectionsAdmin" className='admin-action-button'>Giclee Collections</NavLink>
           <NavLink to="/CreatePainting" className='admin-action-button'>Create Painting</NavLink>
           <button onClick={logout} className='logout-btn admin-action-button'>Logout</button>
         </div>

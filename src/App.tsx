@@ -15,6 +15,8 @@ import Login from './components/Login/Login';
 import CreatePainting from './components/CreatePainting/CreatePaintingWizard';
 import EditPainting from './components/EditPainting/EditPainting';
 import GicleeAdmin from './components/GicleeAdmin/GicleeAdmin';
+import GicleeCollectionsAdmin from './components/GicleeCollectionsAdmin/GicleeCollectionsAdmin';
+import EditGicleeCollection from './components/GicleeCollectionsAdmin/EditGicleeCollection';
 import { AuthProvider } from './AuthContext';
 
 
@@ -42,6 +44,8 @@ function App() {
                     <Route path="/CreatePainting" element={<CreatePainting/>}/>
                     <Route path="/EditPainting/:id" element={<EditPainting/>}/>
                     <Route path="/GicleeAdmin" element={<GicleeAdmin/>}/>
+                    <Route path="/GicleeCollectionsAdmin" element={<GicleeCollectionsAdmin/>}/>
+                    <Route path="/EditGicleeCollection/:id" element={<EditGicleeCollection/>}/>
                 </Routes>
               </div>
             </div>
